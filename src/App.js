@@ -1,24 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { Login } from "./pages/Login";
+import { useContext } from "react";
+import { AuthContext } from "./hoc/AuthContext";
+import { AllRoutes } from "./routes/AllRoutes";
+import { Navbar } from "./componets/Navbar";
+import { Footer } from "./componets/Footer";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  const { authState } = useContext(AuthContext);
+
+  return authState.isAuth ? (
+    <>
+      <Navbar />
+      <AllRoutes />
+      <Footer />
+    </>
+  ) : (
+    <Login />
   );
 }
 

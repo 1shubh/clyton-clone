@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +13,8 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.loginPage{
+  background: rgb(0,0,0);
+background: linear-gradient(98deg, rgba(0,0,0,1) 0%, rgba(64,64,64,1) 67%, rgba(90,90,90,1) 100%, rgba(0,0,0,1) 100%);
 }
