@@ -1,16 +1,16 @@
 import React from "react";
+import { Sidebar } from "../../components/Sidebar";
 import { LuClipboardList } from "react-icons/lu";
 import { TbHomeCheck } from "react-icons/tb";
 import { Button } from "@chakra-ui/react";
 import { RiHomeOfficeLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-
 const homeLinks = [
   {
     title: "Start Order",
     subtitle: "Start an Order Request or Quote.",
     icon: <LuClipboardList />,
-    link: "/models",
+    link: "/",
     btnText: "Start",
   },
   {
@@ -28,32 +28,26 @@ const homeLinks = [
     btnText: "View",
   },
 ];
-export const Home = () => {
-  const navigate = useNavigate()
+export const Dashborad = () => {
+  const navigate = useNavigate();
   return (
-    <>
-      <div className="bg-[#fd211e] p-20">
-        <p className="text-white text-6xl text-center">
-          Welcome to the <br />  Scenic Homes of AZ® Ordering Portal
-        </p>
-      </div>
-      {/* Links */}
-      <div className="flex items-center justify-around p-20">
+    <div className="flex gap-2">
+      <Sidebar pageName={"Dashboard"} />
+      <div className="flex justify-around w-[84%] py-10">
         {homeLinks.map((ele, i) => {
           return (
-            <div
-              key={i}
-              className="flex flex-col gap-1 justify-center items-center"
-            >
+            <div key={i} className="flex flex-col items-center gap-5">
               <div className="text-8xl text-[#fd211e]">{ele.icon}</div>
               <p className="text-[30px] text-[#323232]">{ele.title}</p>
               <p className="text-[18px] text-[#939598]">{ele.subtitle}</p>
               <div className="w-full border bg-red-500 h-1"></div>
-              <Button colorScheme='orange' onClick={()=>navigate(ele.link)}>{ele.btnText}</Button>
+              <Button colorScheme="orange" onClick={() => navigate(ele.link)}>
+                {ele.btnText}
+              </Button>
             </div>
           );
         })}
       </div>
-    </>
+    </div>
   );
 };

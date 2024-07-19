@@ -4,8 +4,8 @@ import { Login } from "./pages/Login";
 import { useContext } from "react";
 import { AuthContext } from "./hoc/AuthContext";
 import { AllRoutes } from "./routes/AllRoutes";
-import { Navbar } from "./componets/Navbar";
-import { Footer } from "./componets/Footer";
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
 
 function App() {
   const { authState } = useContext(AuthContext);

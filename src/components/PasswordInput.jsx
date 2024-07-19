@@ -19,13 +19,14 @@ export function PasswordInput({ value, setpassword }) {
         pr="4.5rem"
         type={show ? "text" : "password"}
         placeholder="Enter password"
-        className="text-white"
+        className="text-black"
+        border={"1px solid black"}
         value={value}
         onChange={(e) => setpassword(e.target.value)}
       />
       <InputRightElement width="4.5rem">
         <div
-          className="w-full h-full flex items-center justify-center text-white cursor-pointer text-xl"
+          className="w-full h-full flex items-center justify-center text-black cursor-pointer text-xl"
           onClick={handleClick}
         >
           {show ? <BsEyeSlashFill /> : <IoEyeSharp />}
