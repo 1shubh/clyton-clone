@@ -29,27 +29,35 @@ const homeLinks = [
   },
 ];
 export const Home = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <>
-      <div className="bg-[#fd211e] p-20">
-        <p className="text-white text-6xl text-center">
-          Welcome to the <br />  Scenic Homes of AZ® Ordering Portal
+      <div className="bg-[#fd211e] p-20 lg:p-10 sm:p-10">
+        <p className="text-white text-6xl lg:text-5xl text-center sm:text-3xl">
+          Welcome to the <br /> Scenic Homes of AZ® Ordering Portal
         </p>
       </div>
       {/* Links */}
-      <div className="flex items-center justify-around p-20">
+      <div className="sm:w-full flex items-center justify-around lg:justify-between gap-10 p-20 sm:grid sm:gap-5">
         {homeLinks.map((ele, i) => {
           return (
             <div
               key={i}
-              className="flex flex-col gap-1 justify-center items-center"
+              className="grid place-items-center gap-3 lg:gap-2 justify-center items-center sm:grid sm:place-items-center w-full"
             >
-              <div className="text-8xl text-[#fd211e]">{ele.icon}</div>
-              <p className="text-[30px] text-[#323232]">{ele.title}</p>
-              <p className="text-[18px] text-[#939598]">{ele.subtitle}</p>
+              <div className="text-8xl sm:text-6xl lg:text-[6xl] text-[#fd211e]">
+                {ele.icon}
+              </div>
+              <p className="text-[30px] sm:text-[25px] lg:text-[25px] text-[#323232]">
+                {ele.title}
+              </p>
+              <p className="text-[18px] sm:text-[15px] lg:text-[15px] text-[#939598] text-nowrap">
+                {ele.subtitle}
+              </p>
               <div className="w-full border bg-red-500 h-1"></div>
-              <Button colorScheme='orange' onClick={()=>navigate(ele.link)}>{ele.btnText}</Button>
+              <Button colorScheme="orange" onClick={() => navigate(ele.link)}>
+                {ele.btnText}
+              </Button>
             </div>
           );
         })}

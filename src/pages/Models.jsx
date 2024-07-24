@@ -5,13 +5,13 @@ export const Models = () => {
   return (
     <>
       <div className="bg-[#fd211e] p-20">
-        <p className="text-white text-6xl text-center">
+        <p className="text-white text-6xl sm:text-4xl text-center">
         Order/Quote Builder
         </p>
       </div>
       {/* Orders data */}
       <div className="py-10">
-        <Select w={"20%"} margin={"auto"}>
+        <Select w={{lg:"20%",base:"80%"}} margin={"auto"}>
             <option>All Sizes</option>
             <option>Single-Section</option>
             <option>Multi-Section</option>

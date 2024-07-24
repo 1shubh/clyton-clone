@@ -31,12 +31,12 @@ const homeLinks = [
 export const Dashborad = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 sm:grid">
       <Sidebar pageName={"Dashboard"} />
-      <div className="flex justify-around w-[84%] py-10">
+      <div className="flex justify-around w-[84%] lg:w-[80%] py-10 sm:grid sm:w-full sm:gap-5">
         {homeLinks.map((ele, i) => {
           return (
-            <div key={i} className="flex flex-col items-center gap-5">
+            <div key={i} className="flex flex-col items-center gap-5 sm:gap-2">
               <div className="text-8xl text-[#fd211e]">{ele.icon}</div>
               <p className="text-[30px] text-[#323232]">{ele.title}</p>
               <p className="text-[18px] text-[#939598]">{ele.subtitle}</p>

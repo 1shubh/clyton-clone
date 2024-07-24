@@ -17,3 +17,71 @@ code {
 .nav-subMenu-shadow{
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
+/* mobile navbar styling */
+.nav-elements {
+  display: none;
+}
+
+.automobileNav{
+  border: 0px solid yellow;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 6em;
+  z-index: 1;
+}
+.navmenu{
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  overflow-x: auto;
+  -ms-overflow-style:none; /* Hide the scrollbar for MS Edge */
+  scrollbar-width: none;
+}
+.navmenu::-webkit-scrollbar{
+  display: none;
+  -webkit-overflow-scrolling:touch
+}
+@media (max-width: 540px) and (min-width : 100px) {
+  .nav-elements {
+      padding-top: 22px;
+      display:block;
+      position: fixed;
+      right: 0;
+      top: 0px;
+      background-color:white;
+      width: 0%;
+      height: 100%;
+      transition: all 0.2s ease-in;
+      overflow: hidden;
+      z-index: 20;
+      border: 0px solid black;
+    }
+    .nav-elements.activeSidebar {
+      border: 0px solid black;
+      width: 100%;
+      box-shadow: none;
+      opacity: 1;
+    }
+}
+
+/* width */
+::-webkit-scrollbar {
+width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f5f5f5;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555;
+}

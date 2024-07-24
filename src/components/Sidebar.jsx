@@ -4,38 +4,40 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { PiFloppyDisk } from "react-icons/pi";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Links = [
   {
     title: "Dashboard",
     icon: <LiaTachometerAltSolid />,
-    href: "/portal/dashboard",
+    href: "/dashboard",
   },
   {
     title: "Orders",
     icon: <IoCheckmarkCircleOutline />,
-    href: "/portal/orders",
+    href: "/orders",
   },
   {
     title: "Quotes",
     icon: <PiFloppyDisk />,
-    href: "/portal/quotes",
+    href: "/quotes",
   },
   {
     title: "Retailers",
     icon: <IoLocationOutline />,
-    href: "/portal/retailers",
+    href: "/retailers",
   },
   {
     title: "Account",
     icon: <FaRegUser />,
-    href: "/portal/account",
+    href: "/account",
   },
 ];
 
 export const Sidebar = ({ pageName }) => {
+  const navigate = useNavigate();
   return (
-    <div className="w-[15%] h-screen bg-gray-800 text-white flex flex-col">
+    <div className="w-[15%] lg:w-[25%] sm:w-full sm:h-fit h-screen bg-gray-800 text-white flex flex-col">
       <nav className="flex-grow p-4">
         <ul className="space-y-2">
           {Links.map((link, index) => (
@@ -46,9 +48,9 @@ export const Sidebar = ({ pageName }) => {
               }`}
             >
               <span className="text-xl">{link.icon}</span>
-              <a href={link.href} className="ml-4 text-lg">
+              <p className="ml-4 text-lg" onClick={() => navigate(link.href)}>
                 {link.title}
-              </a>
+              </p>
             </li>
           ))}
         </ul>

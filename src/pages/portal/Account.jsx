@@ -3,14 +3,14 @@ import { Sidebar } from "../../components/Sidebar";
 import { Button, Input, Select } from "@chakra-ui/react";
 export const Account = () => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 sm:grid sm:pb-5">
       <Sidebar pageName={"Account"} />
-      <div className="w-[84%] px-2">
+      <div className="w-[84%] px-2 sm:w-full">
         <div className="border-b-2 border-black pb-2">
           <p className="text-2xl font-bold">Account</p>
         </div>
         <p className="mt-4 font-bold text-xl">Account Information</p>
-        <div className="grid grid-cols-2 gap-5 w-[60%] xl:w-[80%]">
+        <div className="grid grid-cols-2 gap-5 w-[60%] xl:w-[80%] sm:w-full">
           <div>
             <p className="font-semibold text-sm">First Name *</p>
             <Input placeholder="First Name" />
@@ -29,7 +29,7 @@ export const Account = () => {
           </div>
         </div>
         <p className="font-bold text-2xl mt-5">Default Selections</p>
-        <div className="grid grid-cols-2 gap-5 mt-5 w-[60%] xl:w-[80%]">
+        <div className="grid grid-cols-2 gap-5 mt-5 w-[60%] xl:w-[80%] sm:w-full">
           <div>
             <p className="font-semibold text-sm ">Windzone</p>
             <Select>
@@ -48,7 +48,7 @@ export const Account = () => {
             </Select>
           </div>
         </div>
-        <div className="w-[30%] xl:w-[40%]">
+        <div className="w-[30%] xl:w-[40%] sm:w-[80%]">
           <p className="font-bold text-2xl mt-5">Password</p>
           <p className="font-semibold text-sm mt-2">
             Enter new password to update

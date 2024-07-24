@@ -1,15 +1,15 @@
 export const quickLinksSubheading = [
     {
       title: "Dashboard",
-      href: "/portal/dashboard",
+      href: "/dashboard",
     },
     {
       title: "Orders",
-      href: "/portal/orders",
+      href: "/orders",
     },
     {
       title: "Quotes",
-      href: "/portal/quotes",
+      href: "/quotes",
     },
     {
       title: "Digital Assets",
@@ -21,7 +21,7 @@ export const quickLinksSubheading = [
     // },
     {
       title: "Account",
-      href: "/portal/account",
+      href: "/account",
     },
     {
       title: "Sign Out",
