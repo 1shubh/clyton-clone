@@ -11,12 +11,13 @@ import { Account } from "../pages/portal/Account";
 import { DigitalAssets } from "../pages/DigitalAssets";
 import { Modal } from "@chakra-ui/react";
 import { Models } from "../pages/Models";
+import { Admin } from "../pages/admin/Admin";
+import { SingleModel } from "../pages/SingleModel";
 
 export const AllRoutes = () => {
   return (
     <Routes>
       <Route element={<Home />} path={"/"} />
-
       <Route element={<Dashborad />} path="/dashboard" />
       <Route element={<Orders />} path="/orders" />
       <Route element={<Quotes />} path="/quotes" />
@@ -24,6 +25,9 @@ export const AllRoutes = () => {
       <Route element={<Account/>} path="/account" />
       <Route  element={<DigitalAssets/>} path="/digital-assets"/>
       <Route element={<Models/>} path="/models"/>
+      <Route element={<SingleModel/>} path="/models/:id"/>
+      {/* Admin */}
+      <Route element={<Admin/>} path="/admin"/>
     </Routes>
   );
 };

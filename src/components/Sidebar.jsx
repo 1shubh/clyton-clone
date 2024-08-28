@@ -46,9 +46,10 @@ export const Sidebar = ({ pageName }) => {
               className={`flex items-center p-2 rounded cursor-pointer ${
                 pageName === link.title ? "bg-gray-700" : "hover:bg-gray-700"
               }`}
+              onClick={() => navigate(link.href)}
             >
               <span className="text-xl">{link.icon}</span>
-              <p className="ml-4 text-lg" onClick={() => navigate(link.href)}>
+              <p className="ml-4 text-lg">
                 {link.title}
               </p>
             </li>
