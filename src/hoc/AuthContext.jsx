@@ -34,7 +34,6 @@ function AuthContextProvider({ children }) {
           if (user) {
             // Check if the user is an admin or regular user
             const isAdmin = user.email === 'adminUser@example.com'; // Replace with your admin email check
-
             if (isAdmin) {
               setAdminState({
                 isAuth: true,

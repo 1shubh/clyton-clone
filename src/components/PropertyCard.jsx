@@ -30,7 +30,7 @@ export const PropertyCard = ({
           className="h-full w-full object-cover"
         />
       </div>
-      <div className="h-fit">
+      <div className="h-[100px]">
         <p className="uppercase font-semibold text-xl sm:text-lg">{name}</p>
         <p className="font-semibold sm:text-sm">
           ${price} (Before Options and Fees)
