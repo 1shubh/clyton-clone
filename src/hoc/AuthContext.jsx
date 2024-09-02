@@ -33,7 +33,7 @@ function AuthContextProvider({ children }) {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           if (user) {
             // Check if the user is an admin or regular user
-            const isAdmin = user.email === 'adminUser@example.com'; // Replace with your admin email check
+            const isAdmin = user.email === 'admin@scenichomes.com'; // Replace with your admin email check
             if (isAdmin) {
               setAdminState({
                 isAuth: true,

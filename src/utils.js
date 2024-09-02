@@ -3,21 +3,23 @@ export const data = {
   price: 1000,
   floorPlan: {
     title: "Floor Plan",
+    subtitle: "Floor Plan orientation",
+    image: "https://trove.b-cdn.net/images/ge8c3q6podb.jpeg",
     options: [
       {
         title: "Standard",
+        rotate: "scaleX(1) scaleY(1)",
         price: 0,
-        image: "https://trove.b-cdn.net/images/ge8c3q6podb.jpeg",
       },
       {
         title: "Horizontal Flip",
         price: 1250,
-        image: "https://trove.b-cdn.net/images/ge8c3q6podb.jpeg",
+        rotate: "scaleX(-1)",
       },
       {
         title: "Verical Flip",
         price: 1250,
-        image: "https://trove.b-cdn.net/images/ge8c3q6podb.jpeg",
+        rotate: "scaleY(-1)",
       },
     ],
   },
@@ -25,12 +27,12 @@ export const data = {
     title: "Exterior",
     images: ["", "", ""],
     sidingType: {
-      title: "Siding Type",
+      title: "Exterior Siding Type",
       options: [
         {
           title: "Verticle",
           image: "https://trove.b-cdn.net/images/yzq7wyxeaml.png",
-          price: "",
+          price: 0,
         },
         {
           title: "Horizontal",
@@ -40,12 +42,12 @@ export const data = {
         {
           title: "Hardboard",
           image: "",
-          price: "",
+          price: 2500,
         },
         {
           title: "Board & Batten",
           image: "",
-          price: "",
+          price: 3000,
         },
       ],
     },
@@ -53,28 +55,18 @@ export const data = {
       title: "Exterior Body Color",
       options: [
         {
-          name: "",
-          colorCode: "",
+          name: "Foil",
+          colorCode: "#c1c3c4",
           image: "",
         },
         {
-          name: "",
-          colorCode: "",
+          name: "Blue Print",
+          colorCode: "#58697d",
           image: "",
         },
         {
-          name: "",
-          colorCode: "",
-          image: "",
-        },
-        {
-          name: "",
-          colorCode: "",
-          image: "",
-        },
-        {
-          name: "",
-          colorCode: "",
+          name: "Stay Calm",
+          colorCode: "#c0bbb1",
           image: "",
         },
       ],
@@ -83,23 +75,18 @@ export const data = {
       title: "Exterior Accent Color",
       options: [
         {
-          name: "",
-          colorCode: "",
+          name: "Foil",
+          colorCode: "#c1c3c4",
           image: "",
         },
         {
-          name: "",
-          colorCode: "",
+          name: "Blue Print",
+          colorCode: "#58697d",
           image: "",
         },
         {
-          name: "",
-          colorCode: "",
-          image: "",
-        },
-        {
-          name: "",
-          colorCode: "",
+          name: "Stay Calm",
+          colorCode: "#c0bbb1",
           image: "",
         },
       ],
@@ -108,23 +95,18 @@ export const data = {
       title: "Exterior Trim Color",
       options: [
         {
-          name: "",
-          colorCode: "",
+          name: "Foil",
+          colorCode: "#c1c3c4",
           image: "",
         },
         {
-          name: "",
-          colorCode: "",
+          name: "Blue Print",
+          colorCode: "#58697d",
           image: "",
         },
         {
-          name: "",
-          colorCode: "",
-          image: "",
-        },
-        {
-          name: "",
-          colorCode: "",
+          name: "Stay Calm",
+          colorCode: "#c0bbb1",
           image: "",
         },
       ],
@@ -133,8 +115,13 @@ export const data = {
       title: "Exterior Door Paint",
       options: [
         {
-          name: "",
-          colorCode: "",
+          name: "White",
+          colorCode: "#ffffff",
+          image: "",
+        },
+        {
+          name: "Iron River",
+          colorCode: "#4d504b",
           image: "",
         },
       ],
@@ -146,6 +133,7 @@ export const data = {
           title: "Standard",
           price: 0,
           image: "",
+          subtitle: "Standard Material",
           types: [
             {
               name: "Shasta White",
@@ -171,11 +159,12 @@ export const data = {
           title: "Architectural",
           price: 400,
           image: "",
+          subtitle: "Architectural Shingles",
           types: [
             {
               name: "Sierra Grey",
               image: "",
-              bgImage: "https://trove.b-cdn.net/images/sn1d0ooid99",
+              bgImage: "https://trove.b-cdn.net/images/dgdotyuqopo.png",
               price: 0,
             },
             {
@@ -193,7 +182,8 @@ export const data = {
             {
               name: "Amber",
               image: "",
-              bgImage: "",
+              bgImage:
+                "https://trove.b-cdn.net/images/0yum7q6wu1yp.png?height=160",
               price: 400,
             },
             {
@@ -240,176 +230,200 @@ export const data = {
   kitchen: {
     title: "Kitchen",
     image: "",
-    counterTopMaterial: [
-      {
-        title: "Laminate",
-        image: "",
-        price: 0,
-        subTitle: "Laminate Countertops",
-        types: [
-          {
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/3or101cperm.png",
-            title: "Aluma Marble",
-            price: 0,
-          },
-          {
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/s7hzaz5c6yg.png",
-            title: "Bello Romano",
-            price: 0,
-          },
-        ],
-      },
-      {
-        title: "Solid Surface",
-        image: "",
-        price: 3800,
-        subTitle: "Solid Surface Countertops",
-        types: [
-          {
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/rr2pjyopalb.png",
-            title: "Artic Melange",
-            price: 0,
-          },
-          {
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/y4qma2orpq.png",
-            title: "Avalance Melange",
-            price: 0,
-          },
-        ],
-      },
-    ],
-    flatPanelCabinets: [
-      {
-        title: "Mesquite",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/3p4452ib09k.jpeg",
-        price: 0,
-      },
-      {
-        title: "Maple",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/vmph5pp5mc.jpeg",
-        price: 0,
-      },
-    ],
-    cabinetHardware: [
-      {
-        title: "Black Square Pull",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/zbbe1b8dbch.png",
-        price: 0,
-      },
-      {
-        title: "Brushed Nickel Pull",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/52fmcnswwst.png",
-        price: 0,
-      },
-    ],
-    tileBacksplash: [
-      {
-        title: "Laminate",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/5wdmx4wk3tv.png",
-        price: 0,
-      },
-      {
-        title: "Solid Surface",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/cexkr9u0fu4.png",
-        price: 0,
-      },
-    ],
-    backsplashTile: [
-      {
-        title: "Brickell Antracita 3 x 12",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/lvvqcoa2fdj.png",
-        price: 0,
-      },
-      {
-        title: "Brickell Taupe - 3 X 12",
-        image: "",
-        bgImage: "https://trove.b-cdn.net/images/cexkr9u0fu4.png",
-        price: 0,
-      },
-    ],
-    flooringMaterial: [
-      {
-        title: "Sheet Vinyl",
-        price: 0,
-        subtitle: "Kitchen Linoleum Flooring Material",
-        image: "",
-        types: [
-          {
-            title: "Meteor Highlight",
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/0afn5degr51j.png",
-            price: 0,
-          },
-          {
-            title: "Aged European",
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/rhtui4iy7vk.png",
-            price: 0,
-          },
-        ],
-      },
-      {
-        title: "LVT",
-        price: 550,
-        subtitle: "Kitchen MSI Flooring Material",
-        image: "",
-        types: [
-          {
-            title: "Meteor Highlight",
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/0afn5degr51j.png",
-            price: 0,
-          },
-          {
-            title: "Aged European",
-            image: "",
-            bgImage: "https://trove.b-cdn.net/images/rhtui4iy7vk.png",
-            price: 0,
-          },
-        ],
-      },
-    ],
-    kitchenFaucets: [
-      {
-        title: "Brushed",
-        image: "https://trove.b-cdn.net/images/czah4qbnm4s.png",
-        bgImage: "https://trove.b-cdn.net/images/kekiv5ip3op.png",
-        price: 0,
-      },
-      {
-        title: "Black Smooth",
-        image: "https://trove.b-cdn.net/images/cefed805rxs.png",
-        bgImage: "https://trove.b-cdn.net/images/3cpcxlcsjvg.jpeg",
-        price: 0,
-      },
-    ],
-    kitchenSinks: [
-      {
-        title: "single Bowl",
-        image: "",
-        image2: "",
-        bgImage: "https://trove.b-cdn.net/images/mbefd3lao5.png",
-        price: 0,
-      },
-      {
-        title: "White Undermount",
-        image: "",
-        image2: "https://trove.b-cdn.net/images/qsvsexd7si.png",
-        bgImage: "https://trove.b-cdn.net/images/qsvsexd7si.png",
-        price: 150,
-      },
-    ],
+    counterTopMaterial: {
+      title: "Counter Top Material",
+      options: [
+        {
+          title: "Laminate",
+          image: "",
+          price: 0,
+          subTitle: "Laminate Countertops",
+          types: [
+            {
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/3or101cperm.png",
+              name: "Aluma Marble",
+              price: 0,
+            },
+            {
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/s7hzaz5c6yg.png",
+              name: "Bello Romano",
+              price: 0,
+            },
+          ],
+        },
+        {
+          title: "Solid Surface",
+          image: "",
+          price: 3800,
+          subTitle: "Solid Surface Countertops",
+          types: [
+            {
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/rr2pjyopalb.png",
+              name: "Artic Melange",
+              price: 0,
+            },
+            {
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/y4qma2orpq.png",
+              name: "Avalance Melange",
+              price: 0,
+            },
+          ],
+        },
+      ],
+    },
+    flatPanelCabinets: {
+      title: "Flat Panel Cabinets",
+      options: [
+        {
+          name: "Mesquite",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/3p4452ib09k.jpeg",
+          price: 0,
+        },
+        {
+          name: "Maple",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/vmph5pp5mc.jpeg",
+          price: 0,
+        },
+      ],
+    },
+    cabinetHardware: {
+      title: "Cabinate Hardware",
+      options: [
+        {
+          name: "Black Square Pull",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/zbbe1b8dbch.png",
+          price: 0,
+        },
+        {
+          name: "Brushed Nickel Pull",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/52fmcnswwst.png",
+          price: 0,
+        },
+      ],
+    },
+    tileBacksplash: {
+      title: "Tile Backsplash",
+      options: [
+        {
+          name: "Laminate",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/5wdmx4wk3tv.png",
+          price: 0,
+        },
+        {
+          name: "Solid Surface",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/cexkr9u0fu4.png",
+          price: 0,
+        },
+      ],
+    },
+    backsplashTile: {
+      title: "Backsplash Tile",
+      options: [
+        {
+          name: "Brickell Antracita 3 x 12",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/lvvqcoa2fdj.png",
+          price: 0,
+        },
+        {
+          name: "Brickell Taupe - 3 X 12",
+          image: "",
+          bgImage: "https://trove.b-cdn.net/images/cexkr9u0fu4.png",
+          price: 0,
+        },
+      ],
+    },
+    flooringMaterial: {
+      title: "Kitchen & bathroom flooring material",
+      options: [
+        {
+          title: "Sheet Vinyl",
+          price: 0,
+          subtitle: "Kitchen Linoleum Flooring Material",
+          image: "",
+          types: [
+            {
+              name: "Meteor Highlight",
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/0afn5degr51j.png",
+              price: 0,
+            },
+            {
+              name: "Aged European",
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/rhtui4iy7vk.png",
+              price: 0,
+            },
+          ],
+        },
+        {
+          title: "LVT",
+          price: 550,
+          subtitle: "Kitchen MSI Flooring Material",
+          image: "",
+          types: [
+            {
+              name: "Meteor Highlight",
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/5c7r9rhbb6t.png?height=160",
+              price: 0,
+            },
+            {
+              name: "Aged European",
+              image: "",
+              bgImage: "https://trove.b-cdn.net/images/mamwpkwbuls.png?height=160",
+              price: 0,
+            },
+          ],
+        },
+      ],
+    },
+    kitchenFaucets: {
+      title: "Kitchen",
+      options: [
+        {
+          name: "Brushed",
+          image: "https://trove.b-cdn.net/images/czah4qbnm4s.png",
+          bgImage: "https://trove.b-cdn.net/images/kekiv5ip3op.png",
+          price: 0,
+        },
+        {
+          name: "Black Smooth",
+          image: "https://trove.b-cdn.net/images/cefed805rxs.png",
+          bgImage: "https://trove.b-cdn.net/images/3cpcxlcsjvg.jpeg",
+          price: 500,
+        },
+      ],
+    },
+    kitchenSinks: {
+      title: "Kitchen Sinks",
+      options: [
+        {
+          name: "single Bowl",
+          image: "",
+          image2: "",
+          bgImage: "https://trove.b-cdn.net/images/mbefd3lao5.png",
+          price: 0,
+        },
+        {
+          name: "White Undermount",
+          image: "",
+          image2: "https://trove.b-cdn.net/images/qsvsexd7si.png",
+          bgImage: "https://trove.b-cdn.net/images/qsvsexd7si.png",
+          price: 150,
+        },
+      ],
+    },
   },
   interior: {
     title: "Interior",

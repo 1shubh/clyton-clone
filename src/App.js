@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { Admin } from "./pages/admin/Admin";
 import { useSelector } from 'react-redux';
 import { Loader } from "./components/Loader";
+import { Navbar2 } from "./components/Navbar2";
 
 function App() {
   const { userAuthState } = useContext(AuthContext);
@@ -22,7 +23,7 @@ function App() {
   }
   return userAuthState.isAuth ? (
     <>
-      <Navbar />
+      <Navbar/>
       <AllRoutes />
       <Footer />
     </>
