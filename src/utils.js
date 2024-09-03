@@ -375,13 +375,15 @@ export const data = {
             {
               name: "Meteor Highlight",
               image: "",
-              bgImage: "https://trove.b-cdn.net/images/5c7r9rhbb6t.png?height=160",
+              bgImage:
+                "https://trove.b-cdn.net/images/5c7r9rhbb6t.png?height=160",
               price: 0,
             },
             {
               name: "Aged European",
               image: "",
-              bgImage: "https://trove.b-cdn.net/images/mamwpkwbuls.png?height=160",
+              bgImage:
+                "https://trove.b-cdn.net/images/mamwpkwbuls.png?height=160",
               price: 0,
             },
           ],
@@ -427,30 +429,40 @@ export const data = {
   },
   interior: {
     title: "Interior",
-    doorHandles: [
-      {
-        title: "Black Round",
-        image: "https://trove.b-cdn.net/images/ym9alipcl5.jpeg",
-        price: 0,
-      },
-      {
-        title: "Brushed",
-        image: "https://trove.b-cdn.net/images/jhpx3820utp.jpeg",
-        price: 0,
-      },
-    ],
-    windowTreatment: [
-      {
-        title: "Factory Build valance",
-        image: "https://trove.b-cdn.net/images/399rj0on95w.png",
-        price: 0,
-      },
-      {
-        title: "Faux Wood Blinds",
-        image: "https://trove.b-cdn.net/images/su1rsuer0ck.png",
-        price: 0,
-      },
-    ],
+    doorHandles: {
+      title: "Interior Door Handles",
+      options: [
+        {
+          name: "Black Round",
+          bgImage: "https://trove.b-cdn.net/images/ym9alipcl5.jpeg?height=160",
+          price: 0,
+          image: "",
+        },
+        {
+          name: "Brushed",
+          bgImage: "https://trove.b-cdn.net/images/jhpx3820utp.jpeg?height=160",
+          price: 0,
+          image: "",
+        },
+      ],
+    },
+    windowTreatment: {
+      title: "Window Treatment",
+      options: [
+        {
+          name: "Factory Build valance",
+          bgImage: "https://trove.b-cdn.net/images/399rj0on95w.png",
+          price: 0,
+          image: "",
+        },
+        {
+          name: "Faux Wood Blinds",
+          bgImage: "https://trove.b-cdn.net/images/su1rsuer0ck.png",
+          price: 0,
+          image: "",
+        },
+      ],
+    },
   },
   bathroom: {
     title: "Bathroom",
@@ -491,6 +503,7 @@ export const data = {
           title: "Fiberglass",
           image: "",
           price: 0,
+          options: {},
         },
         {
           title: "Tile Walls",
@@ -512,19 +525,21 @@ export const data = {
             ],
           },
         },
+      ],
+    },
+    showerAndTiles: {
+      title: "Shower | Tiles",
+      price: 0,
+      options: [
         {
-          title: "Shower | Tiles",
-          options: [
-            {
-              title: "Calcutta Gold 12 x 24",
-              image:
-                "https://trove.b-cdn.net/images/yt9a7m1lbxn.png?height=160",
-            },
-            {
-              title: "Pietra 12x24",
-              image: "https://trove.b-cdn.net/images/16bpp2fax2c.png",
-            },
-          ],
+          name: "Calcutta Gold 12 x 24",
+          image: "https://trove.b-cdn.net/images/yt9a7m1lbxn.png?height=160",
+          price: 0,
+        },
+        {
+          name: "Pietra 12x24",
+          image: "https://trove.b-cdn.net/images/16bpp2fax2c.png",
+          price: 0,
         },
       ],
     },
@@ -532,12 +547,12 @@ export const data = {
       title: "Bathroom Mirror",
       options: [
         {
-          title: "Omit Mirror",
+          name: "Omit Mirror",
           image: "https://trove.b-cdn.net/images/6coep6765ql.jpeg?height=160",
           price: 0,
         },
         {
-          title: "LED Mount",
+          name: "LED Mount",
           image: "https://trove.b-cdn.net/images/6coep6765ql.jpeg?height=160",
           price: 400,
         },
@@ -547,12 +562,12 @@ export const data = {
       title: "Vanity Lighting",
       options: [
         {
-          title: "Brushed Lighting",
+          name: "Brushed Lighting",
           image: "https://trove.b-cdn.net/images/8osr7gddjry.png",
           price: 0,
         },
         {
-          title: "Brushed Nickel",
+          name: "Brushed Nickel",
           image: "https://trove.b-cdn.net/images/nfpyjr4xkua.png",
           price: 0,
         },
@@ -587,16 +602,18 @@ export const data = {
           subheading: "Kitchen Linoleum Flooring Material",
           options: [
             {
-              title: "Metor",
+              name: "Metor",
               image: "",
               bgImage:
                 "https://trove.b-cdn.net/images/0afn5degr51j.png?height=160",
+              price: 0,
             },
             {
-              title: "Aged European Oak Natural",
+              name: "Aged European Oak Natural",
               image: "",
               bgImage:
                 "https://trove.b-cdn.net/images/rhtui4iy7vk.png?height=160",
+              price: 0,
             },
           ],
         },
@@ -607,14 +624,16 @@ export const data = {
           subheading: "Kitchen MSI Flooring Material",
           options: [
             {
-              title: "Cyrus Akadia",
+              name: "Cyrus Akadia",
               image: "",
               bgImage: "https://trove.b-cdn.net/images/5c7r9rhbb6t.png",
+              price: 0,
             },
             {
-              title: "Cyrus Mezcla",
+              name: "Cyrus Mezcla",
               image: "",
               bgImage: "https://trove.b-cdn.net/images/mamwpkwbuls.png",
+              price: 0,
             },
           ],
         },
@@ -630,16 +649,18 @@ export const data = {
           subheading: "Living Room Carpet Takeaway - Non FHA",
           subOptions: [
             {
-              title: "Cornerstone",
+              name: "Cornerstone",
               image: "https://trove.b-cdn.net/images/jcjpd3bg5al.png",
               bgImage:
                 "https://trove.b-cdn.net/images/mrxj616ohzr.png?height=160",
+              price: 0,
             },
             {
-              title: "Driftwood",
+              name: "Driftwood",
               image: "https://trove.b-cdn.net/images/33zvoqob9ty.png",
               bgImage:
                 "https://trove.b-cdn.net/images/mkz15qqvt8s.png?height=160",
+              price: 0,
             },
           ],
         },
@@ -649,16 +670,18 @@ export const data = {
           subheading: "Living Room Carpet - Shake It Up",
           subOptions: [
             {
-              title: "Creamy silk",
+              name: "Creamy silk",
               image: "https://trove.b-cdn.net/images/33zvoqob9ty.png",
               bgImage:
                 "https://trove.b-cdn.net/images/8yvkakyrpml.png?height=160",
+              price: 0,
             },
             {
-              title: "Driftwood",
+              name: "Driftwood",
               image: "https://trove.b-cdn.net/images/33zvoqob9ty.png",
               bgImage:
                 "https://trove.b-cdn.net/images/mkz15qqvt8s.png?height=160",
+              price: 0,
             },
           ],
         },
@@ -668,16 +691,18 @@ export const data = {
           subheading: "Living Room Linoleum Flooring Material",
           subOptions: [
             {
-              title: "Meteor Highlights",
+              name: "Meteor Highlights",
               image: "https://trove.b-cdn.net/images/qgds5fm4atf.png",
               bgImage:
                 "https://trove.b-cdn.net/images/0afn5degr51j.png?height=160",
+              price: 0,
             },
             {
-              title: "Aged European Oak Natural",
+              name: "Aged European Oak Natural",
               image: "https://trove.b-cdn.net/images/o1kdabcdw3q.png",
               bgImage:
                 "https://trove.b-cdn.net/images/rhtui4iy7vk.png?height=160",
+              price: 0,
             },
           ],
         },
@@ -690,57 +715,63 @@ export const data = {
         {
           title: "Takeaway carpet",
           price: 0,
-          subheading: "Living Room Carpet Takeaway - Non FHA",
+          subheading: "Bedroom Carpet Takeaway - Non FHA",
           subOptions: [
             {
-              title: "Cornerstone",
+              name: "Cornerstone",
               image: "https://trove.b-cdn.net/images/njmkmtmfab.png",
               bgImage:
                 "https://trove.b-cdn.net/images/mrxj616ohzr.png?height=160",
+              price: 0,
             },
             {
-              title: "Driftwood",
+              name: "Driftwood",
               image: "https://trove.b-cdn.net/images/sfn4b2nasxj.png",
               bgImage:
                 "https://trove.b-cdn.net/images/mkz15qqvt8s.png?height=160",
+              price: 0,
             },
           ],
         },
         {
           title: "Shake it up carpet",
           price: 100,
-          subheading: "Living Room Carpet - Shake It Up",
+          subheading: "Bedroom Carpet - Shake It Up",
           subOptions: [
             {
-              title: "Creamy silk",
+              name: "Creamy silk",
               image: "https://trove.b-cdn.net/images/sfn4b2nasxj.png",
               bgImage:
                 "https://trove.b-cdn.net/images/8yvkakyrpml.png?height=160",
+              price: 0,
             },
             {
-              title: "Driftwood",
+              name: "Driftwood",
               image: "https://trove.b-cdn.net/images/sfn4b2nasxj.png",
               bgImage:
                 "https://trove.b-cdn.net/images/mkz15qqvt8s.png?height=160",
+              price: 0,
             },
           ],
         },
         {
           title: "Sheet Vinyl",
           price: 300,
-          subheading: "Living Room Linoleum Flooring Material",
+          subheading: "Bedroom Linoleum Flooring Material",
           subOptions: [
             {
-              title: "Meteor Highlights",
+              name: "Meteor Highlights",
               image: "https://trove.b-cdn.net/images/cyztgwvgwz.png",
               bgImage:
                 "https://trove.b-cdn.net/images/0afn5degr51j.png?height=160",
+              price: 0,
             },
             {
-              title: "Aged European Oak Natural",
+              name: "Aged European Oak Natural",
               image: "https://trove.b-cdn.net/images/ye08fyccoun.png",
               bgImage:
                 "https://trove.b-cdn.net/images/rhtui4iy7vk.png?height=160",
+              price: 0,
             },
           ],
         },
@@ -771,8 +802,8 @@ export const data = {
             title: "Custom",
             image: "https://trove.b-cdn.net/images/w2jgs33pew.jpeg",
             price: 0,
-            options: [
-              {
+            options: {
+              refrigirator: {
                 title: "Refrigerator",
                 category: [
                   {
@@ -851,7 +882,7 @@ export const data = {
                   },
                 ],
               },
-            ],
+            },
           },
         ],
       },
@@ -995,25 +1026,25 @@ export const data = {
           },
         ],
       },
-      {
-        title: "Dishwasher & Disposal",
-        subtitle: "",
-        description: "",
-        package: [
-          {
-            title: "Kitchen Sink Disposal",
-            price: 0,
-            description: "",
-          },
-          {
-            title: "Dishwasher & Sink Disposal",
-            price: 0,
-            description:
-              "Stainless steel 4 cycle dishwasher and kitchen sink disposal",
-          },
-        ],
-      },
     ],
+    dishwasher: {
+      title: "Dishwasher & Disposal",
+      subtitle: "",
+      description: "",
+      package: [
+        {
+          title: "Kitchen Sink Disposal",
+          price: 0,
+          description: "",
+        },
+        {
+          title: "Dishwasher & Sink Disposal",
+          price: 0,
+          description:
+            "Stainless steel 4 cycle dishwasher and kitchen sink disposal",
+        },
+      ],
+    },
   },
   advanceDetails: {
     title: "Advance Details",

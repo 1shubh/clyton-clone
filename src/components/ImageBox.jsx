@@ -20,7 +20,7 @@ export const ImageBox = ({ data, title, active, setActive }) => {
             >
               <div className="w-full h-[150px] rounded-md">
                 <img
-                  src={ele.bgImage}
+                  src={ele.bgImage || ele.image}
                   alt={ele.name}
                   className="w-full h-full object-contain rounded-md"
                 />
