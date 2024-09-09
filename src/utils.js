@@ -1,3 +1,4 @@
+
 export const data = {
   modelNum: "EG-20302A",
   price: 1000,
@@ -25,7 +26,7 @@ export const data = {
   },
   exterior: {
     title: "Exterior",
-    images: ["", "", ""],
+    image:"/images/exterior.webp",
     sidingType: {
       title: "Exterior Siding Type",
       options: [
@@ -229,7 +230,7 @@ export const data = {
   },
   kitchen: {
     title: "Kitchen",
-    image: "",
+    image: "/images/kitchen.webp",
     counterTopMaterial: {
       title: "Counter Top Material",
       options: [
@@ -436,7 +437,7 @@ export const data = {
           name: "Black Round",
           bgImage: "https://trove.b-cdn.net/images/ym9alipcl5.jpeg?height=160",
           price: 0,
-          image: "",
+          image: "https://trove.b-cdn.net/images/ym9alipcl5.jpeg?height=160",
         },
         {
           name: "Brushed",
@@ -591,6 +592,7 @@ export const data = {
   },
   flooring: {
     title: "Flooring",
+    image:"/images/kitchen.webp",
     kitchenflooringMaterial: {
       title: "Kitchen & bathroom flooring material",
       image: "",
@@ -781,6 +783,7 @@ export const data = {
   appliances: {
     title: "Appliances",
     note: "Appliances may vary in style",
+    image: "https://trove.b-cdn.net/images/dcr6u9q33ok.png",
     types: [
       {
         title: "Electric only",

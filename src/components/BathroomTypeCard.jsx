@@ -6,6 +6,7 @@ export const BathroomTypeCard = ({
   setActiveObj,
   activeType,
   setActiveType,
+  setActiveSuboption
 }) => {
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -14,7 +15,13 @@ export const BathroomTypeCard = ({
   const handleClick = (ele) => {
     setActiveObj(ele);
     setActiveType(ele.options);
+
+    // Check if the selected option is "Fiberglass", and clear activeSuboption if true
+    if (ele.title === "Fiberglass") {
+      setActiveSuboption([]); // Clear activeSuboption
+    }
   };
+
   return (
     <div
       className={`cursor-pointer p-2 mb-2 border hover:bg-gray-100 h-[80px] rounded ${

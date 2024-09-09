@@ -1,20 +1,31 @@
 import { Checkbox } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
-export const CheckboxCard = ({ option, activeObj, setActiveObj }) => {
+export const CheckboxCard = ({ option, checkPackage, setPackage }) => {
+  const [checked, setChecked] = useState(false);
+
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
+
+  const handleCheckboxChange = () => {
+    setChecked(!checked);
+    if (!checked) {
+      // Add to package when checked
+      setPackage((prev) => [...prev, option]);
+    } else {
+      // Remove from package when unchecked
+      setPackage((prev) => prev.filter((item) => item.title !== option.title));
+    }
+  };
+
   return (
     <div
-      className={`cursor-pointer p-2 mb-2 border hover:bg-gray-100 h-[80px] rounded flex items-center gap-3 ${
-        option.title === activeObj.title
-          ? "border-blue-500 bg-[#c5e5f8]"
-          : "border-gray-300"
+      className={`cursor-pointer p-2 mb-2 border h-[80px] rounded flex items-center gap-3 ${
+        checked ? "border-blue-500 bg-[#c5e5f8]" : "border-gray-300 hover:bg-gray-100"
       }`}
-      onClick={() => setActiveObj(option)}
     >
-      <Checkbox />
+      <Checkbox isChecked={checked} onChange={handleCheckboxChange} />
       <div>
         <p className="text-[16px] font-normal">{option.title}</p>
         <div

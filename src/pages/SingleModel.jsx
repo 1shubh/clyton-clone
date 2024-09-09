@@ -14,8 +14,26 @@ import { ImageBox } from "../components/ImageBox";
 import { BathroomTypeCard } from "../components/BathroomTypeCard";
 import { CheckboxCard } from "../components/CheckboxCard";
 import { AppliancesPackageCard } from "../components/AppliancesPackageCard";
+import { PriceCard } from "../components/PriceCard";
+import ExteriorSection from "../components/SingleProperty/ExteriorSection";
+import KitchenSection from "../components/SingleProperty/KitchenSection";
+import InteriorSection from "../components/SingleProperty/InteriorSection";
+import BathroomSection from "../components/SingleProperty/BathroomSection";
+import FlooringSection from "../components/SingleProperty/FlooringSection";
+import AppliancesSection from "../components/SingleProperty/AppliancesSection";
+import AdvanceDetailsSection from "../components/SingleProperty/AdvanceDetailsSection";
+import { ExteriorUpgrades } from "../components/SingleProperty/ExteriorUpgrades";
+import { KitchenUpgrades } from "../components/SingleProperty/KitchenUpgrades";
+import { InteriorUpgrades } from "../components/SingleProperty/InteriorUpgrades";
+import { BathroomUpgrades } from "../components/SingleProperty/BathroomUpgrades";
+import { FlooringUpgrades } from "../components/SingleProperty/FlooringUpgrades";
+import { AppliancesUpgrade } from "../components/SingleProperty/AppliancesUpgrade";
+import { AdvanceDetailsUpgrade } from "../components/SingleProperty/AdvanceDetailsUpgrade";
+import { Button } from "@chakra-ui/react";
+import useInView from "../hooks/useInView";
 
 export const SingleModel = () => {
+  const [ref, isInView] = useInView({ threshold: 0.1 });
   const [activeSection, setActiveSection] = useState("floor-plan");
   const sectionRefs = useRef({
     "floor-plan": null,
@@ -25,22 +43,26 @@ export const SingleModel = () => {
     bathroom: null,
     flooring: null,
     appliances: null,
-    advanceDetails: null,
+    "advance-details": null,
+    "your-home": null,
   });
+
   const [isImageFixed, setIsImageFixed] = useState(false);
   const navbarHeight = 80;
-
   const { id } = useParams();
   const [modelData, setModelData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  // Floor Plan
   const [activeObject, setActiveObject] = useState(data.floorPlan);
   const [activeFloorPlan, setActiveFloorPlan] = useState(
     data.floorPlan.options[0]
   );
   const [currentImage, setCurrentImage] = useState(data.floorPlan.image);
-
+  let FloorArray = [activeFloorPlan];
+  // Exterior
   const [activeSidingType, setActiveSidingType] = useState(
     data.exterior.sidingType.options[0]
   );
@@ -117,7 +139,15 @@ export const SingleModel = () => {
     data.bathroom.bathroomTile.options[0]
   );
   const [activeBathroomTileType, setActiveBathroomTileType] = useState({});
-  const [activeSuboption, setActiveSuboption] = useState({});
+  // console.log(activeBathroomTile);
+  // console.log(activeBathroomTileType);
+  const [activeSuboption, setActiveSuboption] = useState([]);
+  const [activeSuboptionTotal, setActiveSubOptionTotal] = useState(0);
+  useEffect(() => {
+    const total = activeSuboption.reduce((sum, item) => sum + item.price, 0);
+    setActiveSubOptionTotal(total);
+  }, [activeSuboption]);
+
   const [activeShowertiles, setActiveShowerTiles] = useState(
     data.bathroom.showerAndTiles.options[0]
   );
@@ -169,6 +199,7 @@ export const SingleModel = () => {
       setActiveRefrigirator({});
     }
   }, [activeCustomAppliances]);
+  // console.log(activeCustomAppliances);
   useEffect(() => {
     if (
       activeCustomRefrigirator &&
@@ -187,9 +218,13 @@ export const SingleModel = () => {
   const [activeCeilingHeight, setActiveCeilingHeight] = useState(
     data.advanceDetails.celingHeight.options[0]
   );
-  const [activeStrucure, setActiveStructure] = useState(
-    data.advanceDetails.structuralUpgrades.options[0]
-  );
+  const [activeStructure, setActiveStructure] = useState([]);
+  const [activeStructureTotal, setActiveStructureTotal] = useState(0);
+  useEffect(() => {
+    const total = activeStructure.reduce((sum, item) => sum + item.price, 0);
+    setActiveStructureTotal(total);
+  }, [activeStructure]);
+  // console.log(activeStructureTotal)
   const [activeSideWall, setActiveSideWall] = useState(
     data.advanceDetails.sidewallDimenstions.options[0]
   );
@@ -197,6 +232,10 @@ export const SingleModel = () => {
     data.advanceDetails.insulationOptions.options[0]
   );
 
+  // upgrades total
+  const [upgrades, setUpgrades] = useState(0);
+  // console.log(upgrades);
+  // Fetch the data from the api
   useEffect(() => {
     const fetchModelData = async () => {
       try {
@@ -260,18 +299,23 @@ export const SingleModel = () => {
         case "advance-details":
           setActiveObject(data.advanceDetails);
           break;
+        case "your-home":
+          setActiveObject({
+            title: "Your Home",
+            image: data.advanceDetails.image,
+          });
+          break;
         default:
           setActiveObject(data.floorPlan); // Default to floor plan if no match
           break;
       }
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [navbarHeight, data]); // Make sure to add dependencies
+
   // console.log(activeObject);
 
   // Scroll effect for image container
@@ -291,6 +335,93 @@ export const SingleModel = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  // total upgrades
+  useEffect(() => {
+    const activeItems = [
+      activeFloorPlan,
+      activeSidingType,
+      activeShinglesMaterial,
+      activeShinglesType,
+      activeExteriorDoors,
+      activeKitchenCounterTop,
+      activeCounterTopMaterial,
+      activeFlatCabinates,
+      activecabinateHardware,
+      activeTileBacksplash,
+      activeBacksplashtile,
+      activeKitchenFlooringMaterial,
+      activeFlooringType,
+      activeKitchenFucet,
+      activeInteriorDoorHandles,
+      activeInteriorWindow,
+      activeBathroomType,
+      activeBathroomEnclosure,
+      activeBathroomTile,
+      activeShowertiles,
+      activeBathroomMirror,
+      activeBathroomVanity,
+      activeBathroomHardware,
+      activeKitchenBathroomFlooring,
+      activeKitchenBathroomFlooringType,
+      activeLeavingRoomFlooring,
+      leavingRoomFlooringMaterial,
+      activeBedroomFlooringMaterial,
+      activeAppliancesPackage,
+      activeDishwasher,
+      activeCeilingHeight,
+      activeStructure, // Make sure this is the correct state
+      activeSideWall,
+      activeInsulationOption,
+    ];
+
+    // Calculate the total upgrades price
+    const totalUpgrades = activeItems.reduce(
+      (acc, item) => acc + (item?.price || 0),
+      0
+    );
+    setUpgrades(totalUpgrades + activeStructureTotal + activeSuboptionTotal);
+  }, [
+    activeFloorPlan,
+    activeSidingType,
+    activeShinglesMaterial,
+    activeShinglesType,
+    activeExteriorDoors,
+    activeKitchenCounterTop,
+    activeCounterTopMaterial,
+    activeFlatCabinates,
+    activecabinateHardware,
+    activeTileBacksplash,
+    activeBacksplashtile,
+    activeKitchenFlooringMaterial,
+    activeFlooringType,
+    activeKitchenFucet,
+    activeInteriorDoorHandles,
+    activeInteriorWindow,
+    activeBathroomType,
+    activeBathroomEnclosure,
+    activeBathroomTile,
+    activeShowertiles,
+    activeBathroomMirror,
+    activeBathroomVanity,
+    activeBathroomHardware,
+    activeKitchenBathroomFlooring,
+    activeKitchenBathroomFlooringType,
+    activeLeavingRoomFlooring,
+    leavingRoomFlooringMaterial,
+    activeBedroomFlooringMaterial,
+    activeAppliancesPackage,
+    activeDishwasher,
+    activeCeilingHeight,
+    activeStructure,
+    activeSideWall,
+    activeInsulationOption,
+    activeSuboption,
+    activeStructureTotal,
+    activeSuboptionTotal,
+  ]);
+
+  // useinview for price total
 
   if (loading) {
     return (
@@ -318,14 +449,36 @@ export const SingleModel = () => {
       >
         <div
           style={{
-            transform: activeFloorPlan.rotate, // Apply the rotation based on the active option
+            transform:
+              activeObject.title === "Floor Plan" ? activeFloorPlan.rotate : "", // Apply the rotation based on the active option
             transition: "transform 0.3s ease",
           }}
+          className={`${
+            activeObject.title === "Floor Plan"
+              ? "w-full flex items-center bg-white justify-center h-screen"
+              : activeObject.title === "Interior"
+              ? "w-full flex items-center bg-white justify-center h-screen"
+              : "w-full h-screen flex items-center"
+          }`}
         >
           <img
-            src={currentImage}
-            alt={activeFloorPlan.title}
-            className="w-full"
+            src={
+              activeObject.title === "Interior"
+                ? activeObject.doorHandles.options[0].image
+                : activeObject.title === "Bathroom"
+                ? activeBathroomType.image
+                : activeObject.image
+            }
+            alt={activeObject.title}
+            className={`${
+              activeObject.title === "Floor Plan"
+                ? "w-[70%] m-auto"
+                : activeObject.title === "Interior"
+                ? "w-[20%] m-auto"
+                : activeObject.title === "Appliances"
+                ? "m-auto"
+                : "w-full h-full object-cover"
+            }`}
           />
         </div>
       </div>
@@ -353,7 +506,9 @@ export const SingleModel = () => {
             </p>
             <p className="font-bold text-[18px]">{modelData?.modelNum}</p>
           </div>
-          <h2 className="text-[30px] font-semibold">{activeObject.title}</h2>
+          <h2 className="text-[30px] font-semibold pl-5">
+            {activeObject.title}
+          </h2>
         </div>
 
         <div className="">
@@ -378,575 +533,298 @@ export const SingleModel = () => {
             </div>
           </div>
           {/* Exterior */}
-          <div
-            className="mt-5"
-            id="exterior"
-            ref={(el) => (sectionRefs.current["exterior"] = el)}
-          >
-            <h2 className="text-[30px] font-semibold">{data.exterior.title}</h2>
-            <p className="text-xl font-semibold">
-              {data.exterior.sidingType.title}
-            </p>
-            {/* exterior siding type */}
-            <div className="mt-5">
-              {data.exterior.sidingType.options.map((ele, index) => {
-                return (
-                  <OptionCard
-                    key={index}
-                    option={ele}
-                    activeObj={activeSidingType}
-                    setActiveObj={setActiveSidingType}
-                  />
-                );
-              })}
-            </div>
-            {/* Exterior Body color */}
-            <ColorContainer
-              title={data.exterior.bodyColor.title}
-              data={data.exterior.bodyColor.options}
-              activeColor={activeExteriorBodyColor}
-              setActiveColor={setActiveExteriorBodyColor}
-            />
-            {/* Exterior Accent color */}
-            <ColorContainer
-              title={data.exterior.accentColor.title}
-              data={data.exterior.accentColor.options}
-              activeColor={activeExteriorAccentColor}
-              setActiveColor={setActiveExteriorAccentColor}
-            />
-            {/*  Exterior Trim Color*/}
-            <ColorContainer
-              title={data.exterior.trimColor.title}
-              data={data.exterior.trimColor.options}
-              activeColor={activeExteriorTrimColor}
-              setActiveColor={setActiveExteriorTrimColor}
-            />
-            {/* Exterior Door Paint */}
-            <ColorContainer
-              title={data.exterior.doorPaint.title}
-              data={data.exterior.doorPaint.options}
-              activeColor={activeExteriorDoorPaint}
-              setActiveColor={setActiveExteriorDoorPaint}
-            />
-            {/* Shingles Material */}
-            <div className="mt-5">
-              <p className="text-xl font-semibold">
-                {data.exterior.shiglesMaterial.title}
-              </p>
-              <div className="mt-5">
-                {data.exterior.shiglesMaterial.options.map((ele, index) => {
-                  return (
-                    <OptionCard
-                      key={index}
-                      option={ele}
-                      activeObj={activeShinglesMaterial}
-                      setActiveObj={setActiveShinglesMaterial}
-                    />
-                  );
-                })}
-              </div>
-              {/* Active Shingles material type */}
-              <ImageColorCard
-                title={activeShinglesMaterial.subtitle}
-                data={activeShinglesMaterial.types}
-                active={activeShinglesType}
-                setActive={setActiveShinglesType}
-              />
-              {/* Doors */}
-              <p className="text-xl font-semibold mt-5">
-                {data.exterior.exteriorDoors.title}
-              </p>
-              <div className="grid grid-cols-3 gap-4 mt-5">
-                {data.exterior.exteriorDoors.options?.map((ele, i) => {
-                  return (
-                    <div
-                      className={`px-2 py-3 font-semibold border border-gray-300 cursor-pointer rounded-md ${
-                        ele === activeExteriorDoors ? "bg-[#c5e5f8]" : ""
-                      }`}
-                      key={i}
-                      onClick={() => setActiveExteriorDoors(ele)}
-                    >
-                      <div className="w-full h-[150px] rounded-md">
-                        <img
-                          src={ele.image}
-                          alt={ele.name}
-                          className="w-full h-full object-contain rounded-md"
-                        />
-                      </div>
-                      <p>{ele.name}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          <ExteriorSection
+            data={data}
+            activeSidingType={activeSidingType}
+            setActiveSidingType={setActiveSidingType}
+            activeExteriorBodyColor={activeExteriorBodyColor}
+            setActiveExteriorBodyColor={setActiveExteriorBodyColor}
+            activeExteriorAccentColor={activeExteriorAccentColor}
+            setActiveExteriorAccentColor={setActiveExteriorAccentColor}
+            activeExteriorTrimColor={activeExteriorTrimColor}
+            setActiveExteriorTrimColor={setActiveExteriorTrimColor}
+            activeExteriorDoorPaint={activeExteriorDoorPaint}
+            setActiveExteriorDoorPaint={setActiveExteriorDoorPaint}
+            activeShinglesMaterial={activeShinglesMaterial}
+            setActiveShinglesMaterial={setActiveShinglesMaterial}
+            activeShinglesType={activeShinglesType}
+            setActiveShinglesType={setActiveShinglesType}
+            activeExteriorDoors={activeExteriorDoors}
+            setActiveExteriorDoors={setActiveExteriorDoors}
+            sectionRefs={sectionRefs}
+          />
           {/* Kitchen */}
-          <div
-            className="mt-5"
-            id="kitchen"
-            ref={(el) => (sectionRefs.current["kitchen"] = el)}
-          >
-            <h2 className="text-[30px] font-semibold">{data.kitchen.title}</h2>
-            <div className="mt-5">
-              <p className="text-xl font-semibold">Countertop material</p>
-              <div className="mt-5">
-                {data.kitchen.counterTopMaterial.options.map((ele, i) => {
-                  return (
-                    <OptionCard
-                      key={i}
-                      option={ele}
-                      activeObj={activeKitchenCounterTop}
-                      setActiveObj={setActiveKitchenCounterTop}
-                    />
-                  );
-                })}
-              </div>
-              <ImageBox
-                title={activeKitchenCounterTop.subTitle}
-                data={activeKitchenCounterTop.types}
-                active={activeCounterTopMaterial}
-                setActive={setActiveCounterTopMaterial}
-              />
-              {/* kitchen flat cabinates */}
-              <ImageBox
-                title={data.kitchen.flatPanelCabinets.title}
-                data={data.kitchen.flatPanelCabinets.options}
-                active={activeFlatCabinates}
-                setActive={setActiveFlatCabinates}
-              />
-              {/* cabinates hardware */}
-              <ImageBox
-                title={data.kitchen.cabinetHardware.title}
-                data={data.kitchen.cabinetHardware.options}
-                active={activecabinateHardware}
-                setActive={setActiveCabinateHardware}
-              />
-              {/* tile backsplash */}
-              <ImageBox
-                title={data.kitchen.tileBacksplash.title}
-                data={data.kitchen.tileBacksplash.options}
-                active={activeTileBacksplash}
-                setActive={setActiveTileBacksplash}
-              />
-              {/* Backsplash Tile */}
-              <ImageBox
-                title={data.kitchen.backsplashTile.title}
-                data={data.kitchen.backsplashTile.options}
-                active={activeBacksplashtile}
-                setActive={setActivebacksplashTile}
-              />
-              {/* Flooring material */}
-              <p className="text-xl font-semibold mt-5">
-                {data.kitchen.flooringMaterial.title}
-              </p>
-              {data.kitchen.flooringMaterial.options.map((ele, i) => (
-                <OptionCard
-                  key={i}
-                  option={ele}
-                  activeObj={activeKitchenFlooringMaterial}
-                  setActiveObj={setActiveKitchenFlooringMaterial}
-                />
-              ))}
-              <ImageBox
-                title={activeKitchenFlooringMaterial.subtitle}
-                data={activeKitchenFlooringMaterial.types}
-                active={activeFlooringType}
-                setActive={setActiveFlooringType}
-              />
-              <ImageBox
-                title={data.kitchen.kitchenFaucets.title}
-                data={data.kitchen.kitchenFaucets.options}
-                active={activeKitchenFucet}
-                setActive={setActiveKitchenFucet}
-              />
-              <ImageBox
-                title={data.kitchen.kitchenSinks.title}
-                data={data.kitchen.kitchenSinks.options}
-                active={activeKitchenSinks}
-                setActive={setActiveKitchenSinks}
-              />
-            </div>
-          </div>
+          <KitchenSection
+            data={data}
+            activeKitchenCounterTop={activeKitchenCounterTop}
+            setActiveKitchenCounterTop={setActiveKitchenCounterTop}
+            activeCounterTopMaterial={activeCounterTopMaterial}
+            setActiveCounterTopMaterial={setActiveCounterTopMaterial}
+            activeFlatCabinates={activeFlatCabinates}
+            setActiveFlatCabinates={setActiveFlatCabinates}
+            activeCabinateHardware={activecabinateHardware}
+            setActiveCabinateHardware={setActiveCabinateHardware}
+            activeTileBacksplash={activeTileBacksplash}
+            setActiveTileBacksplash={setActiveTileBacksplash}
+            activeBacksplashtile={activeBacksplashtile}
+            setActiveBacksplashtile={setActivebacksplashTile}
+            activeKitchenFlooringMaterial={activeKitchenFlooringMaterial}
+            setActiveKitchenFlooringMaterial={setActiveKitchenFlooringMaterial}
+            activeFlooringType={activeFlooringType}
+            setActiveFlooringType={setActiveFlooringType}
+            activeKitchenFaucet={activeKitchenFucet}
+            setActiveKitchenFaucet={setActiveKitchenFucet}
+            activeKitchenSinks={activeKitchenSinks}
+            setActiveKitchenSinks={setActiveKitchenSinks}
+            sectionRefs={sectionRefs}
+          />
           {/* Interior */}
-          <div
-            className="mt-5"
-            id="interior"
-            ref={(el) => (sectionRefs.current["interior"] = el)}
-          >
-            <h2 className="text-[30px] font-semibold">{data.interior.title}</h2>
-            {/* interior door handles */}
-            <ImageBox
-              title={data.interior.doorHandles.title}
-              data={data.interior.doorHandles.options}
-              active={activeInteriorDoorHandles}
-              setActive={setActiveInteriorDoorHandles}
-            />
-            {/* interior window treatment */}
-            <ImageBox
-              title={data.interior.windowTreatment.title}
-              data={data.interior.windowTreatment.options}
-              active={activeInteriorWindow}
-              setActive={setActiveWindow}
-            />
-          </div>
+          <InteriorSection
+            data={data}
+            activeInteriorDoorHandles={activeInteriorDoorHandles}
+            setActiveInteriorDoorHandles={setActiveInteriorDoorHandles}
+            activeInteriorWindow={activeInteriorWindow}
+            setActiveWindow={setActiveWindow}
+            sectionRefs={sectionRefs}
+          />
           {/* Bathroom */}
-          <div
-            className="mt-5"
-            id="bathroom"
-            ref={(el) => (sectionRefs.current["bathroom"] = el)}
-          >
-            <h2 className="text-[30px] font-semibold">{data.bathroom.title}</h2>
-            {/* bathroom type */}
-            <p className="text-xl font-semibold">
-              {data.bathroom.bathroomType.title}
-            </p>
-            <div className="mt-5">
-              {data.bathroom.bathroomType.options.map((ele, i) => {
-                return (
-                  <OptionCard
-                    key={i}
-                    option={ele}
-                    activeObj={activeBathroomType}
-                    setActiveObj={setActiveBathroomType}
-                  />
-                );
-              })}
-            </div>
-            {/* Bathroom Enclosure */}
-            <p className="text-xl font-semibold mt-5">
-              {data.bathroom.bathroomEnclosure.title}
-            </p>
-            <div className="mt-5">
-              {data.bathroom.bathroomEnclosure.options.map((ele, i) => {
-                return (
-                  <OptionCard
-                    key={i}
-                    option={ele}
-                    activeObj={activeBathroomEnclosure}
-                    setActiveObj={setActiveBathroomEnclosure}
-                  />
-                );
-              })}
-            </div>
-            {/* Bathroom tiles */}
-            <p className="text-xl font-semibold mt-5">
-              {data.bathroom.bathroomTile.title}
-            </p>
-            <div className="mt-5">
-              {data.bathroom.bathroomTile.options?.map((ele, i) => {
-                return (
-                  <BathroomTypeCard
-                    key={i}
-                    option={ele}
-                    activeObj={activeBathroomTile}
-                    setActiveObj={setActiveBathroomTile}
-                    activeType={activeBathroomTileType}
-                    setActiveType={setActiveBathroomTileType}
-                  />
-                );
-              })}
-            </div>
-            {/* bathroom tile Walls options or types */}
-            <div className="mt-5">
-              <p className="text-xl font-semibold mt-5">
-                {activeBathroomTileType?.title}
-              </p>
-              <div className="mt-5">
-                {Object.keys(activeBathroomTileType).length === 0 ? (
-                  <></>
-                ) : (
-                  activeBathroomTileType.subOptions.map((ele, i) => {
-                    return (
-                      <CheckboxCard
-                        key={i}
-                        option={ele}
-                        activeObj={activeSuboption}
-                        setActiveObj={setActiveSuboption}
-                      />
-                    );
-                  })
-                )}
-              </div>
-            </div>
-            {/* shower tiles */}
-            <ImageBox
-              title={data.bathroom.showerAndTiles.title}
-              data={data.bathroom.showerAndTiles.options}
-              active={activeShowertiles}
-              setActive={setActiveShowerTiles}
-            />
-            {/* Bathroom mirrors */}
-            <ImageBox
-              title={data.bathroom.mirror.title}
-              data={data.bathroom.mirror.options}
-              active={activeBathroomMirror}
-              setActive={setActiveBathroomMirror}
-            />
-            {/* vanity lighting */}
-            <ImageBox
-              title={data.bathroom.vanityLighting.title}
-              data={data.bathroom.vanityLighting.options}
-              active={activeBathroomVanity}
-              setActive={setActiveBathroomVanity}
-            />
-            {/* Hardware */}
-            <ImageBox
-              title={data.bathroom.hardware.title}
-              data={data.bathroom.hardware.options}
-              active={activeBathroomHardware}
-              setActive={setActiveBathroomHardware}
-            />
-          </div>
+          <BathroomSection
+            data={data}
+            activeBathroomType={activeBathroomType}
+            setActiveBathroomType={setActiveBathroomType}
+            activeBathroomEnclosure={activeBathroomEnclosure}
+            setActiveBathroomEnclosure={setActiveBathroomEnclosure}
+            activeBathroomTile={activeBathroomTile}
+            setActiveBathroomTile={setActiveBathroomTile}
+            activeBathroomTileType={activeBathroomTileType}
+            setActiveBathroomTileType={setActiveBathroomTileType}
+            activeSuboption={activeSuboption}
+            setActiveSuboption={setActiveSubOptionTotal}
+            activeShowertiles={activeShowertiles}
+            setActiveShowerTiles={setActiveShowerTiles}
+            activeBathroomMirror={activeBathroomMirror}
+            setActiveBathroomMirror={setActiveBathroomMirror}
+            activeBathroomVanity={activeBathroomVanity}
+            setActiveBathroomVanity={setActiveBathroomVanity}
+            activeBathroomHardware={activeBathroomHardware}
+            setActiveBathroomHardware={setActiveBathroomHardware}
+            sectionRefs={sectionRefs}
+          />
           {/* Flooring */}
-          <div
-            className="mt-5"
-            id="flooring"
-            ref={(el) => (sectionRefs.current["flooring"] = el)}
-          >
-            <h2 className="text-[30px] font-semibold">{data.flooring.title}</h2>
-            {/* Kichen Bathroom Flooring Material */}
-            <p className="text-xl font-semibold mt-5">
-              {data.flooring.kitchenflooringMaterial.title}
-            </p>
-            {data.flooring.kitchenflooringMaterial.options.map((ele, i) => (
-              <OptionCard
-                key={i}
-                option={ele}
-                activeObj={activeKitchenBathroomFlooring}
-                setActiveObj={setActiveKitchenBathroomFlooring}
-              />
-            ))}
-            {/* type of Kitchen bathroom flooring material */}
-            <div>
-              <ImageBox
-                title={activeKitchenBathroomFlooring.subheading}
-                data={activeKitchenBathroomFlooring.options}
-                active={activeKitchenBathroomFlooringType}
-                setActive={setActiveKithcenBathroomFlooringType}
-              />
-            </div>
-            {/* living room flooring */}
-            <p className="text-xl font-semibold mt-5">
-              {data.flooring.leavingRoomFlooringMaterial.title}
-            </p>
-            <div className="mt-5">
-              {data.flooring.leavingRoomFlooringMaterial.options.map(
-                (ele, i) => (
-                  <OptionCard
-                    option={ele}
-                    key={i}
-                    activeObj={activeLeavingRoomFlooring}
-                    setActiveObj={setActiveLeavingRoomFlooring}
-                  />
-                )
-              )}
-            </div>
-            <ImageBox
-              title={activeLeavingRoomFlooring.subheading}
-              data={activeLeavingRoomFlooring.subOptions}
-              active={leavingRoomFlooringMaterial}
-              setActive={setLivingRoomFlooringMaterial}
-            />
-            {/* bedroom flooring */}
-            <p className="text-xl font-semibold mt-5">
-              {data.flooring.bedroomFlooringMaterial.title}
-            </p>
-            <div className="mt-5">
-              {data.flooring.bedroomFlooringMaterial.options.map((ele, i) => (
-                <OptionCard
-                  option={ele}
-                  key={i}
-                  activeObj={activeBedroomFlooringMaterial}
-                  setActiveObj={setActiveBedroomFlooringMaterial}
-                />
-              ))}
-            </div>
-            <ImageBox
-              title={activeBedroomFlooringMaterial.subheading}
-              data={activeBedroomFlooringMaterial.subOptions}
-              active={leavingRoomFlooringMaterial}
-              setActive={setLivingRoomFlooringMaterial}
-            />
-          </div>
+          <FlooringSection
+            data={data}
+            activeKitchenBathroomFlooring={activeKitchenBathroomFlooring}
+            setActiveKitchenBathroomFlooring={setActiveKitchenBathroomFlooring}
+            activeKitchenBathroomFlooringType={
+              activeKitchenBathroomFlooringType
+            }
+            setActiveKithcenBathroomFlooringType={
+              setActiveKitchenBathroomFlooring
+            }
+            activeLeavingRoomFlooring={activeLeavingRoomFlooring}
+            setActiveLeavingRoomFlooring={setActiveLeavingRoomFlooring}
+            leavingRoomFlooringMaterial={leavingRoomFlooringMaterial}
+            setLivingRoomFlooringMaterial={setLivingRoomFlooringMaterial}
+            activeBedroomFlooringMaterial={activeBedroomFlooringMaterial}
+            setActiveBedroomFlooringMaterial={setActiveBedroomFlooringMaterial}
+            sectionRefs={sectionRefs}
+          />
           {/* Appliances */}
-          <div
-            className="mt-5"
-            id="appliances"
-            ref={(el) => (sectionRefs.current["appliances"] = el)}
-          >
-            <h2 className="text-[30px] font-semibold">
-              {data.appliances.title}
-            </h2>
-            <p className="text-base font-normal text-gray-600 text-[16px]">
-              {data.appliances.note}
-            </p>
-            <div className="mt-5">
-              {data.appliances.types.map((ele, i) => {
-                return (
-                  <OptionCard
-                    option={ele}
-                    key={i}
-                    activeObj={activeAppliances}
-                    setActiveObj={setActiveAppliances}
-                  />
-                );
-              })}
-            </div>
-            <p className="text-xl font-semibold mt-5">
-              {activeAppliances.subtitle}
-            </p>
-            <div className="mt-5">
-              {activeAppliances.package.map((ele, i) => {
-                return (
-                  <AppliancesPackageCard
-                    key={i}
-                    option={ele}
-                    activeObj={activeAppliancesPackage}
-                    setActiveObj={setActiveAppliancesPackage}
-                    setActiveCustom={setActiveCustomAppliances}
-                  />
-                );
-              })}
-            </div>
-            {/* Refrigirator for custome selection */}
-            <p className="text-xl font-semibold mt-5">
-              {activeCustomAppliances != null
-                ? activeCustomAppliances.refrigirator.title
-                : ""}
-            </p>
-            <div className="mt-5">
-              {activeCustomAppliances != null
-                ? activeCustomAppliances.refrigirator.category.map((ele, i) => {
-                    return (
-                      <OptionCard
-                        key={i}
-                        option={ele}
-                        activeObj={activeCustomRefrigirator}
-                        setActiveObj={setActiveRefrigirator}
-                      />
-                    );
-                  })
-                : ""}
-            </div>
-            {/* Choose your range */}
-            <p className="text-xl font-semibold mt-5">
-              {activeCustomRefrigirator && activeCustomRefrigirator.subCategory
-                ? activeCustomRefrigirator.subCategory.title
-                : ""}
-            </p>
-            <div className="mt-5">
-              {activeCustomRefrigirator && activeCustomRefrigirator.subCategory
-                ? activeCustomRefrigirator.subCategory.options.map((ele, i) => {
-                    return (
-                      <OptionCard
-                        key={i}
-                        option={ele}
-                        activeObj={activeRange}
-                        setActiveObj={setActiveRange}
-                      />
-                    );
-                  })
-                : ""}
-            </div>
-            {/* Dishwasher */}
-            <p className="text-xl font-semibold mt-5">
-              {data.appliances.dishwasher.title}
-            </p>
-            <div className="mt-5">
-              {data.appliances.dishwasher.package.map((ele, i) => {
-                return (
-                  <OptionCard
-                    option={ele}
-                    key={i}
-                    activeObj={activeDishwasher}
-                    setActiveObj={setActiveDishwasher}
-                  />
-                );
-              })}
-            </div>
-          </div>
+          <AppliancesSection
+            data={data}
+            activeAppliances={activeAppliances}
+            setActiveAppliances={setActiveAppliances}
+            activeAppliancesPackage={activeAppliancesPackage}
+            setActiveAppliancesPackage={setActiveAppliancesPackage}
+            activeCustomAppliances={activeCustomAppliances}
+            setActiveCustomAppliances={setActiveCustomAppliances}
+            activeCustomRefrigirator={activeCustomRefrigirator}
+            setActiveRefrigirator={setActiveRefrigirator}
+            activeRange={activeRange}
+            setActiveRange={setActiveRange}
+            activeDishwasher={activeDishwasher}
+            setActiveDishwasher={setActiveDishwasher}
+            sectionRefs={sectionRefs}
+          />
           {/* advance details */}
+          <AdvanceDetailsSection
+            data={data}
+            activeCeilingHeight={activeCeilingHeight}
+            setActiveCeilingHeight={setActiveCeilingHeight}
+            activeStructure={activeStructure}
+            setActiveStructure={setActiveStructure}
+            activeSideWall={activeSideWall}
+            setActiveSideWall={setActiveSideWall}
+            activeInsulationOption={activeInsulationOption}
+            setActiveInsulationOption={setActiveInsulationOption}
+            sectionRefs={sectionRefs}
+          />
+          {/* Your Home */}
           <div
             className="mt-5"
-            id="advance-details"
-            ref={(el) => (sectionRefs.current["advance-details"] = el)}
+            id="your-home"
+            ref={(el) => (sectionRefs.current["your-home"] = el)}
           >
-            <h2 className="text-[30px] font-semibold">
-              {data.advanceDetails.title}
-            </h2>
-            {/* Celing Height */}
-            <div className="mt-5">
-              <p className="text-xl font-semibold">
-                {data.advanceDetails.celingHeight.title}
-              </p>
-              <div className="mt-5">
-                {data.advanceDetails.celingHeight.options.map((ele, i) => {
-                  return (
-                    <OptionCard
-                      option={ele}
-                      key={i}
-                      activeObj={activeCeilingHeight}
-                      setActiveObj={setActiveCeilingHeight}
-                    />
-                  );
-                })}
+            <h2 className="text-[30px] font-semibold">Your Home</h2>
+            <div className="mt-5 pb-5">
+              <p className="font-semibold text-xl">{modelData.modelNum}</p>
+              <p>{modelData.bedroom} Bedroom</p>
+            </div>
+            <hr />
+            {/* Floor Plan */}
+            <div className="mt-5 pb-5">
+              <p className="font-semibold text-xl">{data.floorPlan.title}</p>
+              <PriceCard
+                name={activeFloorPlan.title}
+                price={activeFloorPlan.price}
+                subtext={"Orientation"}
+              />
+            </div>
+            <hr />
+            {/* exterior */}
+            <ExteriorUpgrades
+              data={data}
+              activeSidingType={activeSidingType}
+              activeExteriorBodyColor={activeExteriorBodyColor}
+              activeExteriorAccentColor={activeExteriorAccentColor}
+              activeExteriorTrimColor={activeExteriorTrimColor}
+              activeExteriorDoorPaint={activeExteriorDoorPaint}
+              activeShinglesMaterial={activeShinglesMaterial}
+              activeShinglesType={activeShinglesType}
+              activeExteriorDoors={activeExteriorDoors}
+            />
+            <hr />
+            {/* Kitchen */}
+            <KitchenUpgrades
+              data={data}
+              activeKitchenCounterTop={activeKitchenCounterTop}
+              activeCounterTopMaterial={activeCounterTopMaterial}
+              activeFlatCabinates={activeFlatCabinates}
+              activecabinateHardware={activecabinateHardware}
+              activeTileBacksplash={activeTileBacksplash}
+              activeBacksplashtile={activeBacksplashtile}
+              activeKitchenFlooringMaterial={activeKitchenFlooringMaterial}
+              activeFlooringType={activeFlooringType}
+              activeKitchenFucet={activeKitchenFucet}
+              activeKitchenSinks={activeKitchenSinks}
+            />
+            <hr />
+            {/* interior */}
+            <InteriorUpgrades
+              data={data}
+              activeInteriorDoorHandles={activeInteriorDoorHandles}
+              activeInteriorWindow={activeInteriorWindow}
+            />
+            <hr />
+            {/* Bathroom */}
+            <BathroomUpgrades
+              data={data}
+              activeBathroomType={activeBathroomType}
+              activeBathroomEnclosure={activeBathroomEnclosure}
+              activeBathroomTile={activeBathroomTile}
+              activeSuboption={activeSuboption}
+              activeShowertiles={activeShowertiles}
+              activeBathroomMirror={activeBathroomMirror}
+              activeBathroomVanity={activeBathroomVanity}
+              activeBathroomHardware={activeBathroomHardware}
+            />
+            <hr />
+            {/* Flooring */}
+            <FlooringUpgrades
+              data={data}
+              activeKitchenBathroomFlooring={activeKitchenBathroomFlooring}
+              activeKitchenBathroomFlooringType={
+                activeKitchenBathroomFlooringType
+              }
+              activeLeavingRoomFlooring={activeLeavingRoomFlooring}
+              leavingRoomFlooringMaterial={leavingRoomFlooringMaterial}
+              activeBedroomFlooringMaterial={activeBedroomFlooringMaterial}
+            />
+
+            <hr />
+            {/* Appliances */}
+            <AppliancesUpgrade
+              data={data}
+              activeAppliances={activeAppliances}
+              activeAppliancesPackage={activeAppliancesPackage}
+              activeCustomAppliances={activeCustomAppliances}
+              activeCustomRefrigirator={activeCustomRefrigirator}
+              activeRange={activeRange}
+              activeDishwasher={activeDishwasher}
+            />
+
+            <hr />
+            {/* Advance Details */}
+            <AdvanceDetailsUpgrade
+              data={data}
+              activeCeilingHeight={activeCeilingHeight}
+              activeStructure={activeStructure}
+              activeSideWall={activeSideWall}
+              activeInsulationOption={activeInsulationOption}
+            />
+            <hr />
+            <div className={"mt-5 pb-5"} id="">
+              <p className="font-semibold text-xl">Price estimate</p>
+              <div className="flex justify-between items-center">
+                <p>Unit Price</p>
+                <p className="font-bold">$ {modelData.price}</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <p>Upgrades</p>
+                <p className="font-bold">+ ${upgrades}</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <p>Total</p>
+                <p className="font-bold">
+                  ${Math.floor(modelData.price) + upgrades}
+                </p>
               </div>
             </div>
-            {/* strucural upgrade */}
-            <div className="mt-5">
-              <p className="text-xl font-semibold">
-                {data.advanceDetails.structuralUpgrades.title}
+            <hr />
+            <div className="mt-5 pb-5" id="">
+              <p className="font-semibold text-xl">Disclaimer</p>
+              <p>
+                Prices, dimensions, and features may vary and are subject to
+                change. Photos are for illustrative purposes only.
               </p>
-              <div className="mt-5">
-                {data.advanceDetails.celingHeight.options.map((ele, i) => {
-                  return (
-                    <CheckboxCard
-                      option={ele}
-                      key={i}
-                      activeObj={activeStrucure}
-                      setActiveObj={setActiveStructure}
-                    />
-                  );
-                })}
+            </div>
+            <hr />
+            {/* Sticky text */}
+            <div
+              className={"mt-5 p-5 border rounded-xl bg-white shadow-2xl"}
+              id="price-total"
+              ref={ref}
+            >
+              <p className="text-xl font-semibold mb-5">{modelData.modelNum}</p>
+              <hr />
+              <div className="flex justify-between items-center mt-5">
+                <p>Unit Price</p>
+                <p className="">$ {modelData.price}</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <p>Upgrades</p>
+                <p className="">+ ${upgrades}</p>
+              </div>
+              <div className="flex justify-between items-center pb-5">
+                <p>Unit Total</p>
+                <p className="font-bold">
+                  ${Math.floor(modelData.price) + upgrades}
+                </p>
+              </div>
+              <hr />
+              <div className="flex justify-between mt-5">
+                <Button>Reset</Button>
+                <Button colorScheme="orange">Save Design</Button>
               </div>
             </div>
-            {/* sidewall dimensions */}
-            <div className="mt-5">
-              <p className="text-xl font-semibold">
-                {data.advanceDetails.sidewallDimenstions.title}
+            <div className={isInView ? "hidden":"p-5 fixed bottom-10 bg-white 2xl:w-[33%] w-[28%] rounded-xl border shadow-xl flex justify-between items-center"}>
+              <p className="text-xl font-bold">
+                ${Math.floor(modelData.price) + upgrades} <br />{" "}
+                <span className="font-normal text-sm">
+                  Base unit + upgrades
+                </span>
               </p>
-              <div className="mt-5">
-                {data.advanceDetails.sidewallDimenstions.options.map(
-                  (ele, i) => {
-                    return (
-                      <OptionCard
-                        option={ele}
-                        key={i}
-                        activeObj={activeSideWall}
-                        setActiveObj={setActiveSideWall}
-                      />
-                    );
-                  }
-                )}
-              </div>
-            </div>
-            {/* insulation */}
-            <div className="mt-5">
-              <p className="text-xl font-semibold">
-                {data.advanceDetails.insulationOptions.title}
-              </p>
-              <div className="mt-5">
-                {data.advanceDetails.insulationOptions.options.map((ele, i) => {
-                  return (
-                    <OptionCard
-                      option={ele}
-                      key={i}
-                      activeObj={activeInsulationOption}
-                      setActiveObj={setActiveInsulationOption}
-                    />
-                  );
-                })}
-              </div>
+              <Button colorScheme="orange">Continue</Button>
             </div>
           </div>
         </div>
@@ -955,3 +833,4 @@ export const SingleModel = () => {
     </div>
   );
 };
+// activeObject.title != "Your Home" ? "p-5 fixed bottom-10 bg-white w-[33%] shadow-lg" :

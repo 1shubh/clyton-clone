@@ -1,4 +1,3 @@
-// ImageUpload.js
 import { Button } from "@chakra-ui/react";
 import React from "react";
 import ImageUploading from "react-images-uploading";
@@ -7,7 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useDispatch, useSelector } from "react-redux";
 import { setUploadedImages, setLoading, setError } from "../Redux/imageSlice";
 import { BeatLoader } from "react-spinners";
-
+import { FaPlus } from "react-icons/fa6";
 export const ImageUpload = ({ imageUploaded, setImageUploaded }) => {
   const [images, setImages] = React.useState([]);
   const maxNumber = 10;
@@ -18,7 +17,6 @@ export const ImageUpload = ({ imageUploaded, setImageUploaded }) => {
   const error = useSelector((state) => state.images.error);
 
   const onChange = (imageList, addUpdateIndex) => {
-    console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
 
@@ -36,17 +34,17 @@ export const ImageUpload = ({ imageUploaded, setImageUploaded }) => {
       const urls = await Promise.all(promises);
       dispatch(setUploadedImages(urls));
       setImageUploaded(true);
-      // console.log("Uploaded URLs:", urls);
       dispatch(setLoading(false));
     } catch (error) {
       dispatch(setError("Error uploading images."));
       console.error("Error uploading images:", error);
     }
   };
+
   return loading ? (
     <div className="w-full h-[100%] m-auto flex items-center justify-center">
       <p className="text-center font-bold">Please Wait....</p>
-      <BeatLoader color="red"/>
+      <BeatLoader color="red" />
     </div>
   ) : (
     <div className="App">
@@ -66,15 +64,22 @@ export const ImageUpload = ({ imageUploaded, setImageUploaded }) => {
           isDragging,
           dragProps,
         }) => (
-          <div className="upload__image-wrapper ">
-            <Button
-              style={isDragging ? { color: "red" } : undefined}
+          <div className="upload__image-wrapper">
+            <div
+              style={{
+                border: "2px dashed #ccc",
+                padding: "20px",
+                textAlign: "center",
+                cursor: "pointer",
+                backgroundColor: isDragging ? "#e0e0e0" : "#f9f9f9",
+                color: isDragging ? "red" : "#000",
+              }}
               onClick={onImageUpload}
               {...dragProps}
-              colorScheme="orange"
+              className={images.length > 0 ? "hidden" : "block"}
             >
               Select Image
-            </Button>
+            </div>
             &nbsp;
             <div className="flex gap-5 mt-5">
               {imageList.map((image, index) => (
@@ -103,6 +108,22 @@ export const ImageUpload = ({ imageUploaded, setImageUploaded }) => {
                   </div>
                 </div>
               ))}
+              <div
+              style={{
+                border: "2px dashed #ccc",
+                padding: "20px",
+                textAlign: "center",
+                cursor: "pointer",
+                backgroundColor: isDragging ? "#e0e0e0" : "#f9f9f9",
+                color: isDragging ? "red" : "#000",
+              }}
+              onClick={onImageUpload}
+              {...dragProps}
+              className={images.length > 0 ? "flex items-center justify-center flex-col gap-3 w-[20%]" : "hidden"}
+            >
+              <p>Add More</p>
+              <FaPlus />
+            </div>
             </div>
           </div>
         )}
@@ -118,18 +139,6 @@ export const ImageUpload = ({ imageUploaded, setImageUploaded }) => {
           Upload {images.length > 1 ? "Images" : "Image"}
         </Button>
       )}
-      {/* <div className="mt-5">
-        <h2>Uploaded Image URLs:</h2>
-        <ul>
-          {uploadedImages.map((url, index) => (
-            <li key={index}>
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {url}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div> */}
     </div>
   );
 };

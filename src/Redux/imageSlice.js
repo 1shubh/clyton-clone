@@ -1,15 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const imagesSlice = createSlice({
   name: "images",
   initialState: {
     uploadedImages: [],
+    uploadedFloorPlanImage:"",
     loading: false,
     error: null,
   },
   reducers: {
     setUploadedImages(state, action) {
       state.uploadedImages = action.payload;
+    },
+    setUploadedFloorPlanImage(state,action){
+       state.uploadedFloorPlanImage = action.payload    
     },
     setLoading(state, action) {
       state.loading = action.payload;
@@ -21,6 +26,6 @@ const imagesSlice = createSlice({
   },
 });
 
-export const { setUploadedImages, setLoading, setError } = imagesSlice.actions;
+export const { setUploadedImages, setUploadedFloorPlanImage, setLoading, setError } = imagesSlice.actions;
 
 export default imagesSlice.reducer;
