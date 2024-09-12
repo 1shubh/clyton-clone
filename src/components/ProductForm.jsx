@@ -48,6 +48,7 @@ const ProductForm = () => {
       form: (
         <FloorPlan
           onSubmit={(data) => handleFormSubmit("floorPlan", data)}
+          setIndex={setIndex}
         />
       ),
     },
@@ -56,6 +57,7 @@ const ProductForm = () => {
       form: (
         <ExteriorForm
           onSubmit={(data) => handleFormSubmit("exterior", data)}
+          setIndex={setIndex}
         />
       ),
     },
@@ -64,6 +66,7 @@ const ProductForm = () => {
       form: (
         <KitchenForm
           onSubmit={(data) => handleFormSubmit("kitchen", data)}
+          setIndex={setIndex}
         />
       ),
     },
@@ -72,6 +75,7 @@ const ProductForm = () => {
       form: (
         <InteriorForm
           onSubmit={(data) => handleFormSubmit("interior", data)}
+          setIndex={setIndex}
         />
       ),
     },
@@ -80,6 +84,7 @@ const ProductForm = () => {
       form: (
         <BathroomForm
           onSubmit={(data) => handleFormSubmit("bathroom", data)}
+          setIndex={setIndex}
         />
       ),
     },
@@ -88,6 +93,7 @@ const ProductForm = () => {
       form: (
         <FlooringForm
           onSubmit={(data) => handleFormSubmit("flooring", data)}
+          setIndex={setIndex}
         />
       ),
     },
@@ -96,6 +102,7 @@ const ProductForm = () => {
       form: (
         <AppliancesForm
           onSubmit={(data) => handleFormSubmit("appliances", data)}
+          setIndex={setIndex}
         />
       ),
     },
@@ -104,13 +111,11 @@ const ProductForm = () => {
       form: (
         <AdvanceDetailsForm
           onSubmit={(data) => handleFormSubmit("advanceDetails", data)}
+          setIndex={setIndex}
         />
       ),
     },
   ];
-
-  console.log(data.propertyDetails);
-
   return (
     <Tabs
       // variant="soft-rounded"

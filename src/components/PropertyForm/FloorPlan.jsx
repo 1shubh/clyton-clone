@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ImageUploading from "react-images-uploading";
-import { Button, IconButton } from "@chakra-ui/react";
+import { Button, IconButton, Input } from "@chakra-ui/react";
 import {
   ref,
   uploadBytes,
@@ -89,14 +89,12 @@ export const FloorPlan = ({ onSubmit, setIndex }) => {
     }
   };
 
-  // Update the image
 
+  // Update the image
   // Delete the image from Firebase
   const deleteImage = async () => {
     if (!filePath) return;
-
     const imageRef = ref(storage, filePath);
-
     try {
       await deleteObject(imageRef);
       console.log("Image deleted successfully");
@@ -107,25 +105,86 @@ export const FloorPlan = ({ onSubmit, setIndex }) => {
     }
   };
 
+ 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Extract the entered prices from the form
+    const updatedOptions = floorPlan.options.map((option, index) => {
+      const price = document.getElementById(`price-${index}`).value;
+      return { ...option, price };
+    });
+  
+    // Update the floorPlan object with the new prices
+    setFloorPlan((prev) => ({
+      ...prev,
+      options: updatedOptions,
+    }));
+  
+    // Call the parent onSubmit function with the updated floorPlan
+    if (onSubmit) {
+      onSubmit(floorPlan);
+    }
+    if(setIndex){
+      setIndex((prev)=>prev+1)
+    }
+  };
+  // console.log(floorPlan)
   return (
     <>
       {imageUploaded ? (
-        <div>
-          <p className="font-bold text-sm">Uploaded Floor Plan</p>
+        <div className="flex gap-20">
           <div className="w-[30%]">
+            <p className="font-bold text-sm">Uploaded Floor Plan</p>
             <div className="border mt-2 mb-2 rounded-xl shadow-xl">
-              <img src={floorPlan.image} alt="floor plan" className="w-full rounded-xl" />
+              <img
+                src={floorPlan.image}
+                alt="floor plan"
+                className="w-full rounded-xl"
+              />
             </div>
-            <div className="flex gap-5">
+            <div className="flex gap-5 mt-5">
               {/* Delete Button */}
-              <IconButton
+              <Button
                 colorScheme="yellow"
                 aria-label="Delete Image"
                 size="lg"
                 onClick={deleteImage} // Call delete logic
-                icon={<MdDelete fontSize="25px" />}
-              />
+                leftIcon={<MdDelete fontSize="25px" />}
+              >
+                Delete
+              </Button>
             </div>
+          </div>
+          {/* Form */}
+          <div className="w-[65%] border px-10 py-1 rounded-xl border-black">
+            <form onSubmit={handleSubmit}>
+              <p className="text-xl font-bold mt-10 text-nowrap">
+                Add Price for Floor Plan Orientation
+              </p>
+              <div className="mt-5 flex gap-1 items-center font-semibold">
+                <p className="w-[50%]">Standard Orientation Price</p>
+                <Input type="number" placeholder="Standard Orientation Price"  id={`price-0`} />
+              </div>
+              <div className="mt-5 flex gap-1 items-center font-semibold">
+                <p className="w-[50%]">Horizontal Flip Orientation Price</p>
+                <Input type="number" placeholder="Standard Orientation Price"  id={`price-1`}/>
+              </div>
+              <div className="mt-5 flex gap-1 items-center font-semibold">
+                <p className="w-[50%]">Vertical Flip Orientation Price</p>
+                <Input type="number" placeholder="Standard Orientation Price"  id={`price-2`}/>
+              </div>
+              <div className="w-[30%] m-auto">
+                <Button
+                  colorScheme="yellow"
+                  w={"100%"}
+                  margin={"auto"}
+                  marginTop={"20px"}
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       ) : (

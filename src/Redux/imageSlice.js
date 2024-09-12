@@ -6,6 +6,7 @@ const imagesSlice = createSlice({
   initialState: {
     uploadedImages: [],
     uploadedFloorPlanImage:"",
+    uploadedExteriorImage:"",
     loading: false,
     error: null,
   },
@@ -15,6 +16,9 @@ const imagesSlice = createSlice({
     },
     setUploadedFloorPlanImage(state,action){
        state.uploadedFloorPlanImage = action.payload    
+    },
+    setUploadedExteriorImage(state,action){
+     state.uploadedExteriorImage = action.payload
     },
     setLoading(state, action) {
       state.loading = action.payload;
@@ -26,6 +30,6 @@ const imagesSlice = createSlice({
   },
 });
 
-export const { setUploadedImages, setUploadedFloorPlanImage, setLoading, setError } = imagesSlice.actions;
+export const { setUploadedImages, setUploadedFloorPlanImage,setUploadedExteriorImage, setLoading, setError } = imagesSlice.actions;
 
 export default imagesSlice.reducer;
