@@ -7,9 +7,14 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+
 import { storage } from "../../firebase-config/config";
 import { setUploadedExteriorImage } from "../../Redux/imageSlice";
 import { ImageCard } from "../ImageCard";
+import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { BiSolidDollarCircle } from "react-icons/bi";
+import { GrFormNextLink } from "react-icons/gr";
+import { ExteriorBodyColor } from "./Exterior/ExteriorBodyColor";
 
 export const ExteriorForm = ({ onSubmit }) => {
   const [exterior, setExterior] = useState({
@@ -217,14 +222,17 @@ export const ExteriorForm = ({ onSubmit }) => {
     },
   });
   const [imageUploaded, setImageUploaded] = useState(false);
-
   const [filePath, setFilePath] = useState("");
   const maxNumber = 1;
   const dispatch = useDispatch();
   const uploadedExteriorImage = useSelector(
     (state) => state.images.uploadedExteriorImage
   );
-
+  // Sliding prices
+  const [slidingPrices, setSlidingPrices] = useState({}); // To store price inputs
+  const [isEditing, setIsEditing] = useState({});
+  // setCurrentForm
+  const [currentForm, setcurrentForm] = useState("sliding");
   // set uploaded image to exterior image
   useEffect(() => {
     if (uploadedExteriorImage.length > 0) {
@@ -249,9 +257,54 @@ export const ExteriorForm = ({ onSubmit }) => {
       console.error("Error deleting image:", error);
     }
   };
+  // sliding type price change
+  // Handle price input change
+  const handleSlidingPriceChange = (i, value) => {
+    setSlidingPrices((prev) => ({
+      ...prev,
+      [i]: value, // Keep the user input as is
+    }));
+  };
+  const handleAddSlidingPrice = (i) => {
+    setExterior((prevExterior) => {
+      const updatedOptions = prevExterior.sidingType.options.map(
+        (option, index) =>
+          index === i
+            ? { ...option, price: parseFloat(slidingPrices[i]) || option.price }
+            : option
+      );
+      return {
+        ...prevExterior,
+        sidingType: {
+          ...prevExterior.sidingType,
+          options: updatedOptions,
+        },
+      };
+    });
+
+    // Once price is added, change editing state to false
+    setIsEditing((prev) => ({
+      ...prev,
+      [i]: false,
+    }));
+  };
+
+  // Handle toggling between Add/Edit modes
+  const handleToggleEdit = (i) => {
+    setIsEditing((prev) => ({
+      ...prev,
+      [i]: !prev[i],
+    }));
+  };
+
+  console.log(exterior.sidingType.options);
+  // end sliding price change
 
   // handleFormSubmit
-  const handleSubmit = () => {};
+  const handleSlidingSubmit = (e) => {
+    e.preventDefault();
+    setcurrentForm("bodyColor");
+  };
 
   return (
     <>
@@ -264,12 +317,82 @@ export const ExteriorForm = ({ onSubmit }) => {
               deleteImage={deleteImage}
             />
           </div>
-          <div className="w-[65%] border px-10 py-1 rounded-xl border-black">
-            <form onSubmit={handleSubmit}>
-              <p className="text-xl font-bold mt-10 text-nowrap">
-                Add Siding Types
-              </p>
+          <div className="w-[65%] border px-10 py-10 rounded-xl border-black">
+            {/* Sliding Form */}
+            <form
+              onSubmit={handleSlidingSubmit}
+              className={`${currentForm === "sliding" ? "block" : "hidden"}`}
+            >
+              <p className="text-xl font-bold text-nowrap">Add Siding Types</p>
+              <div className="grid gap-2 mt-5">
+                {exterior.sidingType.options.map((ele, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="border bg-green-100 p-5 rounded-xl grid gap-2"
+                    >
+                      <p className="font-bold text-md">
+                        {ele.title} Option Price
+                      </p>
+                      <div className="flex gap-5 items-center">
+                        {isEditing[i] ? (
+                          // Input field when editing is true
+                          <InputGroup w={"20%"}>
+                            <InputLeftElement>
+                              <BiSolidDollarCircle fontSize={"30px"} />
+                            </InputLeftElement>
+                            <Input
+                              border={"1px solid black"}
+                              placeholder="Price"
+                              type="number"
+                              value={
+                                slidingPrices[i] !== undefined
+                                  ? slidingPrices[i]
+                                  : ele.price
+                              } // Check for slidingPrices[i] explicitly
+                              onChange={(e) =>
+                                handleSlidingPriceChange(i, e.target.value)
+                              }
+                            />
+                          </InputGroup>
+                        ) : (
+                          // Text display when not editing
+                          <span className="font-bold">{ele.price} $</span>
+                        )}
+                        <Button
+                          colorScheme="yellow"
+                          onClick={
+                            () =>
+                              isEditing[i]
+                                ? handleAddSlidingPrice(i) // Add price if in edit mode
+                                : handleToggleEdit(i) // Toggle to edit mode
+                          }
+                        >
+                          {isEditing[i] ? "Add" : "Edit"}
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <Button
+                className="mt-5"
+                type="submit"
+                rightIcon={<GrFormNextLink />}
+              >
+                Save and Next
+              </Button>
+              {/* <Button className="mt-5" colorScheme="orange" type="submit">
+                Submit Sliding Type
+              </Button> */}
             </form>
+            {/* Exterior Form */}
+            <ExteriorBodyColor
+              currentForm={currentForm}
+              exterior={exterior}
+              setExterior={setExterior}
+              setCurrnetForm={setcurrentForm}
+            />
           </div>
         </div>
       ) : (
