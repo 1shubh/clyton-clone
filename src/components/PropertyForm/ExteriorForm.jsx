@@ -15,8 +15,13 @@ import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { GrFormNextLink } from "react-icons/gr";
 import { ExteriorBodyColor } from "./Exterior/ExteriorBodyColor";
+import { ExteriorAccentColors } from "./Exterior/ExteriorAccentColors";
+import { ExteriorTrimColor } from "./Exterior/ExteriorTrimColor";
+import { ExteriorDoorPaint } from "./Exterior/ExteriorDoorPaint";
+import { ExteriorShinglesMaterial } from "./Exterior/ExteriorShinglesMaterial";
+import { ExteriorDoor } from "./Exterior/ExteriorDoor";
 
-export const ExteriorForm = ({ onSubmit }) => {
+export const ExteriorForm = ({ onSubmit,setIndex }) => {
   const [exterior, setExterior] = useState({
     title: "Exterior",
     image: "",
@@ -110,7 +115,7 @@ export const ExteriorForm = ({ onSubmit }) => {
       options: [
         {
           name: "White",
-          colorCode: "#ffffff",
+          colorCode: "#ffff",
           image: "",
         },
         {
@@ -257,8 +262,7 @@ export const ExteriorForm = ({ onSubmit }) => {
       console.error("Error deleting image:", error);
     }
   };
-  // sliding type price change
-  // Handle price input change
+
   const handleSlidingPriceChange = (i, value) => {
     setSlidingPrices((prev) => ({
       ...prev,
@@ -270,7 +274,13 @@ export const ExteriorForm = ({ onSubmit }) => {
       const updatedOptions = prevExterior.sidingType.options.map(
         (option, index) =>
           index === i
-            ? { ...option, price: parseFloat(slidingPrices[i]) || option.price }
+            ? {
+                ...option,
+                price:
+                  slidingPrices[i] !== undefined
+                    ? parseFloat(slidingPrices[i])
+                    : option.price,
+              }
             : option
       );
       return {
@@ -297,7 +307,7 @@ export const ExteriorForm = ({ onSubmit }) => {
     }));
   };
 
-  console.log(exterior.sidingType.options);
+  // console.log(exterior.accentColor.options);
   // end sliding price change
 
   // handleFormSubmit
@@ -305,6 +315,12 @@ export const ExteriorForm = ({ onSubmit }) => {
     e.preventDefault();
     setcurrentForm("bodyColor");
   };
+
+  const handleExteriorSubmit = () => {
+     onSubmit(exterior)
+     setIndex(3)
+     console.log(exterior)
+  }
 
   return (
     <>
@@ -392,6 +408,37 @@ export const ExteriorForm = ({ onSubmit }) => {
               exterior={exterior}
               setExterior={setExterior}
               setCurrnetForm={setcurrentForm}
+            />
+            <ExteriorAccentColors
+              currentForm={currentForm}
+              exterior={exterior}
+              setExterior={setExterior}
+              setCurrnetForm={setcurrentForm}
+            />
+            <ExteriorTrimColor
+              currentForm={currentForm}
+              exterior={exterior}
+              setExterior={setExterior}
+              setCurrnetForm={setcurrentForm}
+            />
+            <ExteriorDoorPaint
+              currentForm={currentForm}
+              exterior={exterior}
+              setExterior={setExterior}
+              setCurrnetForm={setcurrentForm}
+            />
+            <ExteriorShinglesMaterial
+              currentForm={currentForm}
+              exterior={exterior}
+              setExterior={setExterior}
+              setCurrnetForm={setcurrentForm}
+            />
+            <ExteriorDoor
+              currentForm={currentForm}
+              exterior={exterior}
+              setExterior={setExterior}
+              setCurrnetForm={setcurrentForm}
+              handleDoorSubmit={handleExteriorSubmit}
             />
           </div>
         </div>

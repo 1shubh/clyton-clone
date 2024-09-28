@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const imagesSlice = createSlice({
   name: "images",
   initialState: {
     uploadedImages: [],
-    uploadedFloorPlanImage:"",
-    uploadedExteriorImage:"",
+    uploadedFloorPlanImage: "",
+    uploadedExteriorImage: "",
+    uploadTypeImage: "",
+    uploadExteriorDoorImage: "",
+    uploadedKitchenImage: "",
+    uploadedKitchenFlatCabinet: "",
+    uploadedKitchenCabinetHardware: "",
+    uploadKitchenTileBacksplash: "",
+    uploadKitchenBacksplashTile: "",
     loading: false,
     error: null,
   },
@@ -14,11 +20,35 @@ const imagesSlice = createSlice({
     setUploadedImages(state, action) {
       state.uploadedImages = action.payload;
     },
-    setUploadedFloorPlanImage(state,action){
-       state.uploadedFloorPlanImage = action.payload    
+    // floor plan
+    setUploadedFloorPlanImage(state, action) {
+      state.uploadedFloorPlanImage = action.payload;
     },
-    setUploadedExteriorImage(state,action){
-     state.uploadedExteriorImage = action.payload
+    // Exterior
+    setUploadedExteriorImage(state, action) {
+      state.uploadedExteriorImage = action.payload;
+    },
+    setUploadedTypeImage(state, action) {
+      state.uploadTypeImage = action.payload;
+    },
+    setUploadExteriorDoorImage(state, action) {
+      state.uploadExteriorDoorImage = action.payload;
+    },
+    // Kithcen
+    setUploadKitchenImage(state, action) {
+      state.uploadedKitchenImage = action.payload;
+    },
+    setUploadKitchenFlatCabinet(state, action) {
+      state.uploadedKitchenFlatCabinet = action.payload;
+    },
+    setUploadedKitchenCabinetHardware(state, action) {
+      state.uploadedKitchenCabinetHardware = action.payload;
+    },
+    setUploadKitchenTileBacksplash(state, action) {
+      state.uploadKitchenTileBacksplash = action.payload;
+    },
+    setUploadKitchenBacksplashTile(state, action) {
+      state.uploadKitchenBacksplashTile = action.payload;
     },
     setLoading(state, action) {
       state.loading = action.payload;
@@ -30,6 +60,19 @@ const imagesSlice = createSlice({
   },
 });
 
-export const { setUploadedImages, setUploadedFloorPlanImage,setUploadedExteriorImage, setLoading, setError } = imagesSlice.actions;
+export const {
+  setUploadedImages,
+  setUploadedFloorPlanImage,
+  setUploadedExteriorImage,
+  setUploadedTypeImage,
+  setUploadExteriorDoorImage,
+  setUploadKitchenImage,
+  setUploadKitchenFlatCabinet,
+  setUploadedKitchenCabinetHardware,
+  setUploadKitchenTileBacksplash,
+  setUploadKitchenBacksplashTile,
+  setLoading,
+  setError,
+} = imagesSlice.actions;
 
 export default imagesSlice.reducer;

@@ -43,7 +43,6 @@ export const FloorPlan = ({ onSubmit, setIndex }) => {
       },
     ],
   });
-
   const dispatch = useDispatch();
   const uploadedFloorPlanImage = useSelector(
     (state) => state.images.uploadedFloorPlanImage

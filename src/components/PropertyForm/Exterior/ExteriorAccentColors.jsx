@@ -3,17 +3,22 @@ import React, { useState } from "react";
 import { GrFormNextLink } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
-export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrnetForm }) => {
+export const ExteriorAccentColors = ({
+  currentForm,
+  exterior,
+  setExterior,
+  setCurrnetForm,
+}) => {
   const [newColor, setNewColor] = useState({
     name: "",
-    colorCode: ""
+    colorCode: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewColor((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -21,17 +26,17 @@ export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrne
     if (newColor.name && newColor.colorCode) {
       setExterior((prev) => ({
         ...prev,
-        bodyColor: {
-          ...prev.bodyColor,
+        accentColor: {
+          ...prev.accentColor,
           options: [
-            ...prev.bodyColor.options,
+            ...prev.accentColor.options,
             {
               name: newColor.name,
               colorCode: newColor.colorCode,
-              image: "" // Optional image URL
-            }
-          ]
-        }
+              image: "", // Optional image URL
+            },
+          ],
+        },
       }));
       // Clear the form inputs
       setNewColor({ name: "", colorCode: "" });
@@ -41,10 +46,10 @@ export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrne
   const handleDeleteColor = (index) => {
     setExterior((prev) => ({
       ...prev,
-      bodyColor: {
-        ...prev.bodyColor,
-        options: prev.bodyColor.options.filter((_, i) => i !== index)
-      }
+      accentColor: {
+        ...prev.accentColor,
+        options: prev.accentColor.options.filter((_, i) => i !== index),
+      },
     }));
   };
 
@@ -52,27 +57,27 @@ export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrne
     e.preventDefault();
     // Handle form submission logic here
     console.log("Form Submitted");
-    setCurrnetForm("exteriorAccentColor")
+    setCurrnetForm("exteriorTrimColor");
   };
   const handleBack = () => {
-    setCurrnetForm("sliding");
+    setCurrnetForm("bodyColor");
   };
-  const isFormDisabled = exterior.bodyColor.options.length < 1;
+  const isFormDisabled = exterior.accentColor.options.length < 1;
 
   return (
-    <div className={`${currentForm === "bodyColor" ? "block" : "hidden"}`}>
+    <div className={`${currentForm === "exteriorAccentColor" ? "block" : "hidden"}`}>
       <Button
           leftIcon={<IoMdArrowRoundBack />}
           variant={"outline"}
           onClick={handleBack}
         >
-          Back to Exterior Slidings Types
+          Back to Body Colors
         </Button>
         <p className="text-xl font-bold text-nowrap my-5">
-          Add Exterior Body Colors
+          Add Exterior Accent Colors
         </p>
       <div className="grid grid-cols-4 gap-2 pb-4 mt-5">
-        {exterior.bodyColor.options.map((ele, i) => (
+        {exterior.accentColor.options.map((ele, i) => (
           <div
             key={i}
             className="px-2 py-4 font-semibold border border-gray-300 cursor-pointer rounded-md"
@@ -130,7 +135,7 @@ export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrne
           type="submit"
           isDisabled={isFormDisabled}
         >
-          Save Body {exterior.bodyColor.options.length > 1 ? "colors" : "color"}
+          Save Accent {exterior.accentColor.options.length > 1 ? "colors" : "color"}
         </Button>
       </form>
     </div>

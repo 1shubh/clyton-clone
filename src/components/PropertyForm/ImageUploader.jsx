@@ -24,13 +24,11 @@ export const ImageUploader = ({
   setUploadedImage
 }) => {
   const [images, setImage] = useState([]);
-  const [filePath, setFilePath] = useState(""); // Store file path for deleting
+  
   const loading = useSelector((state) => state.images.loading);
-
   const onChange = (imageList, addUpdateIndex) => {
     setImage(imageList);
   };
-
   const dispatch = useDispatch()
   const handleImageUpload = async () => {
     dispatch(setLoading(true));
@@ -53,10 +51,6 @@ export const ImageUploader = ({
       console.error("Error uploading images:", error);
     }
   };
-
-
-
-  
   return (
     <div>
       <p className="font-bold text-sm mb-5">
@@ -93,14 +87,14 @@ export const ImageUploader = ({
                 Select Image
               </div>
             )}
-            <div className="flex gap-5 mt-5">
+            <div className={maxNumber > 1 ? "flex gap-5 mt-5" : ""}>
               {imageList.map((image, index) => (
-                <div key={index} className="w-[20%] h-fit">
+                <div key={index} className={maxNumber > 1 ? "w-[20%] h-fit" : ""}>
                   <div className="w-full h-[200px] border border-black rounded-md">
                     <img
                       src={image["data_url"]}
                       alt=""
-                      className="w-full h-full object-cover rounded-md"
+                      className={maxNumber > 1 ? "w-full h-full object-cover rounded-md" : "w-full h-full object-contain"}
                     />
                   </div>
                   <div className="flex gap-2 mt-3">

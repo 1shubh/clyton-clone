@@ -7,7 +7,7 @@ export const AdminSidebar = ({ currentView, onNavigate, onLogout }) => {
         // Add more navigation options as needed
       ];
   return (
-    <div className="bg-gray-800 text-white w-[15%] h-screen p-5">
+    <div className="bg-gray-800 text-white w-[15%] p-5 h-screen sticky top-0">
       <h2 className="text-xl font-bold mb-4">Admin Panel</h2>
       <ul className="space-y-2">
         {menuItems.map((item) => (

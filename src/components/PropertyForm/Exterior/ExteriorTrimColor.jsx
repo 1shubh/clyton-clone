@@ -3,76 +3,80 @@ import React, { useState } from "react";
 import { GrFormNextLink } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
-export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrnetForm }) => {
-  const [newColor, setNewColor] = useState({
-    name: "",
-    colorCode: ""
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewColor((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleAddColor = () => {
-    if (newColor.name && newColor.colorCode) {
-      setExterior((prev) => ({
-        ...prev,
-        bodyColor: {
-          ...prev.bodyColor,
-          options: [
-            ...prev.bodyColor.options,
-            {
-              name: newColor.name,
-              colorCode: newColor.colorCode,
-              image: "" // Optional image URL
-            }
-          ]
+export const ExteriorTrimColor = ({
+    currentForm,
+    exterior,
+    setExterior,
+    setCurrnetForm,
+  }) => {
+    const [newColor, setNewColor] = useState({
+        name: "",
+        colorCode: "",
+      });
+    
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewColor((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      };
+    
+      const handleAddColor = () => {
+        if (newColor.name && newColor.colorCode) {
+          setExterior((prev) => ({
+            ...prev,
+            trimColor: {
+              ...prev.trimColor,
+              options: [
+                ...prev.trimColor.options,
+                {
+                  name: newColor.name,
+                  colorCode: newColor.colorCode,
+                  image: "", // Optional image URL
+                },
+              ],
+            },
+          }));
+          // Clear the form inputs
+          setNewColor({ name: "", colorCode: "" });
         }
-      }));
-      // Clear the form inputs
-      setNewColor({ name: "", colorCode: "" });
-    }
-  };
-
-  const handleDeleteColor = (index) => {
-    setExterior((prev) => ({
-      ...prev,
-      bodyColor: {
-        ...prev.bodyColor,
-        options: prev.bodyColor.options.filter((_, i) => i !== index)
-      }
-    }));
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form Submitted");
-    setCurrnetForm("exteriorAccentColor")
-  };
-  const handleBack = () => {
-    setCurrnetForm("sliding");
-  };
-  const isFormDisabled = exterior.bodyColor.options.length < 1;
-
+      };
+    
+      const handleDeleteColor = (index) => {
+        setExterior((prev) => ({
+          ...prev,
+          trimColor: {
+            ...prev.trimColor,
+            options: prev.trimColor.options.filter((_, i) => i !== index),
+          },
+        }));
+      };
+    
+      const handleFormSubmit = (e) => {
+        e.preventDefault();
+        // Handle form submission logic here
+        console.log("Form Submitted");
+        setCurrnetForm("exteriorDoorPaint");
+      };
+      const handleBack = () => {
+        setCurrnetForm("exteriorAccentColor");
+      };
+      const isFormDisabled = exterior.trimColor.options.length < 1;
   return (
-    <div className={`${currentForm === "bodyColor" ? "block" : "hidden"}`}>
-      <Button
+    <div className={`${currentForm === "exteriorTrimColor" ? "block" : "hidden"}`}>
+         <Button
           leftIcon={<IoMdArrowRoundBack />}
           variant={"outline"}
           onClick={handleBack}
         >
-          Back to Exterior Slidings Types
+          Back to Accent Colors
         </Button>
         <p className="text-xl font-bold text-nowrap my-5">
-          Add Exterior Body Colors
+          Add Exterior Trim Colors
         </p>
       <div className="grid grid-cols-4 gap-2 pb-4 mt-5">
-        {exterior.bodyColor.options.map((ele, i) => (
+        {exterior.trimColor.options.map((ele, i) => (
           <div
             key={i}
             className="px-2 py-4 font-semibold border border-gray-300 cursor-pointer rounded-md"
@@ -94,7 +98,7 @@ export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrne
         ))}
       </div>
       <form onSubmit={handleFormSubmit}>
-        
+      
         <div className="w-[50%] grid gap-2">
           <Input
             type="text"
@@ -130,9 +134,9 @@ export const ExteriorBodyColor = ({ currentForm, exterior, setExterior,setCurrne
           type="submit"
           isDisabled={isFormDisabled}
         >
-          Save Body {exterior.bodyColor.options.length > 1 ? "colors" : "color"}
+          Save Trim {exterior.trimColor.options.length > 1 ? "colors" : "color"}
         </Button>
       </form>
     </div>
-  );
-};
+  )
+}
