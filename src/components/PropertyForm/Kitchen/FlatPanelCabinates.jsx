@@ -144,9 +144,9 @@ import {
         <Button
           leftIcon={<IoMdArrowRoundBack />}
           variant={"outline"}
-          onClick={() => setCurrentForm("kitchenShinglesMaterial")}
+          onClick={() => setCurrentForm("kitchenSidingType")}
         >
-          Back to kitchen Counter Top Material
+          Back to Kitchen Counter Top Material
         </Button>
   
         <p className="text-xl font-bold text-nowrap my-5">Flat Panel Cabinets</p>
@@ -262,7 +262,7 @@ import {
             isDisabled={isFormDisabled}
             onClick={handleFlatCabinetSubmit}
           >
-            Save Kitchen Details
+            Save and Next
           </Button>
         </div>
       </div>

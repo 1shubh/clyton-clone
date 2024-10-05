@@ -319,7 +319,7 @@ export const ExteriorForm = ({ onSubmit,setIndex }) => {
   const handleExteriorSubmit = () => {
      onSubmit(exterior)
      setIndex(3)
-     console.log(exterior)
+    //  console.log(exterior)
   }
 
   return (

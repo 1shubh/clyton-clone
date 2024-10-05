@@ -10,8 +10,11 @@ import { FlatPanelCabinates } from "./Kitchen/FlatPanelCabinates";
 import { CabinetHardware } from "./Kitchen/CabinetHardware";
 import { Tilebackspash } from "./Kitchen/Tilebackspash";
 import { BacksplashTile } from "./Kitchen/BacksplashTile";
+import { FlooringMaterial } from "./Kitchen/FlooringMaterial";
+import { KitchenFaucets } from "./Kitchen/KitchenFaucets";
+import { KitchenSinks } from "./Kitchen/KitchenSinks";
 
-export const KitchenForm = ({ onSubmit }) => {
+export const KitchenForm = ({ onSubmit,setIndex}) => {
   const [kitchen, setKitchen] = useState({
     title: "Kitchen",
     image: "",
@@ -176,7 +179,7 @@ export const KitchenForm = ({ onSubmit }) => {
       ],
     },
     kitchenFaucets: {
-      title: "Kitchen",
+      title: "Kitchen Faucets",
       options: [
         {
           name: "Brushed",
@@ -246,6 +249,10 @@ export const KitchenForm = ({ onSubmit }) => {
       console.error("Error deleting image:", error);
     }
   };
+   const handleKitchenSubmit = () => {
+    onSubmit(kitchen)
+    setIndex(4)
+   }
 
   return (
     <div>
@@ -287,6 +294,24 @@ export const KitchenForm = ({ onSubmit }) => {
               setCurrentForm={setcurrentForm}
             />
             <BacksplashTile
+              currentForm={currentForm}
+              kitchen={kitchen}
+              setKitchen={setKitchen}
+              setCurrentForm={setcurrentForm}
+            />
+            <FlooringMaterial
+              currentForm={currentForm}
+              kitchen={kitchen}
+              setKitchen={setKitchen}
+              setCurrentForm={setcurrentForm}
+            />
+            <KitchenFaucets
+              currentForm={currentForm}
+              kitchen={kitchen}
+              setKitchen={setKitchen}
+              setCurrentForm={setcurrentForm}
+            />
+            <KitchenSinks
               currentForm={currentForm}
               kitchen={kitchen}
               setKitchen={setKitchen}

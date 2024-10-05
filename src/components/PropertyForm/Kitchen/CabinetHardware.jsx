@@ -151,7 +151,7 @@ const handleAddCabinate = (e) => {
           variant={"outline"}
           onClick={() => setCurrentForm("flatPanelCabinates")}
         >
-          Back to kitchen Flat panel Cabinetes
+          Back to Kitchen Flat panel Cabinetes
         </Button>
         <p className="text-xl font-bold text-nowrap my-5">Cabinet Hardware</p>
         <div className="grid grid-cols-4 gap-2 pb-4 mt-5">
@@ -263,7 +263,7 @@ const handleAddCabinate = (e) => {
             isDisabled={isFormDisabled}
             onClick={handleFlatCabinetSubmit}
           >
-            Save Cabinet Hardware
+            Save and Next
           </Button>
         </div>
     </div>

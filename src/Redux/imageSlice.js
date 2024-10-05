@@ -13,6 +13,7 @@ const imagesSlice = createSlice({
     uploadedKitchenCabinetHardware: "",
     uploadKitchenTileBacksplash: "",
     uploadKitchenBacksplashTile: "",
+    uploadKitchenFaucetImage:"",
     loading: false,
     error: null,
   },
@@ -50,6 +51,9 @@ const imagesSlice = createSlice({
     setUploadKitchenBacksplashTile(state, action) {
       state.uploadKitchenBacksplashTile = action.payload;
     },
+    setUploadKitchenFaucet(state,action){
+     state.uploadKitchenFaucetImage = action.payload
+    },
     setLoading(state, action) {
       state.loading = action.payload;
     },
@@ -71,6 +75,7 @@ export const {
   setUploadedKitchenCabinetHardware,
   setUploadKitchenTileBacksplash,
   setUploadKitchenBacksplashTile,
+  setUploadKitchenFaucet,
   setLoading,
   setError,
 } = imagesSlice.actions;

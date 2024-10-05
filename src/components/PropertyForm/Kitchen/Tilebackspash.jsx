@@ -149,7 +149,7 @@ export const Tilebackspash = ({
       <Button
           leftIcon={<IoMdArrowRoundBack />}
           variant={"outline"}
-          onClick={() => setCurrentForm("flatPanelCabinates")}
+          onClick={() => setCurrentForm("cabinetHardware")}
         >
           Back to kitchen Flat panel Cabinets
         </Button>
