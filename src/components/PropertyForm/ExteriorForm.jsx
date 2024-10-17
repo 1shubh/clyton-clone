@@ -3,8 +3,6 @@ import { ImageUploader } from "./ImageUploader";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ref,
-  uploadBytes,
-  getDownloadURL,
   deleteObject,
 } from "firebase/storage";
 

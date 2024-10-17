@@ -13,7 +13,15 @@ const imagesSlice = createSlice({
     uploadedKitchenCabinetHardware: "",
     uploadKitchenTileBacksplash: "",
     uploadKitchenBacksplashTile: "",
-    uploadKitchenFaucetImage:"",
+    uploadKitchenFaucetImage: "",
+    uploadOptionImage: "",
+    UploadBathroomImage: "",
+    uploadFlooringMaterialImage: "",
+    uploadKitchenFlooringImage: "",
+    uploadLeavingRoomImage: "",
+    uploadBedroomImage:"",
+    uploadAppliancesImage:"",
+    uploadAppliancePackageImage:"",
     loading: false,
     error: null,
   },
@@ -51,9 +59,33 @@ const imagesSlice = createSlice({
     setUploadKitchenBacksplashTile(state, action) {
       state.uploadKitchenBacksplashTile = action.payload;
     },
-    setUploadKitchenFaucet(state,action){
-     state.uploadKitchenFaucetImage = action.payload
+    setUploadKitchenFaucet(state, action) {
+      state.uploadKitchenFaucetImage = action.payload;
     },
+    setUploadOptionImage(state, action) {
+      state.uploadOptionImage = action.payload;
+    },
+    setUploadBathroomImage(state, action) {
+      state.UploadBathroomImage = action.payload;
+    },
+    setUploadFlooringMaterialImage(state, action) {
+      state.uploadFlooringMaterialImage = action.payload;
+    },
+    setUploadKitchenFlooringImage(state, action) {
+      state.uploadKitchenFlooringImage = action.payload;
+    },
+    setUploadLeavingRoomImage(state, action) {
+      state.uploadLeavingRoomImage = action.payload;
+    },
+    setUploadBedroomImage(state,action){
+     state.uploadBedroomImage = action.payload
+    },
+    setUploadAppliancesImage(state,action){
+      state.uploadAppliancesImage = action.payload
+     },
+     setUploadAppliancesPackageImage(state,action){
+      state.uploadAppliancePackageImage = action.payload
+     },
     setLoading(state, action) {
       state.loading = action.payload;
     },
@@ -76,6 +108,14 @@ export const {
   setUploadKitchenTileBacksplash,
   setUploadKitchenBacksplashTile,
   setUploadKitchenFaucet,
+  setUploadOptionImage,
+  setUploadBathroomImage,
+  setUploadFlooringMaterialImage,
+  setUploadKitchenFlooringImage,
+  setUploadLeavingRoomImage,
+  setUploadBedroomImage,
+  setUploadAppliancesImage,
+  setUploadAppliancesPackageImage,
   setLoading,
   setError,
 } = imagesSlice.actions;

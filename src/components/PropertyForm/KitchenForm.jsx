@@ -316,6 +316,7 @@ export const KitchenForm = ({ onSubmit,setIndex}) => {
               kitchen={kitchen}
               setKitchen={setKitchen}
               setCurrentForm={setcurrentForm}
+              handleKitchenSubmit={handleKitchenSubmit}
             />
           </div>
         </div>

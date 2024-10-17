@@ -1,85 +1,80 @@
+import React, { useEffect, useState } from "react";
 import {
   Input,
   Button,
-  Text,
   IconButton,
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
 import { BiSolidDollarCircle } from "react-icons/bi";
-import React, { useEffect, useState } from "react";
-import { GrFormNextLink } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { GrFormNextLink } from "react-icons/gr";
 import { useSelector } from "react-redux";
-import { ImageUploader } from "../ImageUploader";
-import { setUploadKitchenFlatCabinet } from "../../../Redux/imageSlice";
-import { getStorage, ref, deleteObject } from "firebase/storage"; // Import Firebase Storage
+import { ImageUploader } from "./PropertyForm/ImageUploader";
+import { getStorage, ref, deleteObject } from "firebase/storage"; // Firebase storage
+import { setUploadOptionImage } from "../Redux/imageSlice";
 
-export const InteriorDoorHandles = ({
+export const OptionsForm = ({
   currentForm,
-  Interior,
-  setInterior,
+  currentFormTitle,
+  data,
+  setData,
   setCurrentForm,
+  prevForm,
+  nextForm
 }) => {
   const [imageUploaded, setImageUploaded] = useState(false);
   const [filePath, setFilePath] = useState(""); // Store file path for deleting
-  const [editingIndex, setEditingIndex] = useState(null); // Track which cabinet is being edited
+  const [editingIndex, setEditingIndex] = useState(null); // Track which option is being edited
   const [editPrice, setEditPrice] = useState("");
-  const [newDoorHandle, setNewDoorHandle] = useState({
+  const [newOption, setNewOption] = useState({
     name: "",
     image: "",
     price: "",
     bgImage: "",
   });
-  const uploadedInteriorFlatCabinetImage = useSelector(
-    (state) => state.images.uploadedKitchenFlatCabinet
+
+  const uploadedOptionImage = useSelector(
+    (state) => state.images.uploadOptionImage
   );
-  // Update newDoorHandle with uploaded image
+
   useEffect(() => {
-    if (
-      uploadedInteriorFlatCabinetImage &&
-      uploadedInteriorFlatCabinetImage.length > 0
-    ) {
-      setNewDoorHandle((prevProperty) => ({
-        ...prevProperty,
-        bgImage: uploadedInteriorFlatCabinetImage[0].url, // Update image URL
-        image:uploadedInteriorFlatCabinetImage[0].url,
-        filePath: uploadedInteriorFlatCabinetImage[0].path, // Store the Firebase Storage file path
+    if (uploadedOptionImage && uploadedOptionImage.length > 0) {
+      setNewOption((prevOption) => ({
+        ...prevOption,
+        bgImage: uploadedOptionImage[0].url,
+        image: uploadedOptionImage[0].url,
+        filePath: uploadedOptionImage[0].path, // Store file path for deleting
       }));
     }
-  }, [uploadedInteriorFlatCabinetImage]);
+  }, [uploadedOptionImage]);
 
-  // Handle input changes for new cabinet fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewDoorHandle((prev) => ({
+    setNewOption((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  // Add new cabinet
-  const handleAddCabinate = (e) => {
+  const handleAddOption = (e) => {
     e.preventDefault();
-    if (!newDoorHandle.name || !newDoorHandle.bgImage || !newDoorHandle.price) {
-      alert("Please fill all fields to add a cabinet.");
+    if (!newOption.name || !newOption.bgImage || !newOption.price) {
+      alert("Please fill all fields to add an option.");
       return;
     }
 
-   setInterior((prevInterior) => ({
-      ...prevInterior,
-      doorHandles: {
-        ...prevInterior.doorHandles,
-        options: [
-          ...prevInterior.doorHandles.options,
-          { ...newDoorHandle, price: parseFloat(newDoorHandle.price) },
-        ],
-      },
+    setData((prevData) => ({
+      ...prevData,
+      options: [
+        ...prevData.options,
+        { ...newOption, price: parseFloat(newOption.price) },
+      ],
     }));
 
     // Reset the form after adding
-    setNewDoorHandle({
+    setNewOption({
       name: "",
       image: "",
       price: "",
@@ -91,31 +86,25 @@ export const InteriorDoorHandles = ({
   // Handle price editing
   const handleEditPrice = (index) => {
     setEditingIndex(index);
-    setEditPrice(Interior.doorHandles.options[index].price);
+    setEditPrice(data.options[index].price);
   };
 
   // Save edited price
   const handleSavePrice = (index) => {
-    setInterior((prevInterior) => {
-      const updatedOptions = [...prevInterior.doorHandles.options];
+    setData((prevData) => {
+      const updatedOptions = [...prevData.options];
       updatedOptions[index].price = parseFloat(editPrice);
-      return {
-        ...prevInterior,
-        doorHandles: {
-          ...prevInterior.doorHandles,
-          options: updatedOptions,
-        },
-      };
+      return { ...prevData, options: updatedOptions };
     });
     setEditingIndex(null); // Exit editing mode
   };
 
-  // Delete cabinet item and image from Firebase
-  const handleDeleteItem = async (index) => {
-    const cabinetToDelete = Interior.doorHandles.options[index];
-    if (cabinetToDelete.filePath) {
+  // Delete option and image from Firebase
+  const handleDeleteOption = async (index) => {
+    const optionToDelete = data.options[index];
+    if (optionToDelete.filePath) {
       const storage = getStorage();
-      const imageRef = ref(storage, cabinetToDelete.filePath);
+      const imageRef = ref(storage, optionToDelete.filePath);
       try {
         await deleteObject(imageRef);
         console.log("Image deleted from Firebase Storage.");
@@ -124,35 +113,32 @@ export const InteriorDoorHandles = ({
       }
     }
 
-    // Remove the cabinet from options
-    setInterior((prevInterior) => ({
-      ...prevInterior,
-      doorHandles: {
-        ...prevInterior.doorHandles,
-        options: prevInterior.doorHandles.options.filter(
-          (_, i) => i !== index
-        ),
-      },
+    // Remove the option from the list
+    setData((prevData) => ({
+      ...prevData,
+      options: prevData.options.filter((_, i) => i !== index),
     }));
   };
 
-  const handleFlatCabinetSubmit = () => {
-    setCurrentForm("windowTreatment");
+  const handleFormSubmit = () => {
+    setCurrentForm({nextForm});
   };
-  const isFormDisabled = Interior.doorHandles.options.length < 1;
+
+  const isFormDisabled = data.options.length < 1;
 
   return (
-    <div
-      className={`${
-        currentForm === "interiorDoorHandles" ? "block" : "hidden"
-      }`}
-    >
-     
-
-      <p className="text-xl font-bold text-nowrap my-5">Add Interior Door Handles</p>
+    <div className={`${currentForm === {currentFormTitle} ? "block" : "hidden"}`}>
+      <p className="text-xl font-bold text-nowrap my-5">Add Options</p>
+      <Button
+        leftIcon={<IoMdArrowRoundBack />}
+        variant={"outline"}
+        onClick={() => setCurrentForm({prevForm})}
+      >
+        Back to Previous Form
+      </Button>
 
       <div className="grid grid-cols-4 gap-2 pb-4 mt-5">
-        {Interior?.doorHandles?.options?.map((ele, i) => (
+        {data?.options?.map((ele, i) => (
           <div
             key={i}
             className="px-2 py-4 font-semibold border border-gray-300 cursor-pointer rounded-md"
@@ -160,7 +146,7 @@ export const InteriorDoorHandles = ({
             <div className="w-full h-[150px] rounded-md">
               <img
                 src={ele.bgImage}
-                alt="img"
+                alt="optionimage"
                 className="w-full h-full object-contain"
               />
             </div>
@@ -206,47 +192,47 @@ export const InteriorDoorHandles = ({
                 colorScheme="orange"
                 className="mt-1"
                 icon={<MdDelete />}
-                onClick={() => handleDeleteItem(i)}
+                onClick={() => handleDeleteOption(i)}
               />
             </div>
           </div>
         ))}
 
-        {/* Add new cabinet form */}
+        {/* Add new option form */}
         {imageUploaded ? (
-          <form onSubmit={handleAddCabinate}>
+          <form onSubmit={handleAddOption}>
             <div className="w-full grid gap-2">
               <div className="w-full h-[150px] rounded-md">
                 <img
-                  src={newDoorHandle.bgImage}
-                  alt="doorimage"
+                  src={newOption.bgImage}
+                  alt="optionimage"
                   className="w-full h-full object-contain"
                 />
               </div>
               <Input
                 type="text"
                 name="name"
-                placeholder="Cabinet name"
-                value={newDoorHandle.name}
+                placeholder="Option name"
+                value={newOption.name}
                 onChange={handleInputChange}
               />
               <Input
                 type="number"
                 name="price"
                 placeholder="Price"
-                value={newDoorHandle.price}
+                value={newOption.price}
                 onChange={handleInputChange}
               />
               <Button className="w-[50%]" colorScheme="yellow" type="submit">
-                Add Cabinet
+                Add Option
               </Button>
             </div>
           </form>
         ) : (
           <ImageUploader
-            name={"Flat Panel Cabinet"}
+            name={"Option"}
             setImageUploaded={setImageUploaded}
-            setUploadedImage={setUploadKitchenFlatCabinet}
+            setUploadedImage={setUploadOptionImage}
             maxNumber={1}
           />
         )}
@@ -260,9 +246,9 @@ export const InteriorDoorHandles = ({
           rightIcon={<GrFormNextLink />}
           type="submit"
           isDisabled={isFormDisabled}
-          onClick={handleFlatCabinetSubmit}
+          onClick={handleFormSubmit}
         >
-          Save and Next
+          Submit Options
         </Button>
       </div>
     </div>

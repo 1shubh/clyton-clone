@@ -1,89 +1,87 @@
 import {
-  Input,
-  Button,
-  Text,
-  IconButton,
-  InputGroup,
-  InputLeftElement,
-} from "@chakra-ui/react";
-import { BiSolidDollarCircle } from "react-icons/bi";
-import React, { useEffect, useState } from "react";
-import { GrFormNextLink } from "react-icons/gr";
-import { MdDelete } from "react-icons/md";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { useSelector } from "react-redux";
-import { ImageUploader } from "../ImageUploader";
-import { setUploadKitchenFlatCabinet } from "../../../Redux/imageSlice";
-import { getStorage, ref, deleteObject } from "firebase/storage"; // Import Firebase Storage
+    Input,
+    Button,
+    Text,
+    IconButton,
+    InputGroup,
+    InputLeftElement,
+  } from "@chakra-ui/react";
+  import { BiSolidDollarCircle } from "react-icons/bi";
+  import React, { useEffect, useState } from "react";
+  import { GrFormNextLink } from "react-icons/gr";
+  import { MdDelete } from "react-icons/md";
+  import { IoMdArrowRoundBack } from "react-icons/io";
+  import { useSelector } from "react-redux";
+  import { ImageUploader } from "../ImageUploader";
+  import { setUploadBathroomImage } from "../../../Redux/imageSlice";
+  import { getStorage, ref, deleteObject } from "firebase/storage"; // Import Firebase Storage
 
-export const InteriorDoorHandles = ({
+export const BathroomEnclosure = ({
   currentForm,
-  Interior,
-  setInterior,
   setCurrentForm,
+  Bathroom,
+  setBathroom,
 }) => {
   const [imageUploaded, setImageUploaded] = useState(false);
   const [filePath, setFilePath] = useState(""); // Store file path for deleting
   const [editingIndex, setEditingIndex] = useState(null); // Track which cabinet is being edited
   const [editPrice, setEditPrice] = useState("");
-  const [newDoorHandle, setNewDoorHandle] = useState({
-    name: "",
+  const [newbathroomEnclosure, setnewbathroomEnclosure] = useState({
+    title: "",
     image: "",
     price: "",
-    bgImage: "",
   });
-  const uploadedInteriorFlatCabinetImage = useSelector(
-    (state) => state.images.uploadedKitchenFlatCabinet
+  const uploadedBathroomImage = useSelector(
+    (state) => state.images.UploadBathroomImage
   );
-  // Update newDoorHandle with uploaded image
+  // Update newbathroomEnclosure with uploaded image
   useEffect(() => {
-    if (
-      uploadedInteriorFlatCabinetImage &&
-      uploadedInteriorFlatCabinetImage.length > 0
-    ) {
-      setNewDoorHandle((prevProperty) => ({
+    if (uploadedBathroomImage && uploadedBathroomImage.length > 0) {
+      setnewbathroomEnclosure((prevProperty) => ({
         ...prevProperty,
-        bgImage: uploadedInteriorFlatCabinetImage[0].url, // Update image URL
-        image:uploadedInteriorFlatCabinetImage[0].url,
-        filePath: uploadedInteriorFlatCabinetImage[0].path, // Store the Firebase Storage file path
+        image: uploadedBathroomImage[0].url,
+        filePath: uploadedBathroomImage[0].path, // Store the Firebase Storage file path
       }));
     }
-  }, [uploadedInteriorFlatCabinetImage]);
+  }, [uploadedBathroomImage]);
 
   // Handle input changes for new cabinet fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewDoorHandle((prev) => ({
+    setnewbathroomEnclosure((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
   // Add new cabinet
-  const handleAddCabinate = (e) => {
+  const handleAddbathroomEnclosure = (e) => {
     e.preventDefault();
-    if (!newDoorHandle.name || !newDoorHandle.bgImage || !newDoorHandle.price) {
-      alert("Please fill all fields to add a cabinet.");
+    if (
+      !newbathroomEnclosure.title ||
+      !newbathroomEnclosure.image ||
+      !newbathroomEnclosure.price
+    ) {
+      alert("Please fill all fields to add a Bathroom Type.");
       return;
     }
 
-   setInterior((prevInterior) => ({
-      ...prevInterior,
-      doorHandles: {
-        ...prevInterior.doorHandles,
+    setBathroom((prevBathroom) => ({
+      ...prevBathroom,
+      bathroomEnclosure: {
+        ...prevBathroom.bathroomEnclosure,
         options: [
-          ...prevInterior.doorHandles.options,
-          { ...newDoorHandle, price: parseFloat(newDoorHandle.price) },
+          ...prevBathroom.bathroomEnclosure.options,
+          { ...newbathroomEnclosure, price: parseFloat(newbathroomEnclosure.price) },
         ],
       },
     }));
 
     // Reset the form after adding
-    setNewDoorHandle({
-      name: "",
+    setnewbathroomEnclosure({
+      title: "",
       image: "",
       price: "",
-      bgImage: "",
     });
     setImageUploaded(false); // Reset image uploader state
   };
@@ -91,18 +89,18 @@ export const InteriorDoorHandles = ({
   // Handle price editing
   const handleEditPrice = (index) => {
     setEditingIndex(index);
-    setEditPrice(Interior.doorHandles.options[index].price);
+    setEditPrice(Bathroom.bathroomEnclosure.options[index].price);
   };
 
   // Save edited price
   const handleSavePrice = (index) => {
-    setInterior((prevInterior) => {
-      const updatedOptions = [...prevInterior.doorHandles.options];
+    setBathroom((prevBathroom) => {
+      const updatedOptions = [...prevBathroom.bathroomEnclosure.options];
       updatedOptions[index].price = parseFloat(editPrice);
       return {
-        ...prevInterior,
-        doorHandles: {
-          ...prevInterior.doorHandles,
+        ...prevBathroom,
+        bathroomEnclosure: {
+          ...prevBathroom.bathroomEnclosure,
           options: updatedOptions,
         },
       };
@@ -112,7 +110,7 @@ export const InteriorDoorHandles = ({
 
   // Delete cabinet item and image from Firebase
   const handleDeleteItem = async (index) => {
-    const cabinetToDelete = Interior.doorHandles.options[index];
+    const cabinetToDelete = Bathroom.bathroomEnclosure.options[index];
     if (cabinetToDelete.filePath) {
       const storage = getStorage();
       const imageRef = ref(storage, cabinetToDelete.filePath);
@@ -125,46 +123,47 @@ export const InteriorDoorHandles = ({
     }
 
     // Remove the cabinet from options
-    setInterior((prevInterior) => ({
-      ...prevInterior,
-      doorHandles: {
-        ...prevInterior.doorHandles,
-        options: prevInterior.doorHandles.options.filter(
+    setBathroom((prevBathroom) => ({
+      ...prevBathroom,
+      bathroomEnclosure: {
+        ...prevBathroom.bathroomEnclosure,
+        options: prevBathroom.bathroomEnclosure.options.filter(
           (_, i) => i !== index
         ),
       },
     }));
   };
 
-  const handleFlatCabinetSubmit = () => {
-    setCurrentForm("windowTreatment");
+  const handlebathroomEnclosureSubmit = () => {
+    setCurrentForm("bathroomTiles");
   };
-  const isFormDisabled = Interior.doorHandles.options.length < 1;
-
+  const isFormDisabled = Bathroom.bathroomEnclosure.options.length < 1;
   return (
     <div
-      className={`${
-        currentForm === "interiorDoorHandles" ? "block" : "hidden"
-      }`}
+      className={`${currentForm === "bathroomEnclosure" ? "block" : "hidden"}`}
     >
-     
-
-      <p className="text-xl font-bold text-nowrap my-5">Add Interior Door Handles</p>
-
+      <p className="text-xl font-bold text-nowrap my-5">Add Bathroom Enclosure</p>
+      <Button
+            leftIcon={<IoMdArrowRoundBack />}
+            variant={"outline"}
+            onClick={() => setCurrentForm("bathroomType")}
+          >
+            Back to Bathroom Type
+          </Button>
       <div className="grid grid-cols-4 gap-2 pb-4 mt-5">
-        {Interior?.doorHandles?.options?.map((ele, i) => (
+        {Bathroom?.bathroomEnclosure?.options?.map((ele, i) => (
           <div
             key={i}
             className="px-2 py-4 font-semibold border border-gray-300 cursor-pointer rounded-md"
           >
-            <div className="w-full h-[150px] rounded-md">
+            <div className="w-full h-[220px] rounded-md">
               <img
-                src={ele.bgImage}
+                src={ele.image}
                 alt="img"
                 className="w-full h-full object-contain"
               />
             </div>
-            <p className="text-sm mt-2">{ele.name}</p>
+            <p className="text-xl mt-2">{ele.title}</p>
             {/* Editing price */}
             {editingIndex === i ? (
               <div className="flex items-center">
@@ -214,27 +213,28 @@ export const InteriorDoorHandles = ({
 
         {/* Add new cabinet form */}
         {imageUploaded ? (
-          <form onSubmit={handleAddCabinate}>
+          <form onSubmit={handleAddbathroomEnclosure}>
             <div className="w-full grid gap-2">
               <div className="w-full h-[150px] rounded-md">
                 <img
-                  src={newDoorHandle.bgImage}
+                  src={newbathroomEnclosure.image}
                   alt="doorimage"
                   className="w-full h-full object-contain"
                 />
               </div>
               <Input
                 type="text"
-                name="name"
-                placeholder="Cabinet name"
-                value={newDoorHandle.name}
+                name="title" // This was previously "name", change it to "title"
+                placeholder="Bathroom Enclosure title"
+                value={newbathroomEnclosure.title} // Ensure it is tied to "title"
                 onChange={handleInputChange}
               />
+
               <Input
                 type="number"
                 name="price"
                 placeholder="Price"
-                value={newDoorHandle.price}
+                value={newbathroomEnclosure.price}
                 onChange={handleInputChange}
               />
               <Button className="w-[50%]" colorScheme="yellow" type="submit">
@@ -246,7 +246,7 @@ export const InteriorDoorHandles = ({
           <ImageUploader
             name={"Flat Panel Cabinet"}
             setImageUploaded={setImageUploaded}
-            setUploadedImage={setUploadKitchenFlatCabinet}
+            setUploadedImage={setUploadBathroomImage}
             maxNumber={1}
           />
         )}
@@ -260,9 +260,9 @@ export const InteriorDoorHandles = ({
           rightIcon={<GrFormNextLink />}
           type="submit"
           isDisabled={isFormDisabled}
-          onClick={handleFlatCabinetSubmit}
+          onClick={handlebathroomEnclosureSubmit}
         >
-          Save and Next
+          Submit Bathroom Enclosure
         </Button>
       </div>
     </div>

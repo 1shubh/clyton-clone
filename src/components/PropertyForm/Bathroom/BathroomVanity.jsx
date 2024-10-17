@@ -1,7 +1,6 @@
 import {
   Input,
   Button,
-  Text,
   IconButton,
   InputGroup,
   InputLeftElement,
@@ -10,80 +9,77 @@ import { BiSolidDollarCircle } from "react-icons/bi";
 import React, { useEffect, useState } from "react";
 import { GrFormNextLink } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { ImageUploader } from "../ImageUploader";
-import { setUploadKitchenFlatCabinet } from "../../../Redux/imageSlice";
+import { setUploadBathroomImage } from "../../../Redux/imageSlice"; // Assuming an action for vanity images
 import { getStorage, ref, deleteObject } from "firebase/storage"; // Import Firebase Storage
-
-export const InteriorDoorHandles = ({
+import { IoMdArrowRoundBack } from "react-icons/io";
+export const BathroomVanity = ({
   currentForm,
-  Interior,
-  setInterior,
   setCurrentForm,
+  Bathroom,
+  setBathroom,
 }) => {
   const [imageUploaded, setImageUploaded] = useState(false);
-  const [filePath, setFilePath] = useState(""); // Store file path for deleting
-  const [editingIndex, setEditingIndex] = useState(null); // Track which cabinet is being edited
+  const [editingIndex, setEditingIndex] = useState(null);
   const [editPrice, setEditPrice] = useState("");
-  const [newDoorHandle, setNewDoorHandle] = useState({
+  const [newVanityLight, setNewVanityLight] = useState({
     name: "",
     image: "",
     price: "",
-    bgImage: "",
   });
-  const uploadedInteriorFlatCabinetImage = useSelector(
-    (state) => state.images.uploadedKitchenFlatCabinet
+  const uploadedVanityImage = useSelector(
+    (state) => state.images.UploadBathroomImage // Update this according to your Redux state
   );
-  // Update newDoorHandle with uploaded image
+
+  // Update newVanityLight with uploaded image
   useEffect(() => {
-    if (
-      uploadedInteriorFlatCabinetImage &&
-      uploadedInteriorFlatCabinetImage.length > 0
-    ) {
-      setNewDoorHandle((prevProperty) => ({
-        ...prevProperty,
-        bgImage: uploadedInteriorFlatCabinetImage[0].url, // Update image URL
-        image:uploadedInteriorFlatCabinetImage[0].url,
-        filePath: uploadedInteriorFlatCabinetImage[0].path, // Store the Firebase Storage file path
+    if (uploadedVanityImage && uploadedVanityImage.length > 0) {
+      setNewVanityLight((prev) => ({
+        ...prev,
+        image: uploadedVanityImage[0].url,
+        filePath: uploadedVanityImage[0].path,
       }));
     }
-  }, [uploadedInteriorFlatCabinetImage]);
+  }, [uploadedVanityImage]);
 
-  // Handle input changes for new cabinet fields
+  // Handle input changes for new vanity light fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewDoorHandle((prev) => ({
+    setNewVanityLight((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  // Add new cabinet
-  const handleAddCabinate = (e) => {
+  // Add new vanity light
+  const handleAddVanityLight = (e) => {
     e.preventDefault();
-    if (!newDoorHandle.name || !newDoorHandle.bgImage || !newDoorHandle.price) {
-      alert("Please fill all fields to add a cabinet.");
+    if (
+      !newVanityLight.name ||
+      !newVanityLight.image ||
+      !newVanityLight.price
+    ) {
+      alert("Please fill all fields to add a Vanity Light.");
       return;
     }
 
-   setInterior((prevInterior) => ({
-      ...prevInterior,
-      doorHandles: {
-        ...prevInterior.doorHandles,
+    setBathroom((prevBathroom) => ({
+      ...prevBathroom,
+      vanityLighting: {
+        ...prevBathroom.vanityLighting,
         options: [
-          ...prevInterior.doorHandles.options,
-          { ...newDoorHandle, price: parseFloat(newDoorHandle.price) },
+          ...prevBathroom.vanityLighting.options,
+          { ...newVanityLight, price: parseFloat(newVanityLight.price) },
         ],
       },
     }));
 
     // Reset the form after adding
-    setNewDoorHandle({
+    setNewVanityLight({
       name: "",
       image: "",
       price: "",
-      bgImage: "",
     });
     setImageUploaded(false); // Reset image uploader state
   };
@@ -91,18 +87,18 @@ export const InteriorDoorHandles = ({
   // Handle price editing
   const handleEditPrice = (index) => {
     setEditingIndex(index);
-    setEditPrice(Interior.doorHandles.options[index].price);
+    setEditPrice(Bathroom.vanityLighting.options[index].price);
   };
 
   // Save edited price
   const handleSavePrice = (index) => {
-    setInterior((prevInterior) => {
-      const updatedOptions = [...prevInterior.doorHandles.options];
+    setBathroom((prevBathroom) => {
+      const updatedOptions = [...prevBathroom.vanityLighting.options];
       updatedOptions[index].price = parseFloat(editPrice);
       return {
-        ...prevInterior,
-        doorHandles: {
-          ...prevInterior.doorHandles,
+        ...prevBathroom,
+        vanityLighting: {
+          ...prevBathroom.vanityLighting,
           options: updatedOptions,
         },
       };
@@ -110,12 +106,12 @@ export const InteriorDoorHandles = ({
     setEditingIndex(null); // Exit editing mode
   };
 
-  // Delete cabinet item and image from Firebase
+  // Delete vanity light item and image from Firebase
   const handleDeleteItem = async (index) => {
-    const cabinetToDelete = Interior.doorHandles.options[index];
-    if (cabinetToDelete.filePath) {
+    const lightToDelete = Bathroom.vanityLighting.options[index];
+    if (lightToDelete.filePath) {
       const storage = getStorage();
-      const imageRef = ref(storage, cabinetToDelete.filePath);
+      const imageRef = ref(storage, lightToDelete.filePath);
       try {
         await deleteObject(imageRef);
         console.log("Image deleted from Firebase Storage.");
@@ -124,47 +120,49 @@ export const InteriorDoorHandles = ({
       }
     }
 
-    // Remove the cabinet from options
-    setInterior((prevInterior) => ({
-      ...prevInterior,
-      doorHandles: {
-        ...prevInterior.doorHandles,
-        options: prevInterior.doorHandles.options.filter(
+    // Remove the light from options
+    setBathroom((prevBathroom) => ({
+      ...prevBathroom,
+      vanityLighting: {
+        ...prevBathroom.vanityLighting,
+        options: prevBathroom.vanityLighting.options.filter(
           (_, i) => i !== index
         ),
       },
     }));
   };
 
-  const handleFlatCabinetSubmit = () => {
-    setCurrentForm("windowTreatment");
+  const handleVanityLightSubmit = () => {
+    setCurrentForm("bathroomHardware"); // Change this to the actual next form
   };
-  const isFormDisabled = Interior.doorHandles.options.length < 1;
+
+  const isFormDisabled = Bathroom.vanityLighting.options.length < 1;
 
   return (
-    <div
-      className={`${
-        currentForm === "interiorDoorHandles" ? "block" : "hidden"
-      }`}
-    >
-     
-
-      <p className="text-xl font-bold text-nowrap my-5">Add Interior Door Handles</p>
-
+    <div className={`${currentForm === "vanityLighting" ? "block" : "hidden"}`}>
+      <p className="text-xl font-bold text-nowrap my-5">Add Vanity Lighting</p>
+      <Button
+        leftIcon={<IoMdArrowRoundBack />}
+        variant={"outline"}
+        onClick={() => setCurrentForm("mirror")}
+      >
+        Back to Shower Tile
+      </Button>
       <div className="grid grid-cols-4 gap-2 pb-4 mt-5">
-        {Interior?.doorHandles?.options?.map((ele, i) => (
+        {Bathroom?.vanityLighting?.options?.map((ele, i) => (
           <div
             key={i}
             className="px-2 py-4 font-semibold border border-gray-300 cursor-pointer rounded-md"
           >
             <div className="w-full h-[150px] rounded-md">
               <img
-                src={ele.bgImage}
+                src={ele.image}
                 alt="img"
                 className="w-full h-full object-contain"
               />
             </div>
-            <p className="text-sm mt-2">{ele.name}</p>
+            <p className="text-xl mt-2">{ele.name}</p>
+
             {/* Editing price */}
             {editingIndex === i ? (
               <div className="flex items-center">
@@ -212,41 +210,42 @@ export const InteriorDoorHandles = ({
           </div>
         ))}
 
-        {/* Add new cabinet form */}
+        {/* Add new vanity light form */}
         {imageUploaded ? (
-          <form onSubmit={handleAddCabinate}>
+          <form onSubmit={handleAddVanityLight}>
             <div className="w-full grid gap-2">
               <div className="w-full h-[150px] rounded-md">
                 <img
-                  src={newDoorHandle.bgImage}
-                  alt="doorimage"
+                  src={newVanityLight.image}
+                  alt="vanityimage"
                   className="w-full h-full object-contain"
                 />
               </div>
               <Input
                 type="text"
                 name="name"
-                placeholder="Cabinet name"
-                value={newDoorHandle.name}
+                placeholder="Vanity Light Name"
+                value={newVanityLight.name}
                 onChange={handleInputChange}
               />
+
               <Input
                 type="number"
                 name="price"
                 placeholder="Price"
-                value={newDoorHandle.price}
+                value={newVanityLight.price}
                 onChange={handleInputChange}
               />
               <Button className="w-[50%]" colorScheme="yellow" type="submit">
-                Add Cabinet
+                Add Light
               </Button>
             </div>
           </form>
         ) : (
           <ImageUploader
-            name={"Flat Panel Cabinet"}
+            name={"Vanity Light"}
             setImageUploaded={setImageUploaded}
-            setUploadedImage={setUploadKitchenFlatCabinet}
+            setUploadedImage={setUploadBathroomImage} // Keep this the same as for the vanity image
             maxNumber={1}
           />
         )}
@@ -260,9 +259,9 @@ export const InteriorDoorHandles = ({
           rightIcon={<GrFormNextLink />}
           type="submit"
           isDisabled={isFormDisabled}
-          onClick={handleFlatCabinetSubmit}
+          onClick={handleVanityLightSubmit}
         >
-          Save and Next
+          Submit Vanity Lighting
         </Button>
       </div>
     </div>

@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import { InteriorDoorHandles } from "./Interior/InteriorDoorHandles";
+import { InteriorWindowTreatment } from "./Interior/InteriorWindowTreatment";
 
-export const InteriorForm = ({onSubmit,setIndex}) => {
-  const [interior,setInterior] = useState({
+export const InteriorForm = ({ onSubmit, setIndex }) => {
+  const [interior, setInterior] = useState({
     title: "Interior",
     doorHandles: {
       title: "Interior Door Handles",
@@ -37,8 +39,30 @@ export const InteriorForm = ({onSubmit,setIndex}) => {
         },
       ],
     },
-  })
+  });
+  const [currentForm, setcurrentForm] = useState("interiorDoorHandles");
+
+  const handleSubmit = () => {
+      onSubmit(interior)
+      setIndex(5)
+  }
   return (
-    <div>InteriorForm</div>
-  )
-}
+    <div className="">
+      {/* Door Hanldes */}
+      <InteriorDoorHandles
+        Interior={interior}
+        setInterior={setInterior}
+        currentForm={currentForm}
+        setCurrentForm={setcurrentForm}
+      />
+      <InteriorWindowTreatment
+        Interior={interior}
+        setInterior={setInterior}
+        currentForm={currentForm}
+        setCurrentForm={setcurrentForm}
+        handleSubmit={handleSubmit}
+      />
+    
+    </div>
+  );
+};
