@@ -8,8 +8,9 @@ import { ImageCard } from "../ImageCard";
 import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { GrFormNextLink } from "react-icons/gr";
-import { ApplicancesTypes } from "./Appliances/ApplicancesTypes";
 import { ElectricAppliances } from "./Appliances/ElectricAppliances";
+import { GasAppliances } from "./Appliances/GasAppliances";
+import { Dishwasher } from "./Appliances/Dishwasher";
 
 export const AppliancesForm = ({ onSubmit, setIndex }) => {
   const [appliances, setAppliances] = useState({
@@ -314,6 +315,11 @@ export const AppliancesForm = ({ onSubmit, setIndex }) => {
       console.error("Error deleting image:", error);
     }
   };
+
+  const handleApplianceSubmit = () => {
+     onSubmit(appliances)
+     setIndex(8)
+  }
   return (
     <>
       {imageUploaded ? (
@@ -337,12 +343,25 @@ export const AppliancesForm = ({ onSubmit, setIndex }) => {
               setCurrentForm={setCurrentForm} // Correctly set the current form state
             />
 
-            {/* <ApplicancesTypes
-              typesData={typesData}
-              setTypesData={setTypesData}
+            <GasAppliances
+              typesData={typesData[1].package}
+              setTypesData={(updatedData) => {
+                const newTypesData = [...typesData];
+                newTypesData[1].package = updatedData;
+                setTypesData(newTypesData);
+              }}
               currentForm={currentForm}
               setCurrentForm={setCurrentForm}
-            /> */}
+            />
+
+            {/* Dishwasher */}
+            <Dishwasher
+              data={appliances}
+              setData={setAppliances}
+              currentForm={currentForm}
+              setCurrentForm={setCurrentForm}
+              handleSubmit={handleApplianceSubmit}
+            />
           </div>
         </div>
       ) : (

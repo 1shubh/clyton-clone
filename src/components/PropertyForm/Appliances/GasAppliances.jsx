@@ -6,6 +6,7 @@ import {
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import { GrFormNextLink } from "react-icons/gr";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { ImageUploader } from "../ImageUploader";
@@ -18,7 +19,7 @@ import { ImageCard } from "../../ImageCard";
 import { ref, deleteObject } from "firebase/storage"; // Import Firebase functions
 import { storage } from "../../../firebase-config/config";
 
-export const ElectricAppliances = ({
+export const GasAppliances = ({
   typesData,
   setTypesData,
   currentForm,
@@ -264,13 +265,19 @@ export const ElectricAppliances = ({
       setTypesData(updatedTypes);
     }
   };
-
   return (
-    <div className={currentForm === "electricAppliances" ? "block" : "hidden"}>
+    <div className={currentForm === "gasAppliances" ? "block" : "hidden"}>
       <p className="text-xl font-bold text-nowrap">
-        Electric Appliances Package
+        Gas Appliances Package
       </p>
       <div className="border p-5 rounded-xl mt-5">
+      <Button
+          leftIcon={<IoMdArrowRoundBack />}
+          variant={"outline"}
+          onClick={() => setCurrentForm("flatPanelCabinates")}
+        >
+          Back to Kitchen Flat panel Cabinetes
+        </Button>
         <h2 className="font-bold text-xl">{typesData.title}</h2>
         <h3 className="font-bold">{typesData.subtitle}</h3>
         <div className="grid gap-2 mt-5">
@@ -501,9 +508,9 @@ export const ElectricAppliances = ({
             className="mt-4"
             colorScheme="blue"
             rightIcon={<GrFormNextLink />}
-            onClick={() => setCurrentForm("gasAppliances")}
+            onClick={() => setCurrentForm("dishwasher")}
           >
-            Save Electric Appliances
+            Save Gas Appliances
           </Button>
         </div>
       </div>

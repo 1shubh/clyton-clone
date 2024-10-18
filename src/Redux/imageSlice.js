@@ -19,9 +19,10 @@ const imagesSlice = createSlice({
     uploadFlooringMaterialImage: "",
     uploadKitchenFlooringImage: "",
     uploadLeavingRoomImage: "",
-    uploadBedroomImage:"",
-    uploadAppliancesImage:"",
-    uploadAppliancePackageImage:"",
+    uploadBedroomImage: "",
+    uploadAppliancesImage: "",
+    uploadAppliancePackageImage: "",
+    uploadCustomeImages:"",
     loading: false,
     error: null,
   },
@@ -77,15 +78,18 @@ const imagesSlice = createSlice({
     setUploadLeavingRoomImage(state, action) {
       state.uploadLeavingRoomImage = action.payload;
     },
-    setUploadBedroomImage(state,action){
-     state.uploadBedroomImage = action.payload
+    setUploadBedroomImage(state, action) {
+      state.uploadBedroomImage = action.payload;
     },
-    setUploadAppliancesImage(state,action){
-      state.uploadAppliancesImage = action.payload
-     },
-     setUploadAppliancesPackageImage(state,action){
-      state.uploadAppliancePackageImage = action.payload
-     },
+    setUploadAppliancesImage(state, action) {
+      state.uploadAppliancesImage = action.payload;
+    },
+    setUploadAppliancesPackageImage(state, action) {
+      state.uploadAppliancePackageImage = action.payload;
+    },
+    setUploadCustomImages(state, action) {
+      state.uploadCustomeImages = action.payload;
+    },
     setLoading(state, action) {
       state.loading = action.payload;
     },
@@ -116,6 +120,7 @@ export const {
   setUploadBedroomImage,
   setUploadAppliancesImage,
   setUploadAppliancesPackageImage,
+  setUploadCustomImages,
   setLoading,
   setError,
 } = imagesSlice.actions;
