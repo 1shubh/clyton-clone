@@ -27,7 +27,7 @@ export const KitchenFlooring = ({
   setFlooring,
 }) => {
   const [isEditing, setIsEditing] = useState({});
-  const [imageUploaded, setImageUploaded] = useState(true);
+  const [imageUploaded, setImageUploaded] = useState(false);
   const [filePath, setFilePath] = useState("");
   const maxNumber = 1;
   const [counterTopPrices, setCounterTopPrice] = useState({});

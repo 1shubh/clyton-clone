@@ -18,7 +18,7 @@ export const OptionCard = ({
   return (
     <div
       className={`cursor-pointer p-2 mb-2 border hover:bg-gray-100 h-[80px] rounded ${
-        option.title === activeObj.title
+        option?.title === activeObj?.title
           ? "border-blue-500 bg-[#c5e5f8]"
           : "border-gray-300"
       }`}

@@ -17,8 +17,8 @@ export const FlooringUpgrades = ({
         subtext={"Kitchen & Bathroom Flooring"}
       />
       <PriceCard
-        name={activeKitchenBathroomFlooringType.name}
-        price={activeKitchenBathroomFlooringType.price}
+        name={activeKitchenBathroomFlooringType?.name}
+        price={activeKitchenBathroomFlooringType?.price}
         subtext={"Kitchen Linoleum Flooring"}
       />
       <PriceCard
@@ -27,8 +27,8 @@ export const FlooringUpgrades = ({
         subtext={"Leaving Room Flooring"}
       />
       <PriceCard
-        name={leavingRoomFlooringMaterial.name}
-        price={leavingRoomFlooringMaterial.price}
+        name={leavingRoomFlooringMaterial?.name}
+        price={leavingRoomFlooringMaterial?.price}
         subtext={"Living Room Carpet Takeaway-Non FHA"}
       />
       <PriceCard

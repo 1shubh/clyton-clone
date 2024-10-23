@@ -2,28 +2,26 @@ import React, { useState } from "react";
 import {
   Input,
   Button,
-  Text,
   IconButton,
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { GrFormNextLink } from "react-icons/gr";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaTrash } from "react-icons/fa";
 
-export const Dishwasher = ({
+export const CielingHeight = ({
   data,
   setData,
   currentForm,
   setCurrentForm,
-  handleSubmit,
+ 
 }) => {
   const [slidingPrices, setSlidingPrices] = useState({}); // To store price inputs
   const [isEditing, setIsEditing] = useState({});
-  const [newPackage, setNewPackage] = useState({
+  const [newOption, setNewOption] = useState({
     title: "",
     price: "",
-    description: "",
   });
   const [isAddingNew, setIsAddingNew] = useState(false);
 
@@ -36,7 +34,7 @@ export const Dishwasher = ({
 
   const handleAddSlidingPrice = (i) => {
     setData((prevData) => {
-      const updatedOptions = prevData.dishwasher.package.map((option, index) =>
+      const updatedOptions = prevData.celingHeight.options.map((option, index) =>
         index === i
           ? {
               ...option,
@@ -49,9 +47,9 @@ export const Dishwasher = ({
       );
       return {
         ...prevData,
-        dishwasher: {
-          ...prevData.dishwasher,
-          package: updatedOptions,
+        celingHeight: {
+          ...prevData.celingHeight,
+          options: updatedOptions,
         },
       };
     });
@@ -71,43 +69,53 @@ export const Dishwasher = ({
     }));
   };
 
-  // Handle adding a new package
-  const handleAddNewPackage = () => {
-    if (newPackage.title && newPackage.price) {
+  // Handle deleting an option
+  const handleDeleteOption = (i) => {
+    setData((prevData) => {
+      const updatedOptions = prevData.celingHeight.options.filter(
+        (option, index) => index !== i
+      );
+      return {
+        ...prevData,
+        celingHeight: {
+          ...prevData.celingHeight,
+          options: updatedOptions,
+        },
+      };
+    });
+  };
+
+  // Handle adding a new ceiling height option
+  const handleAddNewOption = () => {
+    if (newOption.title && newOption.price) {
       setData((prevData) => ({
         ...prevData,
-        dishwasher: {
-          ...prevData.dishwasher,
-          package: [
-            ...prevData.dishwasher.package,
+        celingHeight: {
+          ...prevData.celingHeight,
+          options: [
+            ...prevData.celingHeight.options,
             {
-              title: newPackage.title,
-              price: parseFloat(newPackage.price),
-              description: newPackage.description,
+              title: newOption.title,
+              price: parseFloat(newOption.price),
             },
           ],
         },
       }));
-      setNewPackage({ title: "", price: "", description: "" });
-      setIsAddingNew(false); // Close the form after adding the new package
+      setNewOption({ title: "", price: "" });
+      setIsAddingNew(false); // Close the form after adding the new option
     }
   };
 
+  const handleSubmit = () => {
+    setCurrentForm("structuralUpgrades")
+  }
+
   return (
-    <div className={`${currentForm === "dishwasher" ? "block" : "hidden"}`}>
+    <div className={`${currentForm === "cielingHeight" ? "block" : "hidden"}`}>
       <div>
-        <p className="text-xl font-bold text-nowrap">
-          Add {data.dishwasher.title}
-        </p>
-        <Button
-          leftIcon={<IoMdArrowRoundBack />}
-          variant={"outline"}
-          onClick={() => setCurrentForm("gasAppliances")}
-        >
-          Back to Add Gas Appliances
-        </Button>
+        <p className="text-xl font-bold text-nowrap">Add Ceiling Height Options</p>
         <div className="grid gap-2 mt-5">
-          {data.dishwasher.package.map((ele, i) => {
+          {data.celingHeight.options.map((ele, i) => {
             return (
               <div
                 key={i}
@@ -150,42 +158,38 @@ export const Dishwasher = ({
                   >
                     {isEditing[i] ? "Add" : "Edit"}
                   </Button>
+                  <IconButton
+                    aria-label="Delete option"
+                    icon={<FaTrash />}
+                    colorScheme="red"
+                    onClick={() => handleDeleteOption(i)}
+                  />
                 </div>
               </div>
             );
           })}
 
-          {/* New Package Adding Form */}
+          {/* New Option Adding Form */}
           {isAddingNew ? (
             <div className="border bg-blue-100 p-5 rounded-xl grid gap-2">
-              <p className="font-bold text-md">Add New Package Option</p>
+              <p className="font-bold text-md">Add New Option</p>
               <Input
                 placeholder="Title"
-                value={newPackage.title}
+                value={newOption.title}
                 onChange={(e) =>
-                  setNewPackage((prev) => ({ ...prev, title: e.target.value }))
+                  setNewOption((prev) => ({ ...prev, title: e.target.value }))
                 }
               />
               <Input
                 placeholder="Price"
                 type="number"
-                value={newPackage.price}
+                value={newOption.price}
                 onChange={(e) =>
-                  setNewPackage((prev) => ({ ...prev, price: e.target.value }))
+                  setNewOption((prev) => ({ ...prev, price: e.target.value }))
                 }
               />
-              <Input
-                placeholder="Description"
-                value={newPackage.description}
-                onChange={(e) =>
-                  setNewPackage((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-              />
-              <Button colorScheme="green" onClick={handleAddNewPackage}>
-                Add Package
+              <Button colorScheme="green" onClick={handleAddNewOption}>
+                Add Option
               </Button>
               <Button colorScheme="red" onClick={() => setIsAddingNew(false)}>
                 Cancel
@@ -197,7 +201,7 @@ export const Dishwasher = ({
               onClick={() => setIsAddingNew(true)}
               className="mt-4"
             >
-              Add New Package
+              Add New Option
             </Button>
           )}
         </div>
@@ -208,7 +212,7 @@ export const Dishwasher = ({
             rightIcon={<GrFormNextLink />}
             onClick={handleSubmit}
           >
-            Save Appliances
+            Save Ceiling Heights
           </Button>
         </div>
       </div>

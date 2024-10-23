@@ -49,7 +49,20 @@ export const Models = () => {
       ) : (
         <div className="grid grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 gap-5 p-10 lg:p-5">
           {properties.map((ele) => {
-            return <PropertyCard {...ele} />;
+            
+            return (
+              <PropertyCard
+                name={ele.propertyDetails.name}
+                images={ele.propertyDetails.images}
+                id={ele.id}
+                area={ele.propertyDetails.area}
+                address={ele.propertyDetails.address}
+                bathroom={ele.propertyDetails.bathroom}
+                bredth={ele.propertyDetails.bredth}
+                length={ele.propertyDetails.length}
+                 price={ele.propertyDetails.price}
+              />
+            );
           })}
         </div>
       )}

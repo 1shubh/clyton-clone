@@ -302,7 +302,7 @@ export const ElectricAppliances = ({
                         </Button>
                       </div>
                     ) : (
-                      <div className="w-[200px] border">
+                      <div className="w-[200px]">
                         <ImageUploader
                           title={pkg.title}
                           maxNumber={1}

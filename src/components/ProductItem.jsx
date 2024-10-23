@@ -19,9 +19,8 @@ export const ProductItem = ({ product, deleteProduct, editProduct }) => {
     <>
       <div
         className="border rounded-md px-9 py-5 mt-2 cursor-pointer hover:bg-slate-300 flex items-center justify-between gap-5"
-        onClick={() => onOpen()}
       >
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5" onClick={() => onOpen()}>
           <div className="w-[10%]">
             <img src={product.images[0]} alt="" className="w-full" />
           </div>
@@ -30,9 +29,9 @@ export const ProductItem = ({ product, deleteProduct, editProduct }) => {
             <p className="font-bold">$ {product.price}</p>
             <p>{product.address}</p>
             <p className="text-black font-semibold">
-                  {product.bedroom} beds | {product.bathroom} bath |{" "}
-                  {product.area} sq. ft. | {product.length}{" "} x {product.bredth}
-                </p>
+              {product.bedroom} beds | {product.bathroom} bath | {product.area}{" "}
+              sq. ft. | {product.length} x {product.bredth}
+            </p>
           </div>
         </div>
         <div>
@@ -80,7 +79,7 @@ export const ProductItem = ({ product, deleteProduct, editProduct }) => {
                 <p>{product.address}</p>
                 <p className="text-black font-semibold">
                   {product.bedroom} beds | {product.bathroom} bath |{" "}
-                  {product.area} sq. ft. | {product.length}{" "} x {product.bredth}
+                  {product.area} sq. ft. | {product.length} x {product.bredth}
                 </p>
                 <p>{product.description}</p>
               </div>

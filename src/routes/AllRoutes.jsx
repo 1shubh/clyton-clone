@@ -13,6 +13,7 @@ import { Modal } from "@chakra-ui/react";
 import { Models } from "../pages/Models";
 import { Admin } from "../pages/admin/Admin";
 import { SingleModel } from "../pages/SingleModel";
+import { SingleModelNew } from "../pages/portal/SingleModelNew";
 
 export const AllRoutes = () => {
   return (
@@ -25,7 +26,7 @@ export const AllRoutes = () => {
       <Route element={<Account/>} path="/account" />
       <Route  element={<DigitalAssets/>} path="/digital-assets"/>
       <Route element={<Models/>} path="/models"/>
-      <Route element={<SingleModel/>} path="/models/:id"/>
+      <Route element={<SingleModelNew/>} path="/models/:id"/>
       {/* Admin */}
       <Route element={<Admin/>} path="/admin"/>
     </Routes>

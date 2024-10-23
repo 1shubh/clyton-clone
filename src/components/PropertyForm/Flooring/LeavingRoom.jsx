@@ -27,7 +27,7 @@ export const LeavingRoom = ({
   setFlooring,
 }) => {
   const [isEditing, setIsEditing] = useState({});
-  const [imageUploaded, setImageUploaded] = useState(true);
+  const [imageUploaded, setImageUploaded] = useState(false);
   const [imageUploadFlags, setImageUploadFlags] = useState({});
   const [filePath, setFilePath] = useState("");
   const maxNumber = 1;

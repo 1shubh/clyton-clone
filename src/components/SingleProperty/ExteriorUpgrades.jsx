@@ -37,8 +37,8 @@ export const ExteriorUpgrades = ({
         subtext={"Exterior Door Paint"}
       />
       <PriceCard
-        name={activeShinglesMaterial.title}
-        price={activeShinglesMaterial.price}
+        name={activeShinglesMaterial?.title}
+        price={activeShinglesMaterial?.price}
         subtext={"Shingles Material"}
       />
       <PriceCard

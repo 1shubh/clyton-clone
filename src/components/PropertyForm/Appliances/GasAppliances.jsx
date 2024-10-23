@@ -267,16 +267,14 @@ export const GasAppliances = ({
   };
   return (
     <div className={currentForm === "gasAppliances" ? "block" : "hidden"}>
-      <p className="text-xl font-bold text-nowrap">
-        Gas Appliances Package
-      </p>
+      <p className="text-xl font-bold text-nowrap">Gas Appliances Package</p>
       <div className="border p-5 rounded-xl mt-5">
-      <Button
+        <Button
           leftIcon={<IoMdArrowRoundBack />}
           variant={"outline"}
-          onClick={() => setCurrentForm("flatPanelCabinates")}
+          onClick={() => setCurrentForm("electricAppliances")}
         >
-          Back to Kitchen Flat panel Cabinetes
+          Back to Electric Appliances
         </Button>
         <h2 className="font-bold text-xl">{typesData.title}</h2>
         <h3 className="font-bold">{typesData.subtitle}</h3>
@@ -309,7 +307,7 @@ export const GasAppliances = ({
                         </Button>
                       </div>
                     ) : (
-                      <div className="w-[200px] border">
+                      <div className="w-[200px]">
                         <ImageUploader
                           title={pkg.title}
                           maxNumber={1}

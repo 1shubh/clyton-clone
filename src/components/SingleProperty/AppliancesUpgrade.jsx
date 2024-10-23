@@ -18,8 +18,8 @@ export const AppliancesUpgrade = ({
       subtext={""}
     />
     <PriceCard
-      name={activeAppliancesPackage.title}
-      price={activeAppliancesPackage.price}
+      name={activeAppliancesPackage?.title}
+      price={activeAppliancesPackage?.price}
       subtext={"Appliance Package"}
     />
     <PriceCard

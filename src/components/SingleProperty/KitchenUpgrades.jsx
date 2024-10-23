@@ -22,8 +22,8 @@ export const KitchenUpgrades = ({
         subtext={"Countertop"}
       />
       <PriceCard
-        name={activeCounterTopMaterial.name}
-        price={activeCounterTopMaterial.price}
+        name={activeCounterTopMaterial?.title}
+        price={activeCounterTopMaterial?.price}
         subtext={"Countertop Material"}
       />
       <PriceCard

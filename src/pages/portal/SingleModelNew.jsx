@@ -1,38 +1,29 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase-config/config";
-import { Loader } from "../components/Loader";
+import { db } from "../../firebase-config/config";
+import { Loader } from "../../components/Loader";
 import { IoMdArrowRoundBack } from "react-icons/io";
-// import { data } from "../utils";
-import { FloorOptionCard } from "../components/FloorPlan/FloorOptionCard";
-import { OptionCard } from "../components/OptionCard";
-import { ColorCard } from "../components/ColorCard";
-import { ColorContainer } from "../components/ColorContainer";
-import { ImageColorCard } from "../components/ImageColorCard";
-import { ImageBox } from "../components/ImageBox";
-import { BathroomTypeCard } from "../components/BathroomTypeCard";
-import { CheckboxCard } from "../components/CheckboxCard";
-import { AppliancesPackageCard } from "../components/AppliancesPackageCard";
-import { PriceCard } from "../components/PriceCard";
-import ExteriorSection from "../components/SingleProperty/ExteriorSection";
-import KitchenSection from "../components/SingleProperty/KitchenSection";
-import InteriorSection from "../components/SingleProperty/InteriorSection";
-import BathroomSection from "../components/SingleProperty/BathroomSection";
-import FlooringSection from "../components/SingleProperty/FlooringSection";
-import AppliancesSection from "../components/SingleProperty/AppliancesSection";
-import AdvanceDetailsSection from "../components/SingleProperty/AdvanceDetailsSection";
-import { ExteriorUpgrades } from "../components/SingleProperty/ExteriorUpgrades";
-import { KitchenUpgrades } from "../components/SingleProperty/KitchenUpgrades";
-import { InteriorUpgrades } from "../components/SingleProperty/InteriorUpgrades";
-import { BathroomUpgrades } from "../components/SingleProperty/BathroomUpgrades";
-import { FlooringUpgrades } from "../components/SingleProperty/FlooringUpgrades";
-import { AppliancesUpgrade } from "../components/SingleProperty/AppliancesUpgrade";
-import { AdvanceDetailsUpgrade } from "../components/SingleProperty/AdvanceDetailsUpgrade";
 import { Button } from "@chakra-ui/react";
-import useInView from "../hooks/useInView";
+import useInView from "../../hooks/useInView";
+import { FloorOptionCard } from "../../components/FloorPlan/FloorOptionCard";
+import ExteriorSection from "../../components/SingleProperty/ExteriorSection";
+import KitchenSection from "../../components/SingleProperty/KitchenSection";
+import InteriorSection from "../../components/SingleProperty/InteriorSection";
+import BathroomSection from "../../components/SingleProperty/BathroomSection";
+import FlooringSection from "../../components/SingleProperty/FlooringSection";
+import AppliancesSection from "../../components/SingleProperty/AppliancesSection";
+import AdvanceDetailsSection from "../../components/SingleProperty/AdvanceDetailsSection";
+import { ExteriorUpgrades } from "../../components/SingleProperty/ExteriorUpgrades";
+import { KitchenUpgrades } from "../../components/SingleProperty/KitchenUpgrades";
+import { InteriorUpgrades } from "../../components/SingleProperty/InteriorUpgrades";
+import { BathroomUpgrades } from "../../components/SingleProperty/BathroomUpgrades";
+import { FlooringUpgrades } from "../../components/SingleProperty/FlooringUpgrades";
+import { AppliancesUpgrade } from "../../components/SingleProperty/AppliancesUpgrade";
+import { AdvanceDetailsUpgrade } from "../../components/SingleProperty/AdvanceDetailsUpgrade";
+import { PriceCard } from "../../components/PriceCard";
 
-export const SingleModel = () => {
+export const SingleModelNew = () => {
   const [ref, isInView] = useInView({ threshold: 0.1 });
   const [activeSection, setActiveSection] = useState("floor-plan");
   const sectionRefs = useRef({
@@ -51,150 +42,92 @@ export const SingleModel = () => {
   const navbarHeight = 80;
   const { id } = useParams();
   const [modelData, setModelData] = useState(null);
-  const [data,setData] = useState(null)
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  
 
-  // Floor Plan
-  const [activeObject, setActiveObject] = useState(modelData?.floorPlan);
-  const [activeFloorPlan, setActiveFloorPlan] = useState();
-  const [currentImage, setCurrentImage] = useState(modelData?.floorPlan.image);
+  // State Management for Different Sections
+  const [activeObject, setActiveObject] = useState({});
+  const [activeFloorPlan, setActiveFloorPlan] = useState({});
+  const [currentImage, setCurrentImage] = useState("");
   let FloorArray = [activeFloorPlan];
-  // Exterior
-  const [activeSidingType, setActiveSidingType] = useState(
-    modelData?.exterior.sidingType.options[0]
-  );
-  const [activeExteriorBodyColor, setActiveExteriorBodyColor] = useState(
-    data?.exterior.bodyColor.options[0]
-  );
+  // Various active states for sections
+  const [activeSidingType, setActiveSidingType] = useState({});
+  const [activeExteriorBodyColor, setActiveExteriorBodyColor] = useState({});
   const [activeExteriorAccentColor, setActiveExteriorAccentColor] = useState(
-    data?.exterior.accentColor.options[0]
+    {}
   );
-  const [activeExteriorTrimColor, setActiveExteriorTrimColor] = useState(
-    data?.exterior.trimColor.options[0]
-  );
-  const [activeExteriorDoorPaint, setActiveExteriorDoorPaint] = useState(
-    data?.exterior.doorPaint.options[0]
-  );
-  const [activeShinglesMaterial, setActiveShinglesMaterial] = useState(
-    data?.exterior.shiglesMaterial.options[0]
-  );
-  const [activeShinglesType, setActiveShinglesType] = useState(
-    activeShinglesMaterial?.types[0]
-  );
-  const [activeExteriorDoors, setActiveExteriorDoors] = useState(
-    data?.exterior.exteriorDoors.options[0]
-  );
+  const [activeExteriorTrimColor, setActiveExteriorTrimColor] = useState({});
+  const [activeExteriorDoorPaint, setActiveExteriorDoorPaint] = useState({});
+  const [activeShinglesMaterial, setActiveShinglesMaterial] = useState({});
+  const [activeShinglesType, setActiveShinglesType] = useState({});
+  const [activeExteriorDoors, setActiveExteriorDoors] = useState({});
 
-  // Kitchen
-  const [activeKitchenCounterTop, setActiveKitchenCounterTop] = useState(
-    data?.kitchen.counterTopMaterial.options[0]
-  );
+  //   KITCHEN
+  const [activeKitchenCounterTop, setActiveKitchenCounterTop] = useState({});
   const [activeCounterTopMaterial, setActiveCounterTopMaterial] = useState(
-    activeKitchenCounterTop.types[0]
+    activeKitchenCounterTop?.types?.[0]
   );
-  const [activeFlatCabinates, setActiveFlatCabinates] = useState(
-    data?.kitchen.flatPanelCabinets.options[0]
-  );
-  const [activecabinateHardware, setActiveCabinateHardware] = useState(
-    data?.kitchen.cabinetHardware.options[0]
-  );
-  const [activeTileBacksplash, setActiveTileBacksplash] = useState(
-    data?.kitchen.tileBacksplash.options[0]
-  );
-  const [activeBacksplashtile, setActivebacksplashTile] = useState(
-    data?.kitchen.backsplashTile.options[0]
-  );
+  const [activeFlatCabinates, setActiveFlatCabinates] = useState({});
+  const [activecabinateHardware, setActiveCabinateHardware] = useState({});
+  const [activeTileBacksplash, setActiveTileBacksplash] = useState({});
+  const [activeBacksplashtile, setActivebacksplashTile] = useState({});
   const [
     activeKitchenFlooringMaterial,
     setActiveKitchenFlooringMaterial,
-  ] = useState(data?.kitchen.flooringMaterial.options[0]);
-  const [activeFlooringType, setActiveFlooringType] = useState(
-    activeKitchenFlooringMaterial.types[0]
-  );
-  const [activeKitchenFucet, setActiveKitchenFucet] = useState(
-    data?.kitchen.kitchenFaucets.options[0]
-  );
-  const [activeKitchenSinks, setActiveKitchenSinks] = useState(
-    data?.kitchen.kitchenSinks.options[0]
-  );
+  ] = useState({});
 
-  // interior
+  const [activeFlooringType, setActiveFlooringType] = useState({});
+  const [activeKitchenFucet, setActiveKitchenFucet] = useState({});
+  const [activeKitchenSinks, setActiveKitchenSinks] = useState({});
+
+  //   INTERIOR
   const [activeInteriorDoorHandles, setActiveInteriorDoorHandles] = useState(
-    data?.interior.doorHandles.options[0]
+    {}
   );
-  const [activeInteriorWindow, setActiveWindow] = useState(
-    data?.interior.windowTreatment.options[0]
-  );
-  // Bathroom
-  const [activeBathroomType, setActiveBathroomType] = useState(
-    data?.bathroom.bathroomType.options[0]
-  );
-  const [activeBathroomEnclosure, setActiveBathroomEnclosure] = useState(
-    data?.bathroom.bathroomEnclosure.options[0]
-  );
-  const [activeBathroomTile, setActiveBathroomTile] = useState(
-    data?.bathroom.bathroomTile.options[0]
-  );
+  const [activeInteriorWindow, setActiveWindow] = useState({});
+  //   BATHROOM
+  const [activeBathroomType, setActiveBathroomType] = useState({});
+  const [activeBathroomEnclosure, setActiveBathroomEnclosure] = useState({});
+  const [activeBathroomTile, setActiveBathroomTile] = useState({});
   const [activeBathroomTileType, setActiveBathroomTileType] = useState({});
-  // console.log(activeBathroomTile);
-  // console.log(activeBathroomTileType);
-  const [activeSuboption, setActiveSuboption] = useState([]);
-  const [activeSuboptionTotal, setActiveSubOptionTotal] = useState(0);
-  useEffect(() => {
-    const total = activeSuboption.reduce((sum, item) => sum + item.price, 0);
-    setActiveSubOptionTotal(total);
-  }, [activeSuboption]);
 
-  const [activeShowertiles, setActiveShowerTiles] = useState(
-    data?.bathroom.showerAndTiles.options[0]
-  );
-  const [activeBathroomMirror, setActiveBathroomMirror] = useState(
-    data?.bathroom.mirror.options[0]
-  );
-  const [activeBathroomVanity, setActiveBathroomVanity] = useState(
-    data?.bathroom.vanityLighting.options[0]
-  );
-  const [activeBathroomHardware, setActiveBathroomHardware] = useState(
-    data?.bathroom.hardware.options[0]
-  );
-
-  // Flooring
+  const [activeShowertiles, setActiveShowerTiles] = useState({});
+  const [activeBathroomMirror, setActiveBathroomMirror] = useState({});
+  const [activeBathroomVanity, setActiveBathroomVanity] = useState({});
+  const [activeBathroomHardware, setActiveBathroomHardware] = useState({});
+  //   FLOORING
   const [
     activeKitchenBathroomFlooring,
     setActiveKitchenBathroomFlooring,
-  ] = useState(data?.flooring.kitchenflooringMaterial.options[0]);
-
+  ] = useState({});
   const [
     activeKitchenBathroomFlooringType,
     setActiveKithcenBathroomFlooringType,
-  ] = useState(activeKitchenBathroomFlooring.options[0]);
+  ] = useState(activeKitchenBathroomFlooring?.options?.[0]);
   const [activeLeavingRoomFlooring, setActiveLeavingRoomFlooring] = useState(
-    data?.flooring.leavingRoomFlooringMaterial.options[0]
+    {}
   );
+  console.log(activeLeavingRoomFlooring)
   const [leavingRoomFlooringMaterial, setLivingRoomFlooringMaterial] = useState(
-    activeLeavingRoomFlooring.subOptions[0]
+    activeLeavingRoomFlooring?.subOptions?.[0]
   );
   const [
     activeBedroomFlooringMaterial,
     setActiveBedroomFlooringMaterial,
-  ] = useState(data?.flooring.bedroomFlooringMaterial.options[0]);
-
-  // Appliances
-  const [activeAppliances, setActiveAppliances] = useState(
-    data?.appliances.types[0]
-  );
-  const [activeAppliancesPackage, setActiveAppliancesPackage] = useState(
-    activeAppliances?.package[0]
-  );
+  ] = useState({});
+  //   APPLIANCES
+  const [activeAppliances, setActiveAppliances] = useState([]);
+  const [activeAppliancesPackage, setActiveAppliancesPackage] = useState( activeAppliances?.package?.[0]);
   const [activeCustomAppliances, setActiveCustomAppliances] = useState(null);
   const [activeCustomRefrigirator, setActiveRefrigirator] = useState({});
   const [activeRange, setActiveRange] = useState({});
   useEffect(() => {
     if (activeCustomAppliances != null) {
-      setActiveRefrigirator(activeCustomAppliances.refrigirator.category[0]);
+      setActiveRefrigirator(
+        activeCustomAppliances?.refrigirator?.category?.[0]
+      );
     } else {
       setActiveRefrigirator({});
     }
@@ -211,31 +144,20 @@ export const SingleModel = () => {
       setActiveRange({});
     }
   }, [activeCustomRefrigirator]);
-  const [activeDishwasher, setActiveDishwasher] = useState(
-    data?.appliances.dishwasher.package[0]
-  );
-  // Advance details
-  const [activeCeilingHeight, setActiveCeilingHeight] = useState(
-    data?.advanceDetails.celingHeight.options[0]
-  );
+  const [activeDishwasher, setActiveDishwasher] = useState({});
+  //   ADVANCE DETAILS
+  const [activeCeilingHeight, setActiveCeilingHeight] = useState({});
+  const [activeSideWall, setActiveSideWall] = useState({});
+  const [activeInsulationOption, setActiveInsulationOption] = useState({});
   const [activeStructure, setActiveStructure] = useState([]);
-  const [activeStructureTotal, setActiveStructureTotal] = useState(0);
-  useEffect(() => {
-    const total = activeStructure.reduce((sum, item) => sum + item.price, 0);
-    setActiveStructureTotal(total);
-  }, [activeStructure]);
-  // console.log(activeStructureTotal)
-  const [activeSideWall, setActiveSideWall] = useState(
-    data?.advanceDetails.sidewallDimenstions.options[0]
-  );
-  const [activeInsulationOption, setActiveInsulationOption] = useState(
-    data?.advanceDetails.insulationOptions.options[0]
-  );
+  const [activeSuboption, setActiveSuboption] = useState([]);
 
-  // upgrades total
+  const [activeStructureTotal, setActiveStructureTotal] = useState(0);
+  const [activeSuboptionTotal, setActiveSubOptionTotal] = useState(0);
+
   const [upgrades, setUpgrades] = useState(0);
-  // console.log(upgrades);
-  // Fetch the data from the api
+
+  // Data fetching from Firebase Firestore
   useEffect(() => {
     const fetchModelData = async () => {
       try {
@@ -243,8 +165,9 @@ export const SingleModel = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setModelData(docSnap.data());
-          setData(docSnap.data())
+          const fetchedData = docSnap.data();
+          setModelData(fetchedData);
+          setData(fetchedData);
         } else {
           setError("No such document!");
         }
@@ -257,10 +180,108 @@ export const SingleModel = () => {
     };
     fetchModelData();
   }, [id]);
- 
+
+  // Initialize active states with fetched data
   useEffect(() => {
-    setCurrentImage(data?.floorPlan.image);
-  }, [activeFloorPlan, activeShinglesMaterial]);
+    if (data) {
+      // floor plan
+      setActiveFloorPlan(data?.floorPlan?.options?.[0]);
+      //Exterior
+      setActiveSidingType(data?.exterior?.sidingType?.options?.[0]);
+      setActiveExteriorBodyColor(data?.exterior?.bodyColor?.options?.[0]);
+      setActiveExteriorAccentColor(data?.exterior?.accentColor?.options?.[0]);
+      setActiveExteriorTrimColor(data?.exterior?.trimColor?.options?.[0]);
+      setActiveExteriorDoorPaint(data?.exterior?.doorPaint?.options?.[0]);
+      setActiveShinglesMaterial(data?.exterior?.shinglesMaterial?.options?.[0]);
+      //   setActiveShinglesType(data?.exterior?.shinglesMaterial?.types?.[0]);
+      setActiveExteriorDoors(data?.exterior?.exteriorDoors?.options?.[0]);
+      //   kitchen
+      setActiveKitchenCounterTop(
+        data?.kitchen?.counterTopMaterial?.options?.[0]
+      );
+      setActiveFlatCabinates(data?.kitchen?.flatPanelCabinets?.options?.[0]);
+      setActiveCabinateHardware(data?.kitchen?.cabinetHardware?.options?.[0]);
+      setActiveTileBacksplash(data?.kitchen.tileBacksplash.options[0]);
+      setActivebacksplashTile(data?.kitchen.backsplashTile.options[0]);
+      setActiveKitchenFlooringMaterial(
+        data?.kitchen?.flooringMaterial?.options?.[0]
+      );
+      setActiveKitchenFucet(data?.kitchen.kitchenFaucets.options[0]);
+      setActiveKitchenSinks(data?.kitchen.kitchenSinks.options[0]);
+
+      //interior
+      setActiveInteriorDoorHandles(data?.interior?.doorHandles?.options?.[0]);
+      setActiveWindow(data?.interior.windowTreatment.options[0]);
+
+      //   bathroom
+      setActiveBathroomType(data?.bathroom?.bathroomType?.options?.[0]);
+      setActiveBathroomEnclosure(data?.bathroom.bathroomEnclosure.options[0]);
+      setActiveBathroomTile(data?.bathroom?.bathroomTile?.options?.[0]);
+      //   setActiveBathroomTileType(data?.bathroom?.bathroomti)
+      setActiveShowerTiles(data?.bathroom.showerAndTiles.options[0]);
+      setActiveBathroomMirror(data?.bathroom.mirror.options[0]);
+      setActiveBathroomVanity(data?.bathroom.vanityLighting.options[0]);
+      setActiveBathroomHardware(data?.bathroom.hardware.options[0]);
+      // flooring
+      setActiveKitchenBathroomFlooring(
+        data?.flooring.kitchenflooringMaterial.options[0]
+      );
+      setActiveLeavingRoomFlooring(
+        data?.flooring.leavingRoomFlooringMaterial.options[0]
+      );
+      setLivingRoomFlooringMaterial(activeLeavingRoomFlooring?.subOptions?.[0]);
+      setActiveBedroomFlooringMaterial(data?.flooring.bedroomFlooringMaterial.options[0])
+    //   appliances
+      setActiveAppliances(data?.appliances?.types?.[0]);
+      setActiveAppliancesPackage(activeAppliances?.package?.[0])
+      setActiveDishwasher(data?.appliances.dishwasher.package[0])
+    //   advance details
+      setActiveCeilingHeight(data?.advanceDetails?.ceilingHeight?.options?.[0]);
+      setActiveSideWall(data?.advanceDetails?.sidewallDimensions?.options?.[0]);
+      setCurrentImage(data?.floorPlan?.image);
+    }
+  }, [data]);
+
+  // Calculate total upgrades
+  const totalUpgrades = useMemo(() => {
+    const activeItems = [
+      activeFloorPlan,
+      activeSidingType,
+      activeShinglesMaterial,
+      activeShinglesType,
+      activeExteriorDoors,
+      activeKitchenCounterTop,
+      activeKitchenFlooringMaterial,
+      activeInteriorDoorHandles,
+      activeBathroomType,
+      activeBathroomTile,
+      activeAppliances,
+      activeCeilingHeight,
+      activeSideWall,
+    ];
+
+    return (
+      activeItems.reduce((acc, item) => acc + (item?.price || 0), 0) +
+      activeStructureTotal +
+      activeSuboptionTotal
+    );
+  }, [
+    activeFloorPlan,
+    activeSidingType,
+    activeShinglesMaterial,
+    activeShinglesType,
+    activeExteriorDoors,
+    activeKitchenCounterTop,
+    activeKitchenFlooringMaterial,
+    activeInteriorDoorHandles,
+    activeBathroomType,
+    activeBathroomTile,
+    activeAppliances,
+    activeCeilingHeight,
+    activeSideWall,
+    activeStructureTotal,
+    activeSuboptionTotal,
+  ]);
 
   // Scroll Event Listener for Active Section
   useEffect(() => {
@@ -274,6 +295,7 @@ export const SingleModel = () => {
         }
       });
       setActiveSection(currentSection);
+
       // Set activeObject based on the current section
       switch (currentSection) {
         case "floor-plan":
@@ -307,7 +329,7 @@ export const SingleModel = () => {
           });
           break;
         default:
-          setActiveObject(data?.floorPlan); // Default to floor plan if no match
+          setActiveObject(data?.floorPlan);
           break;
       }
     };
@@ -315,20 +337,12 @@ export const SingleModel = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [navbarHeight, data]); // Make sure to add dependencies
+  }, [navbarHeight, data]);
 
-  // console.log(activeObject);
-
-  // Scroll effect for image container
+  // Sticky Image on Scroll
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-
-      if (scrollY > navbarHeight) {
-        setIsImageFixed(true);
-      } else {
-        setIsImageFixed(false);
-      }
+      setIsImageFixed(window.scrollY > navbarHeight);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -337,108 +351,8 @@ export const SingleModel = () => {
     };
   }, []);
 
-  // total upgrades
-  useEffect(() => {
-    const activeItems = [
-      activeFloorPlan,
-      activeSidingType,
-      activeShinglesMaterial,
-      activeShinglesType,
-      activeExteriorDoors,
-      activeKitchenCounterTop,
-      activeCounterTopMaterial,
-      activeFlatCabinates,
-      activecabinateHardware,
-      activeTileBacksplash,
-      activeBacksplashtile,
-      activeKitchenFlooringMaterial,
-      activeFlooringType,
-      activeKitchenFucet,
-      activeInteriorDoorHandles,
-      activeInteriorWindow,
-      activeBathroomType,
-      activeBathroomEnclosure,
-      activeBathroomTile,
-      activeShowertiles,
-      activeBathroomMirror,
-      activeBathroomVanity,
-      activeBathroomHardware,
-      activeKitchenBathroomFlooring,
-      activeKitchenBathroomFlooringType,
-      activeLeavingRoomFlooring,
-      leavingRoomFlooringMaterial,
-      activeBedroomFlooringMaterial,
-      activeAppliancesPackage,
-      activeDishwasher,
-      activeCeilingHeight,
-      activeStructure, // Make sure this is the correct state
-      activeSideWall,
-      activeInsulationOption,
-    ];
-
-    // Calculate the total upgrades price
-    const totalUpgrades = activeItems.reduce(
-      (acc, item) => acc + (item?.price || 0),
-      0
-    );
-    setUpgrades(totalUpgrades + activeStructureTotal + activeSuboptionTotal);
-  }, [
-    activeFloorPlan,
-    activeSidingType,
-    activeShinglesMaterial,
-    activeShinglesType,
-    activeExteriorDoors,
-    activeKitchenCounterTop,
-    activeCounterTopMaterial,
-    activeFlatCabinates,
-    activecabinateHardware,
-    activeTileBacksplash,
-    activeBacksplashtile,
-    activeKitchenFlooringMaterial,
-    activeFlooringType,
-    activeKitchenFucet,
-    activeInteriorDoorHandles,
-    activeInteriorWindow,
-    activeBathroomType,
-    activeBathroomEnclosure,
-    activeBathroomTile,
-    activeShowertiles,
-    activeBathroomMirror,
-    activeBathroomVanity,
-    activeBathroomHardware,
-    activeKitchenBathroomFlooring,
-    activeKitchenBathroomFlooringType,
-    activeLeavingRoomFlooring,
-    leavingRoomFlooringMaterial,
-    activeBedroomFlooringMaterial,
-    activeAppliancesPackage,
-    activeDishwasher,
-    activeCeilingHeight,
-    activeStructure,
-    activeSideWall,
-    activeInsulationOption,
-    activeSuboption,
-    activeStructureTotal,
-    activeSuboptionTotal,
-  ]);
-
-  // useinview for price total
-
-  if (loading) {
-    return (
-      <div className="h-[100vh] flex items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <p className="text-center h-[100vh] flex items-center justify-center">
-        No Property Found
-      </p>
-    );
-  }
+  if (loading) return <Loader />;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="flex w-full relative">
@@ -480,6 +394,7 @@ export const SingleModel = () => {
                 ? "m-auto"
                 : "w-full h-full object-cover"
             }`}
+            loading="lazy"
           />
         </div>
       </div>
@@ -505,7 +420,9 @@ export const SingleModel = () => {
               <IoMdArrowRoundBack />
               Back to the Product Page
             </p>
-            <p className="font-bold text-[18px]">{modelData?.propertyDetails.modelNum}</p>
+            <p className="font-bold text-[18px]">
+              {modelData?.propertyDetails.modelNum}
+            </p>
           </div>
           <h2 className="text-[30px] font-semibold pl-5">
             {activeObject.title}
@@ -631,7 +548,7 @@ export const SingleModel = () => {
             sectionRefs={sectionRefs}
           />
           {/* Appliances */}
-          <AppliancesSection
+          {/* <AppliancesSection
             data={data}
             activeAppliances={activeAppliances}
             setActiveAppliances={setActiveAppliances}
@@ -646,7 +563,7 @@ export const SingleModel = () => {
             activeDishwasher={activeDishwasher}
             setActiveDishwasher={setActiveDishwasher}
             sectionRefs={sectionRefs}
-          />
+          /> */}
           {/* advance details */}
           <AdvanceDetailsSection
             data={data}
@@ -668,7 +585,9 @@ export const SingleModel = () => {
           >
             <h2 className="text-[30px] font-semibold">Your Home</h2>
             <div className="mt-5 pb-5">
-              <p className="font-semibold text-xl">{modelData?.propertyDetails.modelNum}</p>
+              <p className="font-semibold text-xl">
+                {modelData?.propertyDetails.modelNum}
+              </p>
               <p>{modelData.propertyDetails.bedroom} Bedroom</p>
             </div>
             <hr />
@@ -796,7 +715,9 @@ export const SingleModel = () => {
               id="price-total"
               ref={ref}
             >
-              <p className="text-xl font-semibold mb-5">{modelData.propertyDetails.modelNum}</p>
+              <p className="text-xl font-semibold mb-5">
+                {modelData.propertyDetails.modelNum}
+              </p>
               <hr />
               <div className="flex justify-between items-center mt-5">
                 <p>Unit Price</p>
@@ -818,7 +739,13 @@ export const SingleModel = () => {
                 <Button colorScheme="orange">Save Design</Button>
               </div>
             </div>
-            <div className={isInView ? "hidden":"p-5 fixed bottom-10 bg-white 2xl:w-[33%] w-[28%] rounded-xl border shadow-xl flex justify-between items-center"}>
+            <div
+              className={
+                isInView
+                  ? "hidden"
+                  : "p-5 fixed bottom-10 bg-white 2xl:w-[33%] w-[28%] rounded-xl border shadow-xl flex justify-between items-center"
+              }
+            >
               <p className="text-xl font-bold">
                 ${Math.floor(modelData.propertyDetails.price) + upgrades} <br />{" "}
                 <span className="font-normal text-sm">
@@ -834,4 +761,3 @@ export const SingleModel = () => {
     </div>
   );
 };
-// activeObject.title != "Your Home" ? "p-5 fixed bottom-10 bg-white w-[33%] shadow-lg" :

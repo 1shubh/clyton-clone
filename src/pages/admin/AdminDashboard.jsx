@@ -15,6 +15,9 @@ import { Button } from "@chakra-ui/react";
 import { AuthContext } from "../../hoc/AuthContext";
 import { BeatLoader } from "react-spinners";
 import { FaRegBell } from "react-icons/fa";
+import { db } from "../../firebase-config/config"; // Import Firestore instance
+import { doc, deleteDoc } from "firebase/firestore"; // Firestore methods
+
 export const AdminDashboard = () => {
   const dispatch = useDispatch();
   const { properties, loading, error } = useSelector(
@@ -22,6 +25,7 @@ export const AdminDashboard = () => {
   );
   const [currentProduct, setCurrentProduct] = useState(null);
   const [currentView, setCurrentView] = useState("properties");
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
   const { logoutAdmin } = useContext(AuthContext);
 
   useEffect(() => {
@@ -29,7 +33,6 @@ export const AdminDashboard = () => {
   }, [dispatch]);
 
   const handleAddProduct = (product) => {
-    // Assuming product ID is generated in the component for simplicity
     dispatch(addProperty({ id: Date.now(), ...product }));
   };
 
@@ -37,8 +40,17 @@ export const AdminDashboard = () => {
     dispatch(updateProperty(updatedProduct));
   };
 
-  const handleDeleteProduct = (id) => {
-    dispatch(deleteProperty(id));
+  const handleDeleteProduct = async (id) => {
+    setIsLoading(true); // Set loading state to true
+    try {
+      await deleteDoc(doc(db, "properties", id)); // Delete from Firestore
+      dispatch(deleteProperty(id)); // Delete from Redux store
+      await dispatch(fetchProperties()); // Fetch properties again
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
 
   const handleEditProduct = (product) => {
@@ -75,10 +87,9 @@ export const AdminDashboard = () => {
       </div>
       <div className="flex">
         <AdminSidebar currentView={currentView} onNavigate={handleNavigate} />
-        {loading ? (
+        {isLoading ? ( // Show loading state here
           <div className="flex items-center justify-center w-[80%]">
-            {" "}
-            <BeatLoader color="red" />{" "}
+            <BeatLoader color="red" />
           </div>
         ) : (
           <div className="flex-1 p-6">

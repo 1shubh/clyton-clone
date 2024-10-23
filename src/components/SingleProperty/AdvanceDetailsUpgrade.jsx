@@ -11,8 +11,8 @@ export const AdvanceDetailsUpgrade = ({
     <div className="mt-5 pb-5">
       <p className="font-semibold text-xl">{data.advanceDetails.title}</p>
       <PriceCard
-        name={activeCeilingHeight.title}
-        price={activeCeilingHeight.price}
+        name={activeCeilingHeight?.title}
+        price={activeCeilingHeight?.price}
         subtext={"Ceiling Height"}
       />
       <div>

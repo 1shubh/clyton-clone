@@ -142,8 +142,8 @@ export const AppliancesForm = ({ onSubmit, setIndex }) => {
             title: "Custom",
             image: "https://trove.b-cdn.net/images/w2jgs33pew.jpeg",
             price: 0,
-            options: [
-              {
+            options: {
+             refrigirator: {
                 title: "Refrigerator",
                 category: [
                   {
@@ -258,7 +258,7 @@ export const AppliancesForm = ({ onSubmit, setIndex }) => {
                   },
                 ],
               },
-            ],
+          },
           },
         ],
       },
@@ -284,7 +284,7 @@ export const AppliancesForm = ({ onSubmit, setIndex }) => {
   });
   const [typesData, setTypesData] = useState(appliances.types);
   const [currentForm, setCurrentForm] = useState("electricAppliances");
-  const [imageUploaded, setImageUploaded] = useState(true);
+  const [imageUploaded, setImageUploaded] = useState(false);
   const [filePath, setFilePath] = useState("");
   const maxNumber = 1;
   const dispatch = useDispatch();

@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import {
   Input,
   Button,
-  Text,
   IconButton,
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { GrFormNextLink } from "react-icons/gr";
+import { FaTrash } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-export const Dishwasher = ({
+export const StructuralUpgrades = ({
   data,
   setData,
   currentForm,
@@ -20,7 +20,7 @@ export const Dishwasher = ({
 }) => {
   const [slidingPrices, setSlidingPrices] = useState({}); // To store price inputs
   const [isEditing, setIsEditing] = useState({});
-  const [newPackage, setNewPackage] = useState({
+  const [newOption, setNewOption] = useState({
     title: "",
     price: "",
     description: "",
@@ -30,40 +30,39 @@ export const Dishwasher = ({
   const handleSlidingPriceChange = (i, value) => {
     setSlidingPrices((prev) => ({
       ...prev,
-      [i]: value, // Keep the user input as is
+      [i]: value,
     }));
   };
 
   const handleAddSlidingPrice = (i) => {
     setData((prevData) => {
-      const updatedOptions = prevData.dishwasher.package.map((option, index) =>
-        index === i
-          ? {
-              ...option,
-              price:
-                slidingPrices[i] !== undefined
-                  ? parseFloat(slidingPrices[i])
-                  : option.price,
-            }
-          : option
+      const updatedOptions = prevData.structuralUpgrades.options.map(
+        (option, index) =>
+          index === i
+            ? {
+                ...option,
+                price:
+                  slidingPrices[i] !== undefined
+                    ? parseFloat(slidingPrices[i])
+                    : option.price,
+              }
+            : option
       );
       return {
         ...prevData,
-        dishwasher: {
-          ...prevData.dishwasher,
-          package: updatedOptions,
+        structuralUpgrades: {
+          ...prevData.structuralUpgrades,
+          options: updatedOptions,
         },
       };
     });
 
-    // Once price is added, change editing state to false
     setIsEditing((prev) => ({
       ...prev,
       [i]: false,
     }));
   };
 
-  // Handle toggling between Add/Edit modes
   const handleToggleEdit = (i) => {
     setIsEditing((prev) => ({
       ...prev,
@@ -71,43 +70,55 @@ export const Dishwasher = ({
     }));
   };
 
-  // Handle adding a new package
-  const handleAddNewPackage = () => {
-    if (newPackage.title && newPackage.price) {
+  const handleAddNewOption = () => {
+    if (newOption.title && newOption.price) {
       setData((prevData) => ({
         ...prevData,
-        dishwasher: {
-          ...prevData.dishwasher,
-          package: [
-            ...prevData.dishwasher.package,
+        structuralUpgrades: {
+          ...prevData.structuralUpgrades,
+          options: [
+            ...prevData.structuralUpgrades.options,
             {
-              title: newPackage.title,
-              price: parseFloat(newPackage.price),
-              description: newPackage.description,
+              title: newOption.title,
+              price: parseFloat(newOption.price),
+              description: newOption.description,
             },
           ],
         },
       }));
-      setNewPackage({ title: "", price: "", description: "" });
-      setIsAddingNew(false); // Close the form after adding the new package
+      setNewOption({ title: "", price: "", description: "" });
+      setIsAddingNew(false);
     }
   };
 
+  const handleDeleteOption = (i) => {
+    setData((prevData) => {
+      const updatedOptions = prevData.structuralUpgrades.options.filter(
+        (_, index) => index !== i
+      );
+      return {
+        ...prevData,
+        structuralUpgrades: {
+          ...prevData.structuralUpgrades,
+          options: updatedOptions,
+        },
+      };
+    });
+  };
+
   return (
-    <div className={`${currentForm === "dishwasher" ? "block" : "hidden"}`}>
+    <div className={`${currentForm === "structuralUpgrades" ? "block" : "hidden"}`}>
       <div>
-        <p className="text-xl font-bold text-nowrap">
-          Add {data.dishwasher.title}
-        </p>
+        <p className="text-xl font-bold text-nowrap">Add Structural Upgrades Options</p>
         <Button
           leftIcon={<IoMdArrowRoundBack />}
           variant={"outline"}
           onClick={() => setCurrentForm("gasAppliances")}
         >
-          Back to Add Gas Appliances
+          Back to Add Interior Ceiling Height
         </Button>
         <div className="grid gap-2 mt-5">
-          {data.dishwasher.package.map((ele, i) => {
+          {data.structuralUpgrades.options.map((ele, i) => {
             return (
               <div
                 key={i}
@@ -116,7 +127,6 @@ export const Dishwasher = ({
                 <p className="font-bold text-md">{ele.title} Price</p>
                 <div className="flex gap-5 items-center">
                   {isEditing[i] ? (
-                    // Input field when editing is true
                     <InputGroup w={"20%"}>
                       <InputLeftElement>
                         <BiSolidDollarCircle fontSize={"30px"} />
@@ -129,14 +139,13 @@ export const Dishwasher = ({
                           slidingPrices[i] !== undefined
                             ? slidingPrices[i]
                             : ele.price
-                        } // Check for slidingPrices[i] explicitly
+                        }
                         onChange={(e) =>
                           handleSlidingPriceChange(i, e.target.value)
                         }
                       />
                     </InputGroup>
                   ) : (
-                    // Text display when not editing
                     <span className="font-bold">{ele.price} $</span>
                   )}
                   <Button
@@ -144,48 +153,54 @@ export const Dishwasher = ({
                     onClick={
                       () =>
                         isEditing[i]
-                          ? handleAddSlidingPrice(i) // Add price if in edit mode
-                          : handleToggleEdit(i) // Toggle to edit mode
+                          ? handleAddSlidingPrice(i)
+                          : handleToggleEdit(i)
                     }
                   >
                     {isEditing[i] ? "Add" : "Edit"}
                   </Button>
+                  <IconButton
+                    colorScheme="red"
+                    icon={<FaTrash />}
+                    onClick={() => handleDeleteOption(i)}
+                    aria-label="Delete Option"
+                  />
                 </div>
+                <p className="text-sm">{ele.description}</p>
               </div>
             );
           })}
 
-          {/* New Package Adding Form */}
           {isAddingNew ? (
             <div className="border bg-blue-100 p-5 rounded-xl grid gap-2">
-              <p className="font-bold text-md">Add New Package Option</p>
+              <p className="font-bold text-md">Add New Option</p>
               <Input
                 placeholder="Title"
-                value={newPackage.title}
+                value={newOption.title}
                 onChange={(e) =>
-                  setNewPackage((prev) => ({ ...prev, title: e.target.value }))
+                  setNewOption((prev) => ({ ...prev, title: e.target.value }))
                 }
               />
               <Input
                 placeholder="Price"
                 type="number"
-                value={newPackage.price}
+                value={newOption.price}
                 onChange={(e) =>
-                  setNewPackage((prev) => ({ ...prev, price: e.target.value }))
+                  setNewOption((prev) => ({ ...prev, price: e.target.value }))
                 }
               />
               <Input
                 placeholder="Description"
-                value={newPackage.description}
+                value={newOption.description}
                 onChange={(e) =>
-                  setNewPackage((prev) => ({
+                  setNewOption((prev) => ({
                     ...prev,
                     description: e.target.value,
                   }))
                 }
               />
-              <Button colorScheme="green" onClick={handleAddNewPackage}>
-                Add Package
+              <Button colorScheme="green" onClick={handleAddNewOption}>
+                Add Option
               </Button>
               <Button colorScheme="red" onClick={() => setIsAddingNew(false)}>
                 Cancel
@@ -197,7 +212,7 @@ export const Dishwasher = ({
               onClick={() => setIsAddingNew(true)}
               className="mt-4"
             >
-              Add New Package
+              Add New Option
             </Button>
           )}
         </div>
@@ -206,9 +221,9 @@ export const Dishwasher = ({
             className="mt-5"
             colorScheme="blue"
             rightIcon={<GrFormNextLink />}
-            onClick={handleSubmit}
+            onClick={()=>setCurrentForm("sidewallDimensions")}
           >
-            Save Appliances
+            Save Structural Upgrades
           </Button>
         </div>
       </div>

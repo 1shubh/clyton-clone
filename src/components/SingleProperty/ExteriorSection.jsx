@@ -94,8 +94,8 @@ const ExteriorSection = ({
 
         {/* Active Shingles Material Type */}
         <ImageColorCard
-          title={activeShinglesMaterial.subtitle}
-          data={activeShinglesMaterial.types}
+          title={activeShinglesMaterial?.subtitle}
+          data={activeShinglesMaterial?.types}
           active={activeShinglesType}
           setActive={setActiveShinglesType}
         />

@@ -61,10 +61,10 @@ const AdvanceDetailsSection = ({
       {/* Sidewall Dimensions */}
       <div className="mt-5">
         <p className="text-xl font-semibold">
-          {data.advanceDetails.sidewallDimenstions.title}
+          {data.advanceDetails.sidewallDimenstions?.title}
         </p>
         <div className="mt-5">
-          {data.advanceDetails.sidewallDimenstions.options.map((ele, i) => (
+          {data.advanceDetails.sidewallDimenstions?.options.map((ele, i) => (
             <OptionCard
               option={ele}
               key={i}
