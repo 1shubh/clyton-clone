@@ -1,6 +1,6 @@
-import React from 'react';
-import { OptionCard } from '../OptionCard';
-import { ImageBox } from '../ImageBox';
+import React from "react";
+import { OptionCard } from "../OptionCard";
+import { ImageBox } from "../ImageBox";
 
 const KitchenSection = ({
   data,
@@ -24,7 +24,7 @@ const KitchenSection = ({
   setActiveKitchenFaucet,
   activeKitchenSinks,
   setActiveKitchenSinks,
-  sectionRefs
+  sectionRefs,
 }) => {
   return (
     <div
@@ -48,8 +48,8 @@ const KitchenSection = ({
           ))}
         </div>
         <ImageBox
-          title={activeKitchenCounterTop.subTitle}
-          data={activeKitchenCounterTop.types}
+          title={activeKitchenCounterTop?.subTitle}
+          data={activeKitchenCounterTop?.types}
           active={activeCounterTopMaterial}
           setActive={setActiveCounterTopMaterial}
         />
@@ -101,8 +101,8 @@ const KitchenSection = ({
           />
         ))}
         <ImageBox
-          title={activeKitchenFlooringMaterial.subtitle}
-          data={activeKitchenFlooringMaterial.types}
+          title={activeKitchenFlooringMaterial?.subtitle}
+          data={activeKitchenFlooringMaterial?.types}
           active={activeFlooringType}
           setActive={setActiveFlooringType}
         />

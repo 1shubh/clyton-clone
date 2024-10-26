@@ -60,15 +60,25 @@ export const SingleModelNew = () => {
   );
   const [activeExteriorTrimColor, setActiveExteriorTrimColor] = useState({});
   const [activeExteriorDoorPaint, setActiveExteriorDoorPaint] = useState({});
-  const [activeShinglesMaterial, setActiveShinglesMaterial] = useState({});
-  const [activeShinglesType, setActiveShinglesType] = useState({});
+  const [activeShinglesMaterial, setActiveShinglesMaterial] = useState(null);
+  const [activeShinglesType, setActiveShinglesType] = useState(null);
+  useEffect(() => {
+    if (activeShinglesMaterial != null) {
+      setActiveShinglesType(activeShinglesMaterial?.types[0]);
+    }
+  }, [activeShinglesMaterial]);
   const [activeExteriorDoors, setActiveExteriorDoors] = useState({});
 
   //   KITCHEN
-  const [activeKitchenCounterTop, setActiveKitchenCounterTop] = useState({});
+  const [activeKitchenCounterTop, setActiveKitchenCounterTop] = useState(null);
   const [activeCounterTopMaterial, setActiveCounterTopMaterial] = useState(
-    activeKitchenCounterTop?.types?.[0]
+    null
   );
+  useEffect(() => {
+    if (activeKitchenCounterTop != null) {
+      setActiveCounterTopMaterial(activeKitchenCounterTop?.types[0]);
+    }
+  }, [activeKitchenCounterTop]);
   const [activeFlatCabinates, setActiveFlatCabinates] = useState({});
   const [activecabinateHardware, setActiveCabinateHardware] = useState({});
   const [activeTileBacksplash, setActiveTileBacksplash] = useState({});
@@ -76,9 +86,15 @@ export const SingleModelNew = () => {
   const [
     activeKitchenFlooringMaterial,
     setActiveKitchenFlooringMaterial,
-  ] = useState({});
+  ] = useState(null);
 
-  const [activeFlooringType, setActiveFlooringType] = useState({});
+  const [activeFlooringType, setActiveFlooringType] = useState(null);
+  useEffect(() => {
+    if (activeKitchenFlooringMaterial != null) {
+      setActiveFlooringType(activeKitchenFlooringMaterial?.types[0]);
+    }
+  }, [activeKitchenFlooringMaterial]);
+
   const [activeKitchenFucet, setActiveKitchenFucet] = useState({});
   const [activeKitchenSinks, setActiveKitchenSinks] = useState({});
 
@@ -92,6 +108,8 @@ export const SingleModelNew = () => {
   const [activeBathroomEnclosure, setActiveBathroomEnclosure] = useState({});
   const [activeBathroomTile, setActiveBathroomTile] = useState({});
   const [activeBathroomTileType, setActiveBathroomTileType] = useState({});
+  const [activeTileTotal, setActiveTileTotal] = useState(0);
+  const [activeTileWallPackage, setActiveTileWallPackage] = useState([]);
 
   const [activeShowertiles, setActiveShowerTiles] = useState({});
   const [activeBathroomMirror, setActiveBathroomMirror] = useState({});
@@ -101,15 +119,24 @@ export const SingleModelNew = () => {
   const [
     activeKitchenBathroomFlooring,
     setActiveKitchenBathroomFlooring,
-  ] = useState({});
+  ] = useState(null);
   const [
     activeKitchenBathroomFlooringType,
     setActiveKithcenBathroomFlooringType,
-  ] = useState(activeKitchenBathroomFlooring?.options?.[0]);
+  ] = useState(null);
+
+  useEffect(() => {
+    if (activeKitchenBathroomFlooring != null) {
+      setActiveKithcenBathroomFlooringType(
+        activeKitchenBathroomFlooring?.options[0]
+      );
+    }
+  }, [activeKitchenBathroomFlooring]);
+
   const [activeLeavingRoomFlooring, setActiveLeavingRoomFlooring] = useState(
     {}
   );
-  console.log(activeLeavingRoomFlooring)
+
   const [leavingRoomFlooringMaterial, setLivingRoomFlooringMaterial] = useState(
     activeLeavingRoomFlooring?.subOptions?.[0]
   );
@@ -119,7 +146,9 @@ export const SingleModelNew = () => {
   ] = useState({});
   //   APPLIANCES
   const [activeAppliances, setActiveAppliances] = useState([]);
-  const [activeAppliancesPackage, setActiveAppliancesPackage] = useState( activeAppliances?.package?.[0]);
+  const [activeAppliancesPackage, setActiveAppliancesPackage] = useState(
+    activeAppliances?.package?.[0]
+  );
   const [activeCustomAppliances, setActiveCustomAppliances] = useState(null);
   const [activeCustomRefrigirator, setActiveRefrigirator] = useState({});
   const [activeRange, setActiveRange] = useState({});
@@ -184,16 +213,17 @@ export const SingleModelNew = () => {
   // Initialize active states with fetched data
   useEffect(() => {
     if (data) {
+      setActiveObject(data?.floorPlan);
       // floor plan
       setActiveFloorPlan(data?.floorPlan?.options?.[0]);
+      setCurrentImage(data?.floorPlan?.image);
       //Exterior
       setActiveSidingType(data?.exterior?.sidingType?.options?.[0]);
       setActiveExteriorBodyColor(data?.exterior?.bodyColor?.options?.[0]);
       setActiveExteriorAccentColor(data?.exterior?.accentColor?.options?.[0]);
       setActiveExteriorTrimColor(data?.exterior?.trimColor?.options?.[0]);
       setActiveExteriorDoorPaint(data?.exterior?.doorPaint?.options?.[0]);
-      setActiveShinglesMaterial(data?.exterior?.shinglesMaterial?.options?.[0]);
-      //   setActiveShinglesType(data?.exterior?.shinglesMaterial?.types?.[0]);
+      setActiveShinglesMaterial(data?.exterior?.shiglesMaterial?.options?.[0]);
       setActiveExteriorDoors(data?.exterior?.exteriorDoors?.options?.[0]);
       //   kitchen
       setActiveKitchenCounterTop(
@@ -224,18 +254,20 @@ export const SingleModelNew = () => {
       setActiveBathroomHardware(data?.bathroom.hardware.options[0]);
       // flooring
       setActiveKitchenBathroomFlooring(
-        data?.flooring.kitchenflooringMaterial.options[0]
+        data?.flooring?.kitchenflooringMaterial?.options?.[0]
       );
       setActiveLeavingRoomFlooring(
         data?.flooring.leavingRoomFlooringMaterial.options[0]
       );
       setLivingRoomFlooringMaterial(activeLeavingRoomFlooring?.subOptions?.[0]);
-      setActiveBedroomFlooringMaterial(data?.flooring.bedroomFlooringMaterial.options[0])
-    //   appliances
+      setActiveBedroomFlooringMaterial(
+        data?.flooring.bedroomFlooringMaterial.options[0]
+      );
+      //   appliances
       setActiveAppliances(data?.appliances?.types?.[0]);
-      setActiveAppliancesPackage(activeAppliances?.package?.[0])
-      setActiveDishwasher(data?.appliances.dishwasher.package[0])
-    //   advance details
+      setActiveAppliancesPackage(activeAppliances?.package?.[0]);
+      setActiveDishwasher(data?.appliances.dishwasher.package[0]);
+      //   advance details
       setActiveCeilingHeight(data?.advanceDetails?.ceilingHeight?.options?.[0]);
       setActiveSideWall(data?.advanceDetails?.sidewallDimensions?.options?.[0]);
       setCurrentImage(data?.floorPlan?.image);
@@ -251,17 +283,39 @@ export const SingleModelNew = () => {
       activeShinglesType,
       activeExteriorDoors,
       activeKitchenCounterTop,
+      activeCounterTopMaterial,
+      activeFlatCabinates,
+      activecabinateHardware,
+      activeTileBacksplash,
+      activeBacksplashtile,
       activeKitchenFlooringMaterial,
+      activeFlooringType,
+      activeKitchenFucet,
+      activeKitchenSinks,
       activeInteriorDoorHandles,
+      activeInteriorWindow,
       activeBathroomType,
+      activeBathroomEnclosure,
       activeBathroomTile,
-      activeAppliances,
+      activeShowertiles,
+      activeBathroomMirror,
+      activeBathroomVanity,
+      activeBathroomHardware,
+      activeKitchenBathroomFlooring,
+      activeKitchenBathroomFlooringType,
+      activeLeavingRoomFlooring,
+      leavingRoomFlooringMaterial,
+      activeBedroomFlooringMaterial,
+      activeAppliancesPackage,
+      activeDishwasher,
       activeCeilingHeight,
+      activeStructure, // Make sure this is the correct state
       activeSideWall,
+      activeInsulationOption,
     ];
-
     return (
       activeItems.reduce((acc, item) => acc + (item?.price || 0), 0) +
+      activeTileTotal +
       activeStructureTotal +
       activeSuboptionTotal
     );
@@ -272,13 +326,37 @@ export const SingleModelNew = () => {
     activeShinglesType,
     activeExteriorDoors,
     activeKitchenCounterTop,
+    activeCounterTopMaterial,
+    activeFlatCabinates,
+    activecabinateHardware,
+    activeTileBacksplash,
+    activeBacksplashtile,
     activeKitchenFlooringMaterial,
+    activeFlooringType,
+    activeKitchenFucet,
+    activeKitchenSinks,
     activeInteriorDoorHandles,
+    activeInteriorWindow,
     activeBathroomType,
+    activeBathroomEnclosure,
     activeBathroomTile,
-    activeAppliances,
+    activeTileTotal,
+    activeShowertiles,
+    activeBathroomMirror,
+    activeBathroomVanity,
+    activeBathroomHardware,
+    activeKitchenBathroomFlooring,
+    activeLeavingRoomFlooring,
+    leavingRoomFlooringMaterial,
+    activeBedroomFlooringMaterial,
+    activeKitchenBathroomFlooringType,
+    activeAppliancesPackage,
+    activeDishwasher,
     activeCeilingHeight,
+    activeStructure,
     activeSideWall,
+    activeInsulationOption,
+    activeSuboption,
     activeStructureTotal,
     activeSuboptionTotal,
   ]);
@@ -304,7 +382,7 @@ export const SingleModelNew = () => {
         case "exterior":
           setActiveObject(data?.exterior);
           break;
-        case "kitchen":
+        case "kitchen":x
           setActiveObject(data?.kitchen);
           break;
         case "interior":
@@ -351,7 +429,12 @@ export const SingleModelNew = () => {
     };
   }, []);
 
-  if (loading) return <Loader />;
+  if (loading)
+    return (
+      <div className="w-full h-screen flex items-center justify-center border">
+        <Loader />
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   return (
@@ -365,32 +448,34 @@ export const SingleModelNew = () => {
         <div
           style={{
             transform:
-              activeObject.title === "Floor Plan" ? activeFloorPlan.rotate : "", // Apply the rotation based on the active option
+              activeObject?.title === "Floor Plan"
+                ? activeFloorPlan?.rotate
+                : "", // Apply the rotation based on the active option
             transition: "transform 0.3s ease",
           }}
           className={`${
-            activeObject.title === "Floor Plan"
+            activeObject?.title === "Floor Plan"
               ? "w-full flex items-center bg-white justify-center h-screen"
-              : activeObject.title === "Interior"
+              : activeObject?.title === "Interior"
               ? "w-full flex items-center bg-white justify-center h-screen"
               : "w-full h-screen flex items-center"
           }`}
         >
           <img
             src={
-              activeObject.title === "Interior"
-                ? activeObject.doorHandles.options[0].image
-                : activeObject.title === "Bathroom"
-                ? activeBathroomType.image
-                : activeObject.image
+              activeObject?.title === "Interior"
+                ? activeObject?.doorHandles?.options?.[0].image
+                : activeObject?.title === "Bathroom"
+                ? activeBathroomType?.image
+                : activeObject?.image
             }
-            alt={activeObject.title}
+            alt={activeObject?.title}
             className={`${
-              activeObject.title === "Floor Plan"
+              activeObject?.title === "Floor Plan"
                 ? "w-[70%] m-auto"
-                : activeObject.title === "Interior"
+                : activeObject?.title === "Interior"
                 ? "w-[20%] m-auto"
-                : activeObject.title === "Appliances"
+                : activeObject?.title === "Appliances"
                 ? "m-auto"
                 : "w-full h-full object-cover"
             }`}
@@ -421,11 +506,11 @@ export const SingleModelNew = () => {
               Back to the Product Page
             </p>
             <p className="font-bold text-[18px]">
-              {modelData?.propertyDetails.modelNum}
+              {data?.propertyDetails.modelNum}
             </p>
           </div>
           <h2 className="text-[30px] font-semibold pl-5">
-            {activeObject.title}
+            {activeObject?.title}
           </h2>
         </div>
 
@@ -438,9 +523,9 @@ export const SingleModelNew = () => {
             {/* <h2 className="text-[30px] font-semibold">
               {data.floorPlan.title}
             </h2> */}
-            <p className="text-xl font-semibold">{data.floorPlan.subtitle}</p>
+            <p className="text-xl font-semibold">{data?.floorPlan?.subtitle}</p>
             <div className="mt-5">
-              {data.floorPlan.options.map((option, index) => (
+              {data?.floorPlan?.options.map((option, index) => (
                 <FloorOptionCard
                   key={index}
                   option={option}
@@ -506,6 +591,8 @@ export const SingleModelNew = () => {
             sectionRefs={sectionRefs}
           />
           {/* Bathroom */}
+          {/* const [activeTileTotal,setActiveTileTotal] = useState(0)
+  const [activeTileWallPackage,setActiveTileWallPackage] = useState([]) */}
           <BathroomSection
             data={data}
             activeBathroomType={activeBathroomType}
@@ -518,6 +605,10 @@ export const SingleModelNew = () => {
             setActiveBathroomTileType={setActiveBathroomTileType}
             activeSuboption={activeSuboption}
             setActiveSuboption={setActiveSubOptionTotal}
+            setTotalTileWalls={setActiveTileTotal}
+            totalTileWalls={activeTileTotal}
+            setActiveTileWallPackage={setActiveTileWallPackage}
+            activeTileWallPackage={activeTileWallPackage}
             activeShowertiles={activeShowertiles}
             setActiveShowerTiles={setActiveShowerTiles}
             activeBathroomMirror={activeBathroomMirror}
@@ -537,7 +628,7 @@ export const SingleModelNew = () => {
               activeKitchenBathroomFlooringType
             }
             setActiveKithcenBathroomFlooringType={
-              setActiveKitchenBathroomFlooring
+              setActiveKithcenBathroomFlooringType
             }
             activeLeavingRoomFlooring={activeLeavingRoomFlooring}
             setActiveLeavingRoomFlooring={setActiveLeavingRoomFlooring}
@@ -548,7 +639,7 @@ export const SingleModelNew = () => {
             sectionRefs={sectionRefs}
           />
           {/* Appliances */}
-          {/* <AppliancesSection
+          <AppliancesSection
             data={data}
             activeAppliances={activeAppliances}
             setActiveAppliances={setActiveAppliances}
@@ -563,7 +654,7 @@ export const SingleModelNew = () => {
             activeDishwasher={activeDishwasher}
             setActiveDishwasher={setActiveDishwasher}
             sectionRefs={sectionRefs}
-          /> */}
+          />
           {/* advance details */}
           <AdvanceDetailsSection
             data={data}
@@ -687,16 +778,16 @@ export const SingleModelNew = () => {
               <p className="font-semibold text-xl">Price estimate</p>
               <div className="flex justify-between items-center">
                 <p>Unit Price</p>
-                <p className="font-bold">$ {modelData.propertyDetails.price}</p>
+                <p className="font-bold">$ {data?.propertyDetails.price}</p>
               </div>
               <div className="flex justify-between items-center">
                 <p>Upgrades</p>
-                <p className="font-bold">+ ${upgrades}</p>
+                <p className="font-bold">+ ${totalUpgrades}</p>
               </div>
               <div className="flex justify-between items-center">
                 <p>Total</p>
                 <p className="font-bold">
-                  ${Math.floor(modelData.propertyDetails.price) + upgrades}
+                  ${Math.floor(data.propertyDetails.price) + totalUpgrades}
                 </p>
               </div>
             </div>
@@ -725,12 +816,12 @@ export const SingleModelNew = () => {
               </div>
               <div className="flex justify-between items-center">
                 <p>Upgrades</p>
-                <p className="">+ ${upgrades}</p>
+                <p className="">+ ${totalUpgrades}</p>
               </div>
               <div className="flex justify-between items-center pb-5">
                 <p>Unit Total</p>
                 <p className="font-bold">
-                  ${Math.floor(modelData.propertyDetails.price) + upgrades}
+                  ${Math.floor(modelData.propertyDetails.price) + totalUpgrades}
                 </p>
               </div>
               <hr />
@@ -747,7 +838,10 @@ export const SingleModelNew = () => {
               }
             >
               <p className="text-xl font-bold">
-                ${Math.floor(modelData.propertyDetails.price) + upgrades} <br />{" "}
+                $
+                {parseFloat(modelData.propertyDetails.price) +
+                  parseFloat(totalUpgrades)}{" "}
+                <br />{" "}
                 <span className="font-normal text-sm">
                   Base unit + upgrades
                 </span>

@@ -44,7 +44,7 @@ const AppliancesSection = ({
       {/* Appliance Package */}
       <p className="text-xl font-semibold mt-5">{activeAppliances.subtitle}</p>
       <div className="mt-5">
-        {activeAppliances.package.map((ele, i) => (
+        {activeAppliances?.package?.map((ele, i) => (
           <AppliancesPackageCard
             key={i}
             option={ele}

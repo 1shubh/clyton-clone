@@ -12,8 +12,8 @@ export const FlooringUpgrades = ({
     <div className="mt-5 pb-5">
       <p className="mt-5 font-semibold text-xl">{data.flooring.title}</p>
       <PriceCard
-        name={activeKitchenBathroomFlooring.title}
-        price={activeKitchenBathroomFlooring.price}
+        name={activeKitchenBathroomFlooring?.title}
+        price={activeKitchenBathroomFlooring?.price}
         subtext={"Kitchen & Bathroom Flooring"}
       />
       <PriceCard
@@ -22,8 +22,8 @@ export const FlooringUpgrades = ({
         subtext={"Kitchen Linoleum Flooring"}
       />
       <PriceCard
-        name={activeLeavingRoomFlooring.title}
-        price={activeLeavingRoomFlooring.price}
+        name={activeLeavingRoomFlooring?.title}
+        price={activeLeavingRoomFlooring?.price}
         subtext={"Leaving Room Flooring"}
       />
       <PriceCard
@@ -32,8 +32,8 @@ export const FlooringUpgrades = ({
         subtext={"Living Room Carpet Takeaway-Non FHA"}
       />
       <PriceCard
-        name={activeBedroomFlooringMaterial.title}
-        price={activeBedroomFlooringMaterial.price}
+        name={activeBedroomFlooringMaterial?.title}
+        price={activeBedroomFlooringMaterial?.price}
         subtext={"Bedroom Flooring"}
       />
     </div>

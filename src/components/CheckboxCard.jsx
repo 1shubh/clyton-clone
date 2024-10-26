@@ -1,7 +1,7 @@
 import { Checkbox } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-export const CheckboxCard = ({ option, checkPackage, setPackage }) => {
+export const CheckboxCard = ({ option, checkPackage, setPackage,onPriceChange }) => {
   const [checked, setChecked] = useState(false);
 
   const formatPrice = (price) => {
@@ -9,13 +9,16 @@ export const CheckboxCard = ({ option, checkPackage, setPackage }) => {
   };
 
   const handleCheckboxChange = () => {
+    const newChecked = !checked;
     setChecked(!checked);
     if (!checked) {
       // Add to package when checked
       setPackage((prev) => [...prev, option]);
+      onPriceChange(option.price, true);
     } else {
       // Remove from package when unchecked
       setPackage((prev) => prev.filter((item) => item.title !== option.title));
+      onPriceChange(option.price, false);
     }
   };
 

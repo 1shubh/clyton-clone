@@ -25,7 +25,17 @@ const BathroomSection = ({
   activeBathroomHardware,
   setActiveBathroomHardware,
   sectionRefs,
+  totalTileWalls,
+  setTotalTileWalls,
+  activeTileWallPackage,
+  setActiveTileWallPackage,
 }) => {
+  const handlePriceChange = (price, isSelected) => {
+    setTotalTileWalls((prevTotal) =>
+      isSelected ? prevTotal + price : prevTotal - price
+    );
+  };
+
   return (
     <div
       className="mt-5"
@@ -96,8 +106,9 @@ const BathroomSection = ({
               <CheckboxCard
                 key={i}
                 option={ele}
-                package={activeSuboption}
-                setPackage={setActiveSuboption}
+                checkPackage={activeTileWallPackage}
+                setPackage={setActiveTileWallPackage}
+                onPriceChange={handlePriceChange}
               />
             ))
           )}

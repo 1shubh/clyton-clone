@@ -121,6 +121,15 @@ const ExteriorSection = ({
                 />
               </div>
               <p>{ele.name}</p>
+              <div
+                className={`border-black border border-opacity-70 w-fit rounded-md transition-opacity duration-300 ease-in-out px-1 mt-2 h-6 ${
+                  ele.price === 0 || "" ? "hidden" : "flex"
+                } items-center justify-center opacity-70 text-xs font-normal`}
+              >
+                <p className="text-sm font-semibold text-[#000000]">
+                  + ${ele.price}
+                </p>
+              </div>
             </div>
           ))}
         </div>

@@ -40,16 +40,19 @@ const FlooringSection = ({
       {/* Type of Kitchen and Bathroom Flooring Material */}
       <div>
         <ImageBox
-          title={activeKitchenBathroomFlooring.subheading}
-          data={activeKitchenBathroomFlooring.options}
+          title={activeKitchenBathroomFlooring?.subheading}
+          data={activeKitchenBathroomFlooring?.options}
           active={activeKitchenBathroomFlooringType}
-          setActive={setActiveKithcenBathroomFlooringType}
+          setActive={(option) => {
+            setActiveKithcenBathroomFlooringType(option);
+            // Preserve other states if needed here
+          }}
         />
       </div>
 
       {/* Living Room Flooring */}
       <p className="text-xl font-semibold mt-5">
-        {data.flooring.leavingRoomFlooringMaterial.title}
+        {data.flooring.leavingRoomFlooringMaterial?.title}
       </p>
       <div className="mt-5">
         {data.flooring.leavingRoomFlooringMaterial.options.map((ele, i) => (

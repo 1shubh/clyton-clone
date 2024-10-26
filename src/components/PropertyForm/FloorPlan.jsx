@@ -43,6 +43,7 @@ export const FloorPlan = ({ onSubmit, setIndex }) => {
       },
     ],
   });
+
   const dispatch = useDispatch();
   const uploadedFloorPlanImage = useSelector(
     (state) => state.images.uploadedFloorPlanImage
@@ -88,7 +89,6 @@ export const FloorPlan = ({ onSubmit, setIndex }) => {
     }
   };
 
-
   // Update the image
   // Delete the image from Firebase
   const deleteImage = async () => {
@@ -104,28 +104,28 @@ export const FloorPlan = ({ onSubmit, setIndex }) => {
     }
   };
 
- 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Extract the entered prices from the form
+    // Extract the entered prices from the form and convert them to numbers
     const updatedOptions = floorPlan.options.map((option, index) => {
-      const price = document.getElementById(`price-${index}`).value;
-      return { ...option, price };
+      const price = parseFloat(document.getElementById(`price-${index}`).value);
+      return { ...option, price:price }; // Handle invalid numbers
     });
-  
+   
     // Update the floorPlan object with the new prices
     setFloorPlan((prev) => ({
       ...prev,
       options: updatedOptions,
     }));
-  
+
     // Call the parent onSubmit function with the updated floorPlan
     if (onSubmit) {
       onSubmit(floorPlan);
     }
-    if(setIndex){
-      setIndex((prev)=>prev+1)
+    if (setIndex) {
+      setIndex((prev) => prev + 1);
     }
+
   };
   // console.log(floorPlan)
   return (
@@ -162,15 +162,27 @@ export const FloorPlan = ({ onSubmit, setIndex }) => {
               </p>
               <div className="mt-5 flex gap-1 items-center font-semibold">
                 <p className="w-[50%]">Standard Orientation Price</p>
-                <Input type="number" placeholder="Standard Orientation Price"  id={`price-0`} />
+                <Input
+                  type="number"
+                  placeholder="Standard Orientation Price"
+                  id={`price-0`}
+                />
               </div>
               <div className="mt-5 flex gap-1 items-center font-semibold">
                 <p className="w-[50%]">Horizontal Flip Orientation Price</p>
-                <Input type="number" placeholder="Standard Orientation Price"  id={`price-1`}/>
+                <Input
+                  type="number"
+                  placeholder="Standard Orientation Price"
+                  id={`price-1`}
+                />
               </div>
               <div className="mt-5 flex gap-1 items-center font-semibold">
                 <p className="w-[50%]">Vertical Flip Orientation Price</p>
-                <Input type="number" placeholder="Standard Orientation Price"  id={`price-2`}/>
+                <Input
+                  type="number"
+                  placeholder="Standard Orientation Price"
+                  id={`price-2`}
+                />
               </div>
               <div className="w-[30%] m-auto">
                 <Button
