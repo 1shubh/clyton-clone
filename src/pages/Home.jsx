@@ -17,14 +17,14 @@ const homeLinks = [
     title: "Orders",
     subtitle: "View your submitted orders.",
     icon: <TbHomeCheck />,
-    link: "/portal/orders",
+    link: "/orders",
     btnText: "View",
   },
   {
     title: "Quotes",
     subtitle: "View or edit your saved quotes.",
     icon: <RiHomeOfficeLine />,
-    link: "/portal/quotes",
+    link: "/quotes",
     btnText: "View",
   },
 ];

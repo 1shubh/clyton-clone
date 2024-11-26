@@ -11,6 +11,7 @@ import { AiFillCloseSquare } from "react-icons/ai";
 import { FiArrowUpRight } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { DropMenu } from "./DropMenu";
+import { getAuth } from "firebase/auth";
 
 const retailerSubheading = [
   {
@@ -18,7 +19,10 @@ const retailerSubheading = [
     href: "/retailers",
   },
 ];
-export const Navbar = ({ref}) => {
+export const Navbar = ({ ref }) => {
+  const auth = getAuth();
+  const user = auth.currentUser
+  console.log(user)
   const [showNavbar, setShowNavbar] = useState(false);
   const { logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -40,7 +44,7 @@ export const Navbar = ({ref}) => {
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar);
   };
-  
+
   return (
     <div className={location.pathname === "/admin" ? "hidden" : "block"}>
       <div className="bg-[#e9e2e4] w-full py-5 px-20 lg:px-5 sm:px-5 flex justify-between items-center">
@@ -64,21 +68,19 @@ export const Navbar = ({ref}) => {
                 <p className="uppercase text-[12px]">
                   Current Retailer location
                 </p>
-                <DropMenu name={"Retailer name"} links={retailerSubheading}/>
+                <DropMenu name={"Retailer name"} links={retailerSubheading} />
               </div>
             </div>
           </div>
 
           {/* Profile Dashboard */}
-          <div
-            className="text-black flex gap-2 items-center relative"
-          >
+          <div className="text-black flex gap-2 items-center relative">
             <div className="text-2xl">
               <FaRegUser />
             </div>
             <div>
               <p className="uppercase text-[12px]">Hello Test User</p>
-              <DropMenu name={"Quick Links"} links={quickLinksSubheading}/>
+              <DropMenu name={"Quick Links"} links={quickLinksSubheading} />
             </div>
           </div>
 

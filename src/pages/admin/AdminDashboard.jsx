@@ -17,6 +17,7 @@ import { BeatLoader } from "react-spinners";
 import { FaRegBell } from "react-icons/fa";
 import { db } from "../../firebase-config/config"; // Import Firestore instance
 import { doc, deleteDoc } from "firebase/firestore"; // Firestore methods
+import { OrderList } from "../../components/OrderList";
 
 export const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -114,6 +115,7 @@ export const AdminDashboard = () => {
                 setCurrentProduct={setCurrentProduct}
               />
             )}
+            {currentView === "orders" && <OrderList />}
           </div>
         )}
       </div>

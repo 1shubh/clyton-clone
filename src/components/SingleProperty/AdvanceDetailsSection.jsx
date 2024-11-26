@@ -1,6 +1,6 @@
-import React from 'react';
-import {OptionCard} from '../OptionCard';
-import {CheckboxCard} from '../CheckboxCard';
+import React from "react";
+import { OptionCard } from "../OptionCard";
+import { CheckboxCard } from "../CheckboxCard";
 
 const AdvanceDetailsSection = ({
   data,
@@ -8,21 +8,25 @@ const AdvanceDetailsSection = ({
   setActiveCeilingHeight,
   activeStructure,
   setActiveStructure,
+  setActiveStructureTotal,
   activeSideWall,
   setActiveSideWall,
   activeInsulationOption,
   setActiveInsulationOption,
   sectionRefs,
 }) => {
+  const handlePriceChange = (price, isSelected) => {
+    setActiveStructureTotal((prevTotal) =>
+      isSelected ? prevTotal + price : prevTotal - price
+    );
+  };
   return (
     <div
       className="mt-5"
       id="advance-details"
       ref={(el) => (sectionRefs.current["advance-details"] = el)}
     >
-      <h2 className="text-[30px] font-semibold">
-        {data.advanceDetails.title}
-      </h2>
+      <h2 className="text-[30px] font-semibold">{data.advanceDetails.title}</h2>
 
       {/* Ceiling Height */}
       <div className="mt-5">
@@ -53,6 +57,7 @@ const AdvanceDetailsSection = ({
               key={i}
               checkPackage={activeStructure}
               setPackage={setActiveStructure}
+              onPriceChange={handlePriceChange}
             />
           ))}
         </div>
@@ -61,10 +66,10 @@ const AdvanceDetailsSection = ({
       {/* Sidewall Dimensions */}
       <div className="mt-5">
         <p className="text-xl font-semibold">
-          {data.advanceDetails.sidewallDimenstions?.title}
+          {data.advanceDetails.sidewallDimensions?.title}
         </p>
         <div className="mt-5">
-          {data.advanceDetails.sidewallDimenstions?.options.map((ele, i) => (
+          {data.advanceDetails.sidewallDimensions?.options.map((ele, i) => (
             <OptionCard
               option={ele}
               key={i}

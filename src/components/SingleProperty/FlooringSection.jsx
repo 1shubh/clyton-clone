@@ -14,6 +14,8 @@ const FlooringSection = ({
   setLivingRoomFlooringMaterial,
   activeBedroomFlooringMaterial,
   setActiveBedroomFlooringMaterial,
+  activeBedroomFlooringType,
+  setActiveBedroomFlooringType,
   sectionRefs,
 }) => {
   return (
@@ -65,8 +67,8 @@ const FlooringSection = ({
         ))}
       </div>
       <ImageBox
-        title={activeLeavingRoomFlooring.subheading}
-        data={activeLeavingRoomFlooring.subOptions}
+        title={activeLeavingRoomFlooring?.subheading}
+        data={activeLeavingRoomFlooring?.subOptions}
         active={leavingRoomFlooringMaterial}
         setActive={setLivingRoomFlooringMaterial}
       />
@@ -86,10 +88,10 @@ const FlooringSection = ({
         ))}
       </div>
       <ImageBox
-        title={activeBedroomFlooringMaterial.subheading}
-        data={activeBedroomFlooringMaterial.subOptions}
-        active={leavingRoomFlooringMaterial}
-        setActive={setLivingRoomFlooringMaterial}
+        title={activeBedroomFlooringMaterial?.subheading}
+        data={activeBedroomFlooringMaterial?.subOptions}
+        active={activeBedroomFlooringType}
+        setActive={setActiveBedroomFlooringType}
       />
     </div>
   );

@@ -4,16 +4,23 @@ import { PasswordInput } from "../../components/PasswordInput";
 import { AuthContext } from "../../hoc/AuthContext";
 
 export const AdminLogin = () => {
-  const {loginAdmin} = useContext(AuthContext);
-  const [username, setusername] = useState("");
+  const { loginAdmin } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent form submission
     setError("");
-    const isAuthenticated = loginAdmin(username, password);
-    if (!isAuthenticated) {
-      setError("Invalid credentials. Please try again.");
+
+    try {
+      const isAuthenticated = await loginAdmin(username, password);
+      if (!isAuthenticated) {
+        setError("Invalid credentials. Please try again.");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again later.");
+      console.error("Login error:", error);
     }
   };
 
@@ -23,17 +30,16 @@ export const AdminLogin = () => {
         <img src="/images/logo.png" alt="logo" className="w-full" />
       </div>
       <p className="text-[35px] sm:text-[25px] text-center text-black mt-5">
-        Scenic Homes of AZ® Admin Pannel
+        Scenic Homes of AZ® Admin Panel
       </p>
-      {/* Login form */}
 
       <div className="w-[35%] sm:w-[90%] lg:w-[60%] xl:w-[40%] m-auto mt-10">
-        <form action="" className="grid gap-5">
+        <form onSubmit={handleLogin} className="grid gap-5">
           <Input
             variant="outline"
             placeholder="Email Address"
             value={username}
-            onChange={(e) => setusername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             className="text-black"
             border={"1px solid black"}
           />
@@ -42,13 +48,12 @@ export const AdminLogin = () => {
             className="w-[20%] sm:w-[35%] lg:w-[30%] m-auto"
             colorScheme="orange"
             variant="solid"
-            onClick={handleLogin}
+            type="submit" // Set button type to submit
           >
             Login
           </Button>
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </form>
-       
       </div>
     </div>
   );

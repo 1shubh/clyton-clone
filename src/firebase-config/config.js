@@ -9,12 +9,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCHIZe_PY44Pm4ry41JW8R8XeaUsVBLtgw",
-  authDomain: "scenic-homes.firebaseapp.com",
-  projectId: "scenic-homes",
-  storageBucket: "scenic-homes.appspot.com",
-  messagingSenderId: "886891486193",
-  appId: "1:886891486193:web:ee62915d439a20cbfa8250"
+  apiKey: process.env.FIREBASE_API,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId:process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID
 };
 
 // Initialize Firebase

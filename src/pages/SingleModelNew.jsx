@@ -1,29 +1,40 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase-config/config";
-import { Loader } from "../../components/Loader";
+import { doc, getDoc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
+import { db } from "../firebase-config/config";
+import { Timestamp } from "firebase/firestore"
+import { getAuth } from "firebase/auth";
+import { Loader } from "../components/Loader";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { Button } from "@chakra-ui/react";
-import useInView from "../../hooks/useInView";
-import { FloorOptionCard } from "../../components/FloorPlan/FloorOptionCard";
-import ExteriorSection from "../../components/SingleProperty/ExteriorSection";
-import KitchenSection from "../../components/SingleProperty/KitchenSection";
-import InteriorSection from "../../components/SingleProperty/InteriorSection";
-import BathroomSection from "../../components/SingleProperty/BathroomSection";
-import FlooringSection from "../../components/SingleProperty/FlooringSection";
-import AppliancesSection from "../../components/SingleProperty/AppliancesSection";
-import AdvanceDetailsSection from "../../components/SingleProperty/AdvanceDetailsSection";
-import { ExteriorUpgrades } from "../../components/SingleProperty/ExteriorUpgrades";
-import { KitchenUpgrades } from "../../components/SingleProperty/KitchenUpgrades";
-import { InteriorUpgrades } from "../../components/SingleProperty/InteriorUpgrades";
-import { BathroomUpgrades } from "../../components/SingleProperty/BathroomUpgrades";
-import { FlooringUpgrades } from "../../components/SingleProperty/FlooringUpgrades";
-import { AppliancesUpgrade } from "../../components/SingleProperty/AppliancesUpgrade";
-import { AdvanceDetailsUpgrade } from "../../components/SingleProperty/AdvanceDetailsUpgrade";
-import { PriceCard } from "../../components/PriceCard";
 
+import { Button } from "@chakra-ui/react";
+import useInView from "../hooks/useInView";
+import { v4 as uuidv4 } from "uuid"; // Use uuid for unique IDs
+import { FloorOptionCard } from "../components/FloorPlan/FloorOptionCard";
+import ExteriorSection from "../components/SingleProperty/ExteriorSection";
+import KitchenSection from "../components/SingleProperty/KitchenSection";
+import InteriorSection from "../components/SingleProperty/InteriorSection";
+import BathroomSection from "../components/SingleProperty/BathroomSection";
+import FlooringSection from "../components/SingleProperty/FlooringSection";
+import AppliancesSection from "../components/SingleProperty/AppliancesSection";
+import AdvanceDetailsSection from "../components/SingleProperty/AdvanceDetailsSection";
+import { ExteriorUpgrades } from "../components/SingleProperty/ExteriorUpgrades";
+import { KitchenUpgrades } from "../components/SingleProperty/KitchenUpgrades";
+import { InteriorUpgrades } from "../components/SingleProperty/InteriorUpgrades";
+import { BathroomUpgrades } from "../components/SingleProperty/BathroomUpgrades";
+import { FlooringUpgrades } from "../components/SingleProperty/FlooringUpgrades";
+import { AppliancesUpgrade } from "../components/SingleProperty/AppliancesUpgrade";
+import { AdvanceDetailsUpgrade } from "../components/SingleProperty/AdvanceDetailsUpgrade";
+import { PriceCard } from "../components/PriceCard";
+import { useDispatch } from "react-redux";
+import { orderSuccess, orderError } from "../Redux/orderStatusSlice";
 export const SingleModelNew = () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const dispatch = useDispatch();
+
+  const [placingOrder, setPlacingOrder] = useState(false);
+  const [placingOrderError, setPlacingOrderError] = useState(false);
   const [ref, isInView] = useInView({ threshold: 0.1 });
   const [activeSection, setActiveSection] = useState("floor-plan");
   const sectionRefs = useRef({
@@ -132,23 +143,41 @@ export const SingleModelNew = () => {
       );
     }
   }, [activeKitchenBathroomFlooring]);
-
   const [activeLeavingRoomFlooring, setActiveLeavingRoomFlooring] = useState(
-    {}
+    null
   );
-
   const [leavingRoomFlooringMaterial, setLivingRoomFlooringMaterial] = useState(
-    activeLeavingRoomFlooring?.subOptions?.[0]
+    null
   );
+  useEffect(() => {
+    if (activeLeavingRoomFlooring != null) {
+      setLivingRoomFlooringMaterial(activeLeavingRoomFlooring?.subOptions?.[0]);
+    }
+  }, [activeLeavingRoomFlooring]);
   const [
     activeBedroomFlooringMaterial,
     setActiveBedroomFlooringMaterial,
-  ] = useState({});
-  //   APPLIANCES
-  const [activeAppliances, setActiveAppliances] = useState([]);
-  const [activeAppliancesPackage, setActiveAppliancesPackage] = useState(
-    activeAppliances?.package?.[0]
+  ] = useState(null);
+  const [activeBedroomFlooringType, setActiveBedroomFlooringType] = useState(
+    null
   );
+  useEffect(() => {
+    if (activeBedroomFlooringMaterial != null) {
+      setActiveBedroomFlooringType(
+        activeBedroomFlooringMaterial?.subOptions?.[0]
+      );
+    }
+  }, [activeBedroomFlooringMaterial]);
+
+  //   APPLIANCES
+  const [activeAppliances, setActiveAppliances] = useState(null);
+  const [activeAppliancesPackage, setActiveAppliancesPackage] = useState(null);
+  useEffect(() => {
+    if (activeAppliances != null) {
+      setActiveAppliancesPackage(activeAppliances?.package?.[0]);
+    }
+  }, [activeAppliances]);
+
   const [activeCustomAppliances, setActiveCustomAppliances] = useState(null);
   const [activeCustomRefrigirator, setActiveRefrigirator] = useState({});
   const [activeRange, setActiveRange] = useState({});
@@ -183,8 +212,6 @@ export const SingleModelNew = () => {
 
   const [activeStructureTotal, setActiveStructureTotal] = useState(0);
   const [activeSuboptionTotal, setActiveSubOptionTotal] = useState(0);
-
-  const [upgrades, setUpgrades] = useState(0);
 
   // Data fetching from Firebase Firestore
   useEffect(() => {
@@ -265,11 +292,14 @@ export const SingleModelNew = () => {
       );
       //   appliances
       setActiveAppliances(data?.appliances?.types?.[0]);
-      setActiveAppliancesPackage(activeAppliances?.package?.[0]);
+      // setActiveAppliancesPackage(activeAppliances?.package?.[0]);
       setActiveDishwasher(data?.appliances.dishwasher.package[0]);
       //   advance details
-      setActiveCeilingHeight(data?.advanceDetails?.ceilingHeight?.options?.[0]);
+      setActiveCeilingHeight(data?.advanceDetails?.celingHeight?.options?.[0]);
       setActiveSideWall(data?.advanceDetails?.sidewallDimensions?.options?.[0]);
+      setActiveInsulationOption(
+        data?.advanceDetails?.insulationOptions?.options?.[0]
+      );
       setCurrentImage(data?.floorPlan?.image);
     }
   }, [data]);
@@ -306,6 +336,7 @@ export const SingleModelNew = () => {
       activeLeavingRoomFlooring,
       leavingRoomFlooringMaterial,
       activeBedroomFlooringMaterial,
+      activeBedroomFlooringType,
       activeAppliancesPackage,
       activeDishwasher,
       activeCeilingHeight,
@@ -349,6 +380,7 @@ export const SingleModelNew = () => {
     activeLeavingRoomFlooring,
     leavingRoomFlooringMaterial,
     activeBedroomFlooringMaterial,
+    activeBedroomFlooringType,
     activeKitchenBathroomFlooringType,
     activeAppliancesPackage,
     activeDishwasher,
@@ -382,7 +414,7 @@ export const SingleModelNew = () => {
         case "exterior":
           setActiveObject(data?.exterior);
           break;
-        case "kitchen":x
+        case "kitchen":
           setActiveObject(data?.kitchen);
           break;
         case "interior":
@@ -428,6 +460,146 @@ export const SingleModelNew = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const submitForm = {
+    floorPlan: {
+      floorPlanOrientation: activeFloorPlan,
+    },
+    exterior: {
+      sidingType: activeSidingType,
+      exteriorBodyColor: activeExteriorBodyColor,
+      exteriorAccentColor: activeExteriorAccentColor,
+      exteriorTrimColor: activeExteriorTrimColor,
+      exteriorDoorPaint: activeExteriorDoorPaint,
+      exteriorShinglesMaterial: activeShinglesMaterial,
+      shinglesMaterialType: activeShinglesType,
+      exteriorDoor: activeExteriorDoors,
+    },
+    kitchen: {
+      kitchenCounterTop: activeKitchenCounterTop,
+      counterTopMaterial: activeCounterTopMaterial,
+      kitchenFlatCabinets: activeFlatCabinates,
+      kitchenCabinetHardware: activecabinateHardware,
+      kitchentileBacksplash: activeTileBacksplash,
+      kitchenBacksplashTile: activeBacksplashtile,
+      kitchenFlooringMaterial: activeKitchenFlooringMaterial,
+      kitchenFlooringType: activeFlooringType,
+      kitchenFucet: activeKitchenFucet,
+      kitchenSink: activeKitchenSinks,
+    },
+    interior: {
+      interiorDoorHandles: activeInteriorDoorHandles,
+      interiorWindow: activeInteriorWindow,
+    },
+    bathroom: {
+      bathroomType: activeBathroomType,
+      bathroomEnclosure: activeBathroomEnclosure,
+      bathroomTile: activeBathroomTile,
+      bathroomTileType: activeBathroomTileType,
+      bathroomTilewallPackage: activeTileWallPackage,
+      bathroomShowerTiles: activeShowertiles,
+      bathroomMirror: activeBathroomMirror,
+      bathroomVanity: activeBathroomVanity,
+      bathroomHardware: activeBathroomHardware,
+    },
+    flooring: {
+      kitchenBathroomFlooring: activeKitchenBathroomFlooring,
+      kitchenBathroomFlooringType: activeKitchenBathroomFlooringType,
+      leavingRoomFlooring: activeLeavingRoomFlooring,
+      leavingRoomFlooringMaterial: leavingRoomFlooringMaterial,
+      bedroomFlooring: activeBedroomFlooringMaterial,
+      bedroomFlooringType: activeBedroomFlooringType,
+    },
+    appliances: {
+      appliancesType: activeAppliances,
+      appliancesPackage: activeAppliancesPackage,
+      customeAppliance: activeCustomAppliances,
+      customeRefrigirator: activeCustomRefrigirator,
+      applianceRange: activeRange,
+      dishwasher: activeDishwasher,
+    },
+    advanceDetails: {
+      ceilingHeight: activeCeilingHeight,
+      sidewall: activeSideWall,
+      insulation: activeInsulationOption,
+      structure: activeStructure,
+    },
+    totalUpgrades: totalUpgrades,
+    propertyDetails: data?.propertyDetails,
+  };
+
+  // order place handler
+  const handleContinue = async () => {
+    setPlacingOrder(true);
+    setPlacingOrderError(false);
+    const orderId = uuidv4();
+  
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (user) {
+        // Define user details and order data
+        const userDetails = {
+          name: user.displayName || "User's Name", // Provide default if displayName is unavailable
+          email: user.email,
+          mobileNumber: "User's Mobile Number", // Replace with the actual mobile number if available
+        };
+  
+        // Add userDetails to orderData
+        const orderData = {
+          ...submitForm,
+          orderId, // Add generated orderId
+          timestamp: Timestamp.fromDate(new Date()),
+          userDetails, // Include userDetails in orderData
+        };
+  
+        const userRef = doc(db, "users", user.uid);
+        const allOrdersDocRef = doc(db, "orders", "allOrders");
+  
+        // Set the document with user details and add the order to the orders array
+        await setDoc(
+          userRef,
+          {
+            ...userDetails,
+            orders: arrayUnion(orderData),
+          },
+          { merge: true } // Merges data instead of overwriting
+        );
+  
+        // Add the order to the global orders collection
+        await setDoc(
+          allOrdersDocRef,
+          { orders: arrayUnion(orderData) },
+          { merge: true }
+        );
+  
+        dispatch(orderSuccess()); // Dispatch success action
+        console.log("Order and user details added successfully!");
+        navigate("/order-status");
+      } else {
+        console.log("No user is logged in");
+        dispatch(orderError());
+        setPlacingOrderError(true);
+        navigate("/order-status");
+      }
+    } catch (error) {
+      console.error("Error adding order and user details: ", error);
+      dispatch(orderError());
+      setPlacingOrderError(true);
+    } finally {
+      setPlacingOrder(false);
+    }
+  };
+  
+
+  if (placingOrder) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center border">
+        <Loader />
+      </div>
+    );
+  }
 
   if (loading)
     return (
@@ -591,8 +763,6 @@ export const SingleModelNew = () => {
             sectionRefs={sectionRefs}
           />
           {/* Bathroom */}
-          {/* const [activeTileTotal,setActiveTileTotal] = useState(0)
-  const [activeTileWallPackage,setActiveTileWallPackage] = useState([]) */}
           <BathroomSection
             data={data}
             activeBathroomType={activeBathroomType}
@@ -636,6 +806,8 @@ export const SingleModelNew = () => {
             setLivingRoomFlooringMaterial={setLivingRoomFlooringMaterial}
             activeBedroomFlooringMaterial={activeBedroomFlooringMaterial}
             setActiveBedroomFlooringMaterial={setActiveBedroomFlooringMaterial}
+            activeBedroomFlooringType={activeBedroomFlooringType}
+            setActiveBedroomFlooringType={setActiveBedroomFlooringType}
             sectionRefs={sectionRefs}
           />
           {/* Appliances */}
@@ -662,6 +834,7 @@ export const SingleModelNew = () => {
             setActiveCeilingHeight={setActiveCeilingHeight}
             activeStructure={activeStructure}
             setActiveStructure={setActiveStructure}
+            setActiveStructureTotal={setActiveStructureTotal}
             activeSideWall={activeSideWall}
             setActiveSideWall={setActiveSideWall}
             activeInsulationOption={activeInsulationOption}
@@ -846,7 +1019,9 @@ export const SingleModelNew = () => {
                   Base unit + upgrades
                 </span>
               </p>
-              <Button colorScheme="orange">Continue</Button>
+              <Button colorScheme="orange" onClick={handleContinue}>
+                Continue
+              </Button>
             </div>
           </div>
         </div>

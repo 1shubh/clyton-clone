@@ -4,6 +4,10 @@ export const AdminSidebar = ({ currentView, onNavigate, onLogout }) => {
     const menuItems = [
         { label: 'Property List', view: 'properties' },
         { label: 'Add New Property', view: 'addProduct' },
+        {
+          label: 'Orders',
+          view: 'orders',
+        }
         // Add more navigation options as needed
       ];
   return (

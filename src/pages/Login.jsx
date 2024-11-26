@@ -1,19 +1,30 @@
 import React, { useContext, useState } from "react";
-import { Input, Button } from "@chakra-ui/react";
+import { Input, Button, Spinner } from "@chakra-ui/react";
 import { PasswordInput } from "../components/PasswordInput";
 import { AuthContext } from "../hoc/AuthContext";
 
 export const Login = () => {
-  const { loginUser,authState } = useContext(AuthContext);
-  const [username, setusername] = useState("");
+  const { loginUser, authState } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent form submission
     setError("");
-    const isAuthenticated = loginUser(username, password);
-    if (!isAuthenticated) {
-      setError("Invalid credentials. Please try again.");
+    setLoading(true);
+    
+    try {
+      const isAuthenticated = await loginUser(username, password);
+      if (!isAuthenticated) {
+        setError("Invalid credentials. Please try again.");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again later.");
+      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,15 +36,14 @@ export const Login = () => {
       <p className="text-[35px] sm:text-[25px] text-center text-black mt-5">
         Scenic Homes of AZ® Ordering Portal
       </p>
-      {/* Login form */}
 
       <div className="w-[35%] sm:w-[90%] lg:w-[60%] xl:w-[40%] m-auto mt-10">
-        <form action="" className="grid gap-5">
+        <form className="grid gap-5" onSubmit={handleLogin}>
           <Input
             variant="outline"
             placeholder="Email Address or Username"
             value={username}
-            onChange={(e) => setusername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             className="text-black"
             border={"1px solid black"}
           />
@@ -42,9 +52,10 @@ export const Login = () => {
             className="w-[20%] sm:w-[35%] lg:w-[30%] m-auto"
             colorScheme="orange"
             variant="solid"
-            onClick={handleLogin}
+            type="submit" // Set button type to submit
+            isDisabled={loading} // Disable button when loading
           >
-            Login
+            {loading ? <Spinner size="sm" /> : "Login"}
           </Button>
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </form>
